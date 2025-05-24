@@ -8,7 +8,7 @@ import Item from './pages/Items/Item'
 const App = () => {
   return (
     <>
-    <div className='xl:h-screen bg-white bg-fixed bg-no-repeat bg-cover'>
+    <div className='xl:h-screen bg-gradient-to-r from-[#f1f2b5] to-[#135058] bg-fixed bg-no-repeat bg-cover'>
     <Routes>
       <Route path='/' element={<Login />} />
      <Route path='/dashboard' element={<Home />} />
