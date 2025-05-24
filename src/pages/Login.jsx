@@ -4,47 +4,31 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const navigate = useNavigate();
   return (
-    <div className="flex items-center h-screen justify-center relative">
-    <div className="border bg-white">
-      <h1 className="bg-blue-600 text-white font-semibold py-1 text-center">
-        Billing Sphere Login
-      </h1>
-      <div className="flex border">
-        <div className="w-1/3 p-5">
-          <img
-            src="https://cdn-icons-png.freepik.com/256/1073/1073162.png?ga=GA1.1.182845382.1747206352&semt=ais_hybrid"
-            alt=""
-            className="w-32"
-          />
+    <div className="flex md:items-center h-screen md:justify-center relative">
+      <div className="md:rounded w-full md:w-xl overflow-hidden bg-white">
+        <div className="bg-blue-700 flex items-center justify-center py-1">
+          <h1 className='text-xl font-semibold text-white'>Billing Sphere</h1>
         </div>
-        <form className="w-2/3 flex flex-col px-2 py-1.5 font-bold select-none">
-          <div className="w-full flex justify-between px-3 py-3">
-            <label>UserName</label>
-            <input type="text" className="outline border w-52 px-2 py-1.5" />
+        <form className='flex gap-3'>
+          <div className='hidden md:block'>
+            <img src="https://img.freepik.com/free-vector/locker_53876-25496.jpg?ga=GA1.1.182845382.1747206352&semt=ais_hybrid&w=740" alt="" className='w-46'/>
           </div>
-          <div className="w-full flex justify-between px-3 py-3">
-            <label>Password</label>
-            <input type="password" className="outline border w-52 px-2 py-1.5" />
-          </div>
-          <div className="flex gap-3 px-3 py-2">
-            <button
-              onClick={()=>navigate('/dashboard')}
-              type="button"
-              className="px-6 py-1 border-2 border-amber-500 bg-amber-200 w-auto"
-            >
-              Login
-            </button>
-            <button
-              type="button"
-              // onClick={onClose}
-              className="px-6 py-1 border-2 border-amber-500 bg-amber-200 w-auto"
-            >
-              Cancel
-            </button>
+          <div className='px-2 py-2 w-full'>
+            <div className='flex items-center mt-1'>
+              <label htmlFor="email" className='w-32 text-xl font-semibold'>Email :</label>
+              <input className=' border rounded p-2 text-xl flex-1' type="email" name="email" id="email" />
+            </div>
+            <div className='flex items-center mt-1'>
+              <label htmlFor="password" className='w-32 text-xl font-semibold'>Password :</label>
+              <input className='border rounded p-2 text-xl flex-1' type="password" name="password" id="password" />
+            </div>
+            <div className='flex flex-col md:flex-row items-center mt-1 gap-3'>
+              <button className='border text-lg font-medium px-4 bg-amber-300 block w-full hover:bg-amber-500 rounded py-2'>Login</button>
+              <button className='border text-lg font-medium px-4 bg-amber-300 block w-full hover:bg-amber-500 rounded py-2'>Cancel</button>
+            </div>
           </div>
         </form>
       </div>
-    </div>
     </div>
   );
 };

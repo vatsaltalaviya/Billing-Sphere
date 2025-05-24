@@ -4,8 +4,6 @@ const Datatable = ({ data }) => {
   if (!data || data.length === 0) return <div>No data found</div>;
 
   const [selectedRow, setselectedRow] = useState(null);
-  console.log(selectedRow)
-
   const columns = Object.keys(data[0]);
 
   const handleKeyDown = (e) =>{
@@ -32,7 +30,7 @@ const Datatable = ({ data }) => {
     tabIndex={0}
     onKeyDown={handleKeyDown}
     >
-      <table className="table-auto w-full border border-black text-sm">
+      <table className="table-auto w-full border border-black text-xs md:text-sm xl:text-xl ">
         <thead>
           <tr className="bg-white text-purple-900 font-bold text-left">
             {columns.map((col, i) => (
@@ -52,9 +50,7 @@ const Datatable = ({ data }) => {
               {columns.map((col, colIndex) => (
                 <td
                   key={colIndex}
-                  className={`border border-black px-3 py-1 ${
-                    col === 'Item Name' ? 'text-yellow-400' : ''
-                  }`}
+                  className={`border border-black px-3 py-1 `}
                 >
                   {row[col]}
                 </td>

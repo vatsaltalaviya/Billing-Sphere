@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+*{
+    font-family: "Quicksand", sans-serif;
+}
 .table-data::-webkit-scrollbar{
     display: none;
 }
