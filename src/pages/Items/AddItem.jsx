@@ -72,7 +72,7 @@ const AddItem = () => {
                 </div>
 
                 {/* Brand + Code No */}
-                <div className="flex flex-col md:flex-row xl:items-center gap-4">
+                <div className="flex flex-col md:flex-row flex-wrap xl:items-center gap-4">
                   <div className="flex">
                     <label htmlFor="brand" className="w-36 text-sm font-medium">
                       Brand
@@ -141,7 +141,7 @@ const AddItem = () => {
                 </div>
 
                 {/* HSN Code + Tax Category */}
-                <div className=" flex flex-col md:flex-row  xl:items-center gap-4">
+                <div className=" flex flex-col md:flex-row flex-wrap  xl:items-center gap-4">
                   <div className="flex">
                     <label htmlFor="hsn" className="w-36 text-sm font-medium">
                       HSN Code
@@ -181,7 +181,7 @@ const AddItem = () => {
             </div>
             <div className="space-x-4">
               <div className="py-5 px-4">
-                <div className="flex flex-col xl:flex-row  xl:items-center gap-4">
+                <div className="flex flex-col xl:flex-row flex-wrap xl:items-center gap-4">
                   <div className="flex">
                     <label
                       htmlFor="retail"
@@ -221,7 +221,7 @@ const AddItem = () => {
             <div className="py-5 px-4">
               <div className="space-y-4">
                 {/* Barcode + rack/bin */}
-                <div className="flex flex-col xl:flex-row  xl:items-center gap-4">
+                <div className="flex flex-col xl:flex-row flex-wrap xl:items-center gap-4">
                   <div className="flex">
                     <label
                       htmlFor="barcode"
@@ -248,22 +248,22 @@ const AddItem = () => {
                 </div>
 
                 {/* stock unit */}
-                <div className="flex items-center gap-4">
-                  <label
-                    htmlFor="remarkstockunit"
-                    className="w-30 text-sm font-medium"
-                  >
-                    Stock Unit
-                  </label>
-                  <input
-                    type="text"
-                    id="stockunit"
-                    className="border px-2 py-1 w-32"
-                  />
-                </div>
+                 <div className="flex">
+                    <label
+                      htmlFor="stockUnit"
+                      className="w-32 text-sm font-medium"
+                    >
+                      Stock Unit
+                    </label>
+                    <input
+                      type="text"
+                      id="stockUnit"
+                      className="w-32 border px-2 py-1"
+                    />
+                  </div>
 
                 {/* min stock + max stock */}
-                <div className="flex flex-col xl:flex-row  xl:items-center gap-4">
+                <div className="flex flex-col xl:flex-row flex-wrap xl:items-center gap-4">
                   <div className="flex">
                     <label
                       htmlFor="minStock"
