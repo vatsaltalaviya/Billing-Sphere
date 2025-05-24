@@ -21,7 +21,8 @@ const ButtonGroup = ({ data, className }) => {
           // className="border text-lg font-medium px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
           className={className}
         >
-          {btn}
+          
+          <span>{btn}</span>
         </button>
       ))}
     </>
