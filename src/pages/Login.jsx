@@ -9,7 +9,7 @@ const Login = () => {
   }
   return (
     <div className="flex md:items-center h-screen md:justify-center relative">
-      <div className="md:rounded w-full md:w-xl overflow-hidden bg-white">
+      <div className="md:rounded w-full md:w-xl overflow-hidden bg-white md:border">
         <div className="bg-blue-700 flex items-center justify-center py-1">
           <h1 className='text-xl font-semibold text-white'>Billing Sphere</h1>
         </div>

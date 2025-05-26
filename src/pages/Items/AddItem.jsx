@@ -20,30 +20,35 @@ const AddItem = () => {
     maxStock: "",
     updateImage: "NO",
     openstock: "",
-    isActive: "NO",
+    isActive: "NO", // Only use lowercase 'isActive'
   };
   const [formData, setformData] = useState(defaultForm);
   const { editid } = useParams();
   const { deleteid } = useParams();
 
   const handleChangeData = (e) => {
-    const { id, value } = e.target;
-    setformData((perv) => ({
-      ...perv,
-      [id]: value,
-    }));
-    console.log(formData);
+    const { id, value, type, checked } = e.target;
+    const newValue = type === "checkbox" ? checked : value;
+
+    setformData((prev) => {
+      const updatedForm = {
+        ...prev,
+        [id]: newValue,
+      };
+      console.log(updatedForm); // Move console.log inside the setState callback
+      return updatedForm;
+    });
   };
 
   return (
     <div className="h-screen w-full bg-white">
       <div
         className={`${
-          editid ? "bg-amber-500" : "bg-blue-800"
+          editid ? "bg-amber-500" : deleteid ?"bg-red-500": "bg-blue-800"
         } font-bold text-xl`}
       >
         <h1 className="text-center text-white">
-          {editid ? "Edit Item" : "Add Item"}
+          {editid ? "Edit Item" : deleteid ? "Delete Item" : "Add Item"}
         </h1>
       </div>
       {/* ------------------------------- body ----------------------------------- */}
@@ -57,36 +62,40 @@ const AddItem = () => {
             <div className="py-5 px-4">
               <div className="space-y-4">
                 {/* Item Group */}
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                   <label
                     htmlFor="itemGroup"
-                    className="w-32 text-sm font-medium"
+                    className="lg:w-32 lg:text-lg text-xl font-medium"
                   >
                     Item Group
                   </label>
                   <input
                     type="text"
                     id="itemGroup"
+                    value={formData.itemGroup}
+                    onChange={handleChangeData}
                     className="flex-1 border px-2 py-1"
                   />
                 </div>
 
                 {/* Brand + Code No */}
                 <div className="flex flex-col md:flex-row flex-wrap xl:items-center gap-4">
-                  <div className="flex">
-                    <label htmlFor="brand" className="w-36 text-sm font-medium">
+                  <div className="flex flex-col lg:flex-row lg:items-center">
+                    <label htmlFor="brand" className="lg:w-36 text-xl lg:text-lg font-medium">
                       Brand
                     </label>
                     <input
                       type="text"
                       id="brand"
                       className="flex-1 border px-2 py-1"
+                      value={formData.brand}
+                      onChange={handleChangeData}
                     />
                   </div>
-                  <div className="flex">
+                  <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="codeNo"
-                      className="w-36 text-sm font-medium"
+                      className="lg:w-36 text-xl lg:text-lg font-medium"
                     >
                       Code No
                     </label>
@@ -94,15 +103,17 @@ const AddItem = () => {
                       type="text"
                       id="codeNo"
                       className="flex-1 border px-2 py-1"
+                      value={formData.codeNo}
+                      onChange={handleChangeData}
                     />
                   </div>
                 </div>
 
                 {/* Item Name */}
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                   <label
                     htmlFor="itemName"
-                    className="w-32 text-sm font-medium"
+                    className="lg:w-32 lg:text-lg text-xl font-medium"
                   >
                     Item Name
                   </label>
@@ -110,14 +121,16 @@ const AddItem = () => {
                     type="text"
                     id="itemName"
                     className="flex-1 border px-2 py-1"
+                    value={formData.itemName}
+                    onChange={handleChangeData}
                   />
                 </div>
 
                 {/* Print Name */}
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                   <label
                     htmlFor="printName"
-                    className="w-32 text-sm font-medium"
+                    className="lg:w-32 lg:text-lg text-xl font-medium"
                   >
                     Print Name
                   </label>
@@ -125,40 +138,49 @@ const AddItem = () => {
                     type="text"
                     id="printName"
                     className="flex-1 border px-2 py-1"
+                    value={formData.printName}
+                    onChange={handleChangeData}
+
                   />
                 </div>
 
                 {/* Remarks */}
-                <div className="flex items-center gap-4">
-                  <label htmlFor="remarks" className="w-32 text-sm font-medium">
+                <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+                  <label htmlFor="remarks" className="lg:w-32 lg:text-lg text-xl font-medium">
                     Remarks
                   </label>
                   <input
                     type="text"
                     id="remarks"
                     className="flex-1 border px-2 py-1"
+                    value={formData.remarks}
+                    onChange={handleChangeData}
                   />
                 </div>
 
                 {/* HSN Code + Tax Category */}
                 <div className=" flex flex-col md:flex-row flex-wrap  xl:items-center gap-4">
-                  <div className="flex">
-                    <label htmlFor="hsn" className="w-36 text-sm font-medium">
+                  <div className="flex flex-col lg:flex-row lg:items-center">
+                    <label htmlFor="hsn" className="lg:w-36 text-xl lg:text-lg font-medium">
                       HSN Code
                     </label>
                     <input
                       type="text"
                       id="hsn"
                       className="flex-1 border px-2 py-1"
+                      value={formData.hsn}
+                      onChange={handleChangeData}
                     />
                   </div>
-                  <div className="flex">
-                    <label htmlFor="tax" className="w-36 text-sm font-medium">
+                  <div className="flex flex-col lg:flex-row lg:items-center">
+                    <label htmlFor="tax" className="lg:w-36 text-xl lg:text-lg font-medium">
                       Tax Category
                     </label>
                     <select
                       id="tax"
                       className="w-48 md:flex-1 border px-2 py-1"
+                      value={formData.tax}
+                      onChange={handleChangeData}
                     >
                       <option value="">Select Tax Category</option>
                       <option value="0%">0% (Exempted/Nil Rated)</option>
@@ -182,10 +204,10 @@ const AddItem = () => {
             <div className="space-x-4">
               <div className="py-5 px-4">
                 <div className="flex flex-col xl:flex-row flex-wrap xl:items-center gap-4">
-                  <div className="flex">
+                  <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="retail"
-                      className="w-32 text-sm font-medium"
+                      className="lg:w-32 lg:text-lg text-xl font-medium"
                     >
                       Retail
                     </label>
@@ -193,16 +215,20 @@ const AddItem = () => {
                       type="text"
                       id="retail"
                       className="flex-1 border px-2 py-1"
+                      value={formData.retail}
+                      onChange={handleChangeData}
                     />
                   </div>
-                  <div className="flex">
-                    <label htmlFor="mrp" className="w-32 text-sm font-medium">
+                  <div className="flex flex-col lg:flex-row lg:items-center">
+                    <label htmlFor="mrp" className="lg:w-32 lg:text-lg text-xl font-medium">
                       MRP
                     </label>
                     <input
                       type="text"
                       id="mrp"
                       className="flex-1 border px-2 py-1"
+                      value={formData.mrp}
+                      onChange={handleChangeData}
                     />
                   </div>
                 </div>
@@ -222,10 +248,11 @@ const AddItem = () => {
               <div className="space-y-4">
                 {/* Barcode + rack/bin */}
                 <div className="flex flex-col xl:flex-row flex-wrap xl:items-center gap-4">
-                  <div className="flex">
+                  <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="barcode"
-                      className="w-32 text-sm font-medium"
+                      className="lg:w-32 lg:text-lg text-xl font-medium"
+                  
                     >
                       Barcode SR
                     </label>
@@ -233,41 +260,48 @@ const AddItem = () => {
                       type="text"
                       id="barcode"
                       className="flex-1 border px-2 py-1"
+                          value={formData.barcode}
+                      onChange={handleChangeData}
                     />
                   </div>
-                  <div className="flex">
-                    <label htmlFor="rack" className="w-32 text-sm font-medium">
+                  <div className="flex flex-col lg:flex-row lg:items-center">
+                    <label htmlFor="rack" className="lg:w-32 lg:text-lg text-xl font-medium">
                       Rack/Bin
                     </label>
                     <input
                       type="text"
                       id="rack"
                       className="flex-1 border px-2 py-1"
+                      value={formData.rack}
+                      onChange={handleChangeData}
+
                     />
                   </div>
                 </div>
 
                 {/* stock unit */}
-                 <div className="flex">
+                 <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
-                      htmlFor="stockUnit"
-                      className="w-32 text-sm font-medium"
+                      htmlFor="stockunit"
+                      className="lg:w-32 lg:text-lg text-xl font-medium"
                     >
                       Stock Unit
                     </label>
                     <input
                       type="text"
-                      id="stockUnit"
+                      id="stockunit"
                       className="w-32 border px-2 py-1"
+                      value={formData.stockunit}
+                      onChange={handleChangeData}
                     />
                   </div>
 
                 {/* min stock + max stock */}
                 <div className="flex flex-col xl:flex-row flex-wrap xl:items-center gap-4">
-                  <div className="flex">
+                  <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="minStock"
-                      className="w-32 text-sm font-medium"
+                      className="lg:w-32 lg:text-lg text-xl font-medium"
                     >
                       Minimun Stock
                     </label>
@@ -275,12 +309,14 @@ const AddItem = () => {
                       type="text"
                       id="minStock"
                       className="flex-1 border px-2 py-1"
+                      value={formData.minStock}
+                      onChange={handleChangeData}
                     />
                   </div>
-                  <div className="flex">
+                  <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="maxStock"
-                      className="w-32 text-sm font-medium"
+                      className="lg:w-32 lg:text-lg text-xl font-medium"
                     >
                       Maximum Stock
                     </label>
@@ -288,6 +324,8 @@ const AddItem = () => {
                       type="text"
                       id="maxStock"
                       className="flex-1 border px-2 py-1"
+                      value={formData.maxStock}
+                      onChange={handleChangeData}
                     />
                   </div>
                 </div>
@@ -302,14 +340,14 @@ const AddItem = () => {
             <div className="py-5 px-4">
               <div className="space-y-4">
                 {/* update images  */}
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                   <label
                     htmlFor="remarkstockunit"
-                    className="w-32 text-sm font-medium"
+                    className="lg:w-32 lg:text-lg text-xl font-medium"
                   >
                     Update Images ??
                   </label>
-                  <select id="updateImage" className="border px-2 py-1 w-32">
+                  <select id="updateImage" className="border px-2 py-1 w-32" value={formData.updateImage} onChange={handleChangeData}>
                     <option value="NO">NO</option>
                     <option value="YES">YES</option>
                   </select>
@@ -322,6 +360,7 @@ const AddItem = () => {
                       src="#"
                       alt=""
                       className="h-full w-full object-cover"
+
                     />
                   </div>
                   <div className="flex flex-col gap-2">
@@ -360,20 +399,21 @@ const AddItem = () => {
         <div className="w-full flex flex-col xl:flex-row justify-between border p-2">
           <div className="grid  grid-cols-1 md:grid-cols-2 xl:grid-cols-2 my-2 px-1 py-0.5">
             <div className="grid grid-cols-2 py-1 gap-3">
-              <label htmlFor="openstock" className="font-medium text-sm">
+              <label htmlFor="openstock" className="font-medium lg:text-lg text-xl" >
                 Opening Stock
               </label>
               <input
                 type="text"
                 id="openstock"
                 className="border px-2 py-1 w-36"
+                value={formData.openstock} onChange={handleChangeData}
               />
             </div>
             <div className="grid grid-cols-2 xl:ml-3 gap-3">
-              <label htmlFor="isActive" className="font-medium text-sm">
+              <label htmlFor="isActive" className="font-medium lg:text-lg text-xl">
                 Is Active
               </label>
-              <select id="IsActive" className="border px-2 py-1 w-36">
+              <select id="isActive" className="border px-2 py-1 w-36" value={formData.isActive} onChange={handleChangeData}>
                 <option value="NO">NO</option>
                 <option value="YES">YES</option>
               </select>

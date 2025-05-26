@@ -96,11 +96,11 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="w-full flex flex-col xl:flex-row gap-3 mt-16 relative z-0 justify-center">
+      <div className="w-full flex flex-col xl:flex-row gap-3 mt-16 xl:mt-0 relative z-0 justify-center">
         {/* ---------------- left side ------------------------ */}
         <div className="xl:w-xl p-2">
           <div className=" backdrop-blur-sm border flex flex-col  justify-center">
-            <h1 className="text-center bg-red-600 uppercase text-white font-medium">
+            <h1 className="text-center bg-red-600 uppercase text-white font-bold">
               Quick Aceess
             </h1>
             <div className="p-3 flex flex-col md:flex-row">
@@ -110,7 +110,7 @@ const Home = () => {
                 </h1>
                 <div className="w-full md:w-52 gap-0.5 flex flex-col mt-2">
                   <ButtonGroup
-                    className="border text-lg font-medium px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
+                    className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
                     data={Transaction}
                   />
                 </div>
@@ -121,7 +121,7 @@ const Home = () => {
                 </h1>
                 <div className="w-full md:w-52 gap-0.5 flex flex-col mt-2">
                   <ButtonGroup
-                    className="border text-lg font-medium px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
+                    className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
                     data={AccountReport}
                   />
                 </div>
@@ -134,7 +134,7 @@ const Home = () => {
                 </h1>
                 <div className="w-full md:w-52 gap-0.5 flex flex-col mt-2">
                   <ButtonGroup
-                    className="border text-lg font-medium px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
+                    className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
                     data={Master}
                   />
                 </div>
@@ -145,20 +145,20 @@ const Home = () => {
                 </h1>
                 <div className="w-full md:w-52 gap-0.5 flex flex-col mt-2">
                   <ButtonGroup
-                    className="border text-lg font-medium px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
+                    className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
                     data={InventoryReport}
                   />
                 </div>
               </div>
             </div>
-            <div className="p-3 flex flex-col md:flex-row">
+            <div className="p-3 flex flex-col md:flex-row xl:mb-14">
               <div className="w-full md:w-1/2">
                 <h1 className="text-xl font-bold text-red-700 underline underline-offset-4">
                   Favourite Shortcuts
                 </h1>
                 <div className="w-full md:w-52 gap-0.5 flex flex-col mt-2">
                   <ButtonGroup
-                    className="border text-lg font-medium px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
+                    className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
                     data={FavouriteShortCut1}
                   />
                 </div>
@@ -166,7 +166,7 @@ const Home = () => {
               <div className="w-full md:w-1/2">
                 <div className="w-full md:w-52 gap-0.5 flex flex-col mt-10">
                   <ButtonGroup
-                    className="border text-lg font-medium px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
+                    className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
                     data={FavouriteShortCut2}
                   />
                 </div>
@@ -179,21 +179,21 @@ const Home = () => {
           <div className="flex flex-col xl:flex-row gap-2">
             {/* ------------ todo list ---------------------------- */}
             <div className=" backdrop-blur-sm border flex flex-col justify-center">
-              <h1 className="text-center bg-green-600 uppercase text-white font-medium">
+              <h1 className="text-center bg-green-600 uppercase text-white font-bold">
                 Todo List
               </h1>
 
               <div className="w-76">
                 <div className="flex">
                   <button className="text-sm mt-3 font-medium px-5 py-2 mx-3 bg-white border rounded">
-                    Add Todo
+                    Add 
                   </button>
                   <button className="text-sm mt-3 font-medium px-5 py-2 mx-3 bg-white border rounded">
-                    Complete Todo
+                    Complete
                   </button>
                 </div>
                 <div className="w-full flex flex-col mt-2 p-4 h-52 overflow-y-auto">
-                  <div className="border py-2 px-1.5 text-xl hover:bg-purple-900 hover:text-white">
+                  <div className="border py-2 px-1.5 text-sm hover:bg-purple-900 hover:text-white">
                     <p>Add your todo here</p>
                   </div>
                 </div>
@@ -202,19 +202,20 @@ const Home = () => {
 
             {/* -------------------- reminder -------------------------- */}
             <div className=" backdrop-blur-sm border flex flex-col justify-center">
-              <h1 className="text-center bg-blue-600 uppercase text-white font-medium">
+              <h1 className="text-center bg-blue-600 uppercase text-white font-semibold">
                 Reminder
               </h1>
 
               <div className="w-76">
                 <div className="flex">
+                  
                   <button className="text-sm mt-3 font-medium px-5 py-2 mx-3 bg-white border rounded">
-                    New Reminder
+                    Reminder
                   </button>
                 </div>
                 <div className="w-full flex flex-col mt-2 p-4 h-52 overflow-y-auto">
-                  <div className="border py-2 px-1.5 text-xl">
-                    <p>Add your reminder here</p>
+                  <div className="border py-2 px-1.5 text-sm hover:bg-purple-900 hover:text-white">
+                    <p>Add your todo here</p>
                   </div>
                 </div>
               </div>
@@ -222,14 +223,14 @@ const Home = () => {
           </div>
 
           {/* ------------------- Dash Board ------------------------ */}
-          <div className="border mt-3">
+          <div className="border mt-3 xl:w-[38.7em]">
             <div className=" backdrop-blur-sm flex flex-col justify-center">
               <div className="w-full">
                 <div className="flex bg-green-600 items-center justify-between">
                   <button className="text-sm font-medium px-5 py-0.5 bg-white border rounded">
                     Today's Profit
                   </button>
-                  <h1 className="text-center text-white uppercase font-medium">
+                  <h1 className="text-center text-white uppercase font-bold">
                     DashBoard
                   </h1>
                   <button className="text-sm font-medium px-5 py-0.5 bg-white border rounded">
@@ -239,7 +240,7 @@ const Home = () => {
                 <div className="w-full flex flex-col h-76 overflow-y-auto table-data">
                   <div className="border text-xl">
                     {/* ----------- table ------------------ */}
-                    <div className="overflow-x-auto p-4">
+                    <div className="overflow-x-auto p-1">
                       <table className="table-auto  border-collapse border border-black w-full text-sm">
                         <thead>
                           <tr className="bg-white text-purple-900 font-bold">

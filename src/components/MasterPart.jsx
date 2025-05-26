@@ -1,40 +1,8 @@
 import React from 'react'
 import Datatable from './Datatable'
 
-const MasterPart = () => {
-  const tableData = [
-    {
-      Sr: 1,
-      "Item Name": "Chocolate Box",
-      "Code No": "1212",
-      Group: "General",
-      Retail: 125,
-      MRP: 150,
-      "Cl.Stk": "0 Kg",
-      Active: "Yes",
-    },
-    {
-      Sr: 2,
-      "Item Name": "Maggie box",
-      "Code No": "121212",
-      Group: "General",
-      Retail: 130,
-      MRP: 170,
-      "Cl.Stk": "0 Kg",
-      Active: "Yes",
-    },
-    {
-      Sr: 3,
-      "Item Name": "pasta Box",
-      "Code No": "721641",
-      Group: "General",
-      Retail: 105,
-      MRP: 130,
-      "Cl.Stk": "0 Kg",
-      Active: "Yes",
-    },
-   
-  ];
+const MasterPart = ({tableData}) => {
+  
   return (
     <div className='h-full w-full'>
       {/* ----------------------------- search ----------------------------------------------- */}

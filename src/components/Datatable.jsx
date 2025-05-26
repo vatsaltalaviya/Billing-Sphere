@@ -3,26 +3,18 @@ import React, { useState } from 'react';
 const Datatable = ({ data }) => {
   if (!data || data.length === 0) return <div>No data found</div>;
 
-  const [selectedRow, setselectedRow] = useState(null);
+  const [selectedRow, setselectedRow] = useState(0);
   const columns = Object.keys(data[0]);
 
-  const handleKeyDown = (e) =>{
-    if (selectedRow === null && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
-    setselectedRow(0);
-    return;
-  }
+   const handleKeyDown = (e) =>{
     if(e.key === "ArrowDown"){
-      setselectedRow((perv)=>
-      perv == null ? 0 : Math.min(perv +1 , data.length -1)
-      )
-      
+      setselectedRow((prev)=> Math.min(prev + 1 , data.length -1))
   }
-  console.log(e.key)
+
       if(e.key === "ArrowUp"){
-      setselectedRow((perv)=>
-      perv == null ? 0 : Math.max(perv - 1 , 0 )
-      )
+      setselectedRow((prev)=> Math.max(prev - 1 , 0 ))
     }
+    console.log(selectedRow);
 }
 
   return (
