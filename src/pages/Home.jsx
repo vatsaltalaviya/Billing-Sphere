@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import DropdownButton from "../components/DropdownButton";
 import ButtonGroup from "../components/ButtonGroup";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [showMenu, setshowMenu] = useState(false);
+  const navigate = useNavigate();
 
   const dropdownData = [
     {
@@ -72,8 +74,16 @@ const Home = () => {
 
   return (
     <div className="p-0 md:px-10 xl:px-32 relative w-full">
-      <div className="py-5 hidden md:block md:w-auto ">
+      <div className="py-5  hidden md:flex justify-between md:w-auto">
         <DropdownButton dropdownData={dropdownData} />
+        <button
+          className="px-3 py-1 bg-white font-bold text-sm border rounded"
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          Logout<i className="ri-logout-circle-r-line"></i>
+        </button>
       </div>
       <div
         className={`w-full h-16 bg-white fixed top-0 left-0 flex flex-col z-50 md:hidden`}
@@ -93,6 +103,14 @@ const Home = () => {
           }`}
         >
           <DropdownButton dropdownData={dropdownData} />
+          <button
+            className="px-3 py-1 bg-white font-bold text-sm border rounded"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            Logout<i className="ri-logout-circle-r-line"></i>
+          </button>
         </div>
       </div>
 
@@ -186,7 +204,7 @@ const Home = () => {
               <div className="w-76">
                 <div className="flex">
                   <button className="text-sm mt-3 font-medium px-5 py-2 mx-3 bg-white border rounded">
-                    Add 
+                    Add
                   </button>
                   <button className="text-sm mt-3 font-medium px-5 py-2 mx-3 bg-white border rounded">
                     Complete
@@ -208,7 +226,6 @@ const Home = () => {
 
               <div className="w-76">
                 <div className="flex">
-                  
                   <button className="text-sm mt-3 font-medium px-5 py-2 mx-3 bg-white border rounded">
                     Reminder
                   </button>

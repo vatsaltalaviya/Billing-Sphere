@@ -100,11 +100,12 @@ const AddItem = () => {
                       Code No
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       id="codeNo"
                       className="flex-1 border px-2 py-1"
                       value={formData.codeNo}
                       onChange={handleChangeData}
+                      min="0"
                     />
                   </div>
                 </div>
@@ -212,11 +213,12 @@ const AddItem = () => {
                       Retail
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       id="retail"
                       className="flex-1 border px-2 py-1"
                       value={formData.retail}
                       onChange={handleChangeData}
+                      min="0"
                     />
                   </div>
                   <div className="flex flex-col lg:flex-row lg:items-center">
@@ -224,11 +226,12 @@ const AddItem = () => {
                       MRP
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       id="mrp"
                       className="flex-1 border px-2 py-1"
                       value={formData.mrp}
                       onChange={handleChangeData}
+                      min="0"
                     />
                   </div>
                 </div>
@@ -306,11 +309,12 @@ const AddItem = () => {
                       Minimun Stock
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       id="minStock"
                       className="flex-1 border px-2 py-1"
                       value={formData.minStock}
                       onChange={handleChangeData}
+                      min="0"
                     />
                   </div>
                   <div className="flex flex-col lg:flex-row lg:items-center">
@@ -321,11 +325,12 @@ const AddItem = () => {
                       Maximum Stock
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       id="maxStock"
                       className="flex-1 border px-2 py-1"
                       value={formData.maxStock}
                       onChange={handleChangeData}
+                      min="0"
                     />
                   </div>
                 </div>
@@ -403,10 +408,11 @@ const AddItem = () => {
                 Opening Stock
               </label>
               <input
-                type="text"
+                type="number"
                 id="openstock"
                 className="border px-2 py-1 w-36"
                 value={formData.openstock} onChange={handleChangeData}
+                min="0"
               />
             </div>
             <div className="grid grid-cols-2 xl:ml-3 gap-3">

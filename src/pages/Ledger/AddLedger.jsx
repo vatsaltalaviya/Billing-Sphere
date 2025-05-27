@@ -201,11 +201,12 @@ const AddLedger = () => {
                   </label>
                   <div className="flex flex-col lg:flex-row lg:flex-wrap gap-2">
                     <input
-                      type="text"
+                      type="number"
                       id="opBalance"
                       value={formData.opBalance}
                       onChange={handleChangeData}
                       className="flex-1 border px-2 py-1"
+                      min="0"
                     />
 
                     <select
@@ -285,11 +286,12 @@ const AddLedger = () => {
                       Ledger code
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       id="ledgercode"
                       className="flex-1 border px-2 py-1"
                       value={formData.ledgercode}
                       onChange={handleChangeData}
+                      min="0"
                     />
                   </div>
 
@@ -373,11 +375,12 @@ const AddLedger = () => {
                         Pincode
                       </label>
                       <input
-                        type="text"
+                        type="number"
                         id="Pincode"
                         className="flex-1 border px-2 py-1"
                         value={formData.Pincode}
                         onChange={handleChangeData}
+                        min="0"
                       />
                     </div>
                     <div className="flex flex-col lg:flex-row lg:items-center">
@@ -388,11 +391,12 @@ const AddLedger = () => {
                         Tele. NO.
                       </label>
                       <input
-                        type="text"
+                        type="number"
                         id="teleno"
                         className="flex-1 border px-2 py-1"
                         value={formData.teleno}
                         onChange={handleChangeData}
+                        min="0"
                       />
                     </div>
                   </div>
@@ -404,11 +408,12 @@ const AddLedger = () => {
                       Fax No
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       id="fax"
                       className="flex-1 border px-2 py-1"
                       value={formData.fax}
                       onChange={handleChangeData}
+                      min="0"
                     />
                   </div>
                   <div className="flex flex-col md:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4">
@@ -420,11 +425,12 @@ const AddLedger = () => {
                         Mobile No
                       </label>
                       <input
-                        type="text"
+                        type="number"
                         id="mobile"
                         className="flex-1 border px-2 py-1"
                         value={formData.mobile}
                         onChange={handleChangeData}
+                        min="0"
                       />
                     </div>
                     <div className="flex flex-col lg:flex-row lg:items-center">
@@ -435,11 +441,12 @@ const AddLedger = () => {
                         SMS NO.
                       </label>
                       <input
-                        type="text"
+                        type="number"
                         id="sms"
                         value={formData.sms}
                         onChange={handleChangeData}
                         className="flex-1 border px-2 py-1"
+                        min="0"
                       />
                     </div>
                   </div>
@@ -481,11 +488,12 @@ const AddLedger = () => {
                       Bank A/C Detail
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       id="bank"
                       className="flex-1 border px-2 py-1"
                       value={formData.bank}
                       onChange={handleChangeData}
+                      min="0"
                     />
                   </div>
                 </div>
@@ -666,11 +674,12 @@ const AddLedger = () => {
                         Aadhar NO
                       </label>
                       <input
-                        type="text"
+                        type="number"
                         id="Adhar"
                         className="flex-1 border px-2 py-1"
                         value={formData.Adhar}
                         onChange={handleChangeData}
+                        min="0"
                       />
                     </div>
                     <div className="flex flex-1"></div>

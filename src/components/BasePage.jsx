@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
 import ButtonGroup from './ButtonGroup'
 import MasterPart from './MasterPart'
+import SalePurchase from './SalePurchase'
+import ReceptPayment from './ReceptPayment'
 
-const BasePage = ({Sidebardata,heading,tableData}) => {
+const BasePage = ({Sidebardata,heading,tableData,mode,subHeading}) => {
 
   const [showSidebar, setshowSidebar] = useState(false)
 
   return (
     <div className='h-screen w-full relative bg-white overflow-hidden'>
-      <div className='bg-blue-600 flex justify-between xl:justify-center px-2 text-xl font-bold py-1.5 text-white'>
+      <div className={`${mode == "Sales" ?'bg-green-500':'bg-blue-500'} ${mode == "Purchase" ? 'bg-orange-400':'bg-blue-500'} ${mode == "Receipt" ? 'bg-emerald-400':'bg-blue-500'} ${mode == "Payment" ? 'bg-orange-300':'bg-blue-500'} flex justify-between text-xl font-bold text-white`}>
+        {subHeading && <h1 className={`px-10 bg-yellow-900`}>{subHeading}</h1>}
         <h1 className='text-center'>{heading}</h1>
       <button
             className="text-xl px-5 block xl:hidden"
@@ -16,12 +19,27 @@ const BasePage = ({Sidebardata,heading,tableData}) => {
           >
             <i className="ri-menu-line "></i>
           </button>
-
+      {/* <button
+            className="text-xl px-5 block xl:hidden"
+            onClick={() => setshowSidebar(!showSidebar)}
+          >
+            <i className="ri-close-fill"></i>
+          </button> */}
+      <div className="lg:flex hidden "></div>
       </div>
       <div className='flex justify-end'>
-        <div className='w-full h-screen p-5 sm:p-2'>
-            <MasterPart tableData={tableData}/>
+        {/* ------------------ displaying main content according their mode or table data -------------------------------- */}
+       <div className='w-full h-screen overflow-y-auto p-5 sm:p-2 table-data'>
+            {tableData && <MasterPart tableData={tableData}/>}
+            {(mode === "Sales" || mode === "Purchase") && (
+              <SalePurchase />
+            )}
+            {(mode === "Receipt" || mode === "Payment") && (
+              <ReceptPayment mode={mode}/>
+            )}
         </div>
+        
+        {/* --------------------------------- display sidebar  --------------------------------------------- */}
         <div className='w-48 h-screen hidden xl:block '>
             <ButtonGroup className='w-full py-2 border mb-0.5 font-bold text-left px-3' data={Sidebardata} />
         </div>

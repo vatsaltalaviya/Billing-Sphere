@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
+  const [email, setemail] = useState("")
+  const [Password, setPassword] = useState("")
   const handleSubmit = (e)=>{
     e.preventDefault();
     navigate('/dashboard')
@@ -19,12 +21,12 @@ const Login = () => {
           </div>
           <div className='px-2 py-2 w-full'>
             <div className='flex items-center mt-1'>
-              <label htmlFor="email" className='w-32 text-xl font-semibold'>Email :</label>
-              <input className=' border rounded p-2 text-xl flex-1' type="email" name="email" id="email" />
+              <label htmlFor="email" className='w-32 text-lg md:text-xl font-semibold'>Email </label>
+              <input className=' border rounded p-2 text-xl flex-1' type="email" name="email" id="email" value={email} onChange={(e)=>setemail(e.target.value)}/>
             </div>
             <div className='flex items-center mt-1'>
-              <label htmlFor="password" className='w-32 text-xl font-semibold'>Password :</label>
-              <input className='border rounded p-2 text-xl flex-1' type="password" name="password" id="password" />
+              <label htmlFor="password" className='w-32 text-lg md:text-xl font-semibold'>Password </label>
+              <input className='border rounded p-2 text-xl flex-1' type="password" name="password" id="password" value={Password} onChange={(e)=>setPassword(e.target.value)}/>
             </div>
             <div className='flex flex-col md:flex-row items-center mt-1 gap-3'>
               <button  className='border text-lg font-medium px-4 bg-amber-300 block w-full hover:bg-amber-500 rounded py-2'>Login</button>
