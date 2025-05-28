@@ -22,7 +22,7 @@ const Datatable = ({ data }) => {
     tabIndex={0}
     onKeyDown={handleKeyDown}
     >
-      <table className="table-auto w-full border border-black text-xs md:text-sm xl:text-[16.5px] ">
+      <table className="table-auto w-full border border-b-0 border-black text-xs md:text-sm xl:text-[16.5px] ">
         <thead>
           <tr className="bg-white text-purple-900 font-bold text-left">
             {columns.map((col, i) => (

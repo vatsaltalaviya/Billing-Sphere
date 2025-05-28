@@ -1,7 +1,7 @@
 import React from 'react'
 import Datatable from './Datatable'
 
-const MasterPart = ({tableData}) => {
+const MasterPart = ({tableData }) => {
   
   return (
     <div className='h-full w-full xl:px-5'>
@@ -13,7 +13,7 @@ const MasterPart = ({tableData}) => {
         </form>
       </div>
       {/* -------------------------------- table ------------------------------ */}
-      <div className='w-full h-[85vh] table-data overflow-y-auto xl:border-b'>
+      <div className={`w-full max-h-[85vh] table-data overflow-y-auto xl:border-b`}>
         <Datatable data={tableData}/>
       </div>
     </div>
