@@ -182,7 +182,7 @@ const Home = () => {
                 </div>
               </div>
               <div className="w-full md:w-1/2">
-                <div className="w-full gap-0.5 flex flex-col mt-10">
+                <div className="w-full gap-0.5 flex flex-col mt-9">
                   <ButtonGroup
                     className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
                     data={FavouriteShortCut2}

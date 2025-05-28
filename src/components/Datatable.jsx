@@ -14,7 +14,7 @@ const Datatable = ({ data }) => {
       if(e.key === "ArrowUp"){
       setselectedRow((prev)=> Math.max(prev - 1 , 0 ))
     }
-    console.log(selectedRow);
+    
 }
 
   return (

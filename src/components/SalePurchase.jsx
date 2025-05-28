@@ -449,8 +449,9 @@ const SalePurchase = () => {
             <input
               type="number"
               id="roundof"
-              className="flex-1 text-right px-2 py-1"
+              className="w-32 xl:flex-1 text-right px-2 py-1"
               defaultValue="0"
+              value="100000"
             />
           </div>
           <div className="flex">
@@ -460,8 +461,9 @@ const SalePurchase = () => {
             <input
               type="number"
               id="netTotal"
-              className="flex-1 text-right px-2 py-1"
+              className="w-32 xl:flex-1 text-right px-2 py-1"
               defaultValue="0"
+              value="100000"
             />
           </div>
         </div>

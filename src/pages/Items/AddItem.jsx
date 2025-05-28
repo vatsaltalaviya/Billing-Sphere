@@ -27,7 +27,7 @@ const AddItem = () => {
   const { deleteid } = useParams();
 
   const handleChangeData = (e) => {
-    console.log("handleChangeData called with:", e.target);
+    // console.log("handleChangeData called with:", e.target);
     const { id, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
 
@@ -42,8 +42,9 @@ const AddItem = () => {
   };
 
   return (
-    <div className="h-screen w-full bg-white">
+    <div className="h-screen w-full  bg-white">
       <div
+      
         className={`${
           editid ? "bg-amber-500" : deleteid ?"bg-red-500": "bg-blue-800"
         } font-bold text-lg`}
@@ -53,7 +54,7 @@ const AddItem = () => {
         </h1>
       </div>
       {/* ------------------------------- body ----------------------------------- */}
-      <form className="p-2 ">
+      <form className="p-2 " >
         <div className="flex flex-col xl:flex-row">
           {/* ----------------- left part --------------- */}
           <div className="w-full xl:w-1/2 border py-5">
