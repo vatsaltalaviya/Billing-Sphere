@@ -112,7 +112,7 @@ const AddLedger = () => {
         </h1>
       </div>
       {/* ------------------------------- body ----------------------------------- */}
-      <form className="p-2 xl:p-10">
+      <form className="p-2">
         <div className="flex flex-col xl:flex-row">
           {/* ----------------- left part --------------- */}
           <div className="w-full xl:w-1/2 border py-5">
@@ -367,7 +367,7 @@ const AddLedger = () => {
                   </div>
 
                   <div className="flex flex-col md:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-3">
-                    <div className="flex flex-col lg:flex-row lg:items-center">
+                    <div className="flex flex-col lg:flex-row lg:items-center ">
                       <label
                         htmlFor="Pincode"
                         className="w-36 md:w-48 test-sm md:text-lg font-medium"
@@ -377,7 +377,7 @@ const AddLedger = () => {
                       <input
                         type="number"
                         id="Pincode"
-                        className="flex-1 border px-2 py-1"
+                        className="flex-1 md:w-32 border px-2 py-1"
                         value={formData.Pincode}
                         onChange={handleChangeData}
                         min="0"
@@ -388,12 +388,12 @@ const AddLedger = () => {
                         htmlFor="teleno"
                         className="w-36 md:w-48 test-sm md:text-lg font-medium"
                       >
-                        Tele. NO.
+                        Tele. No.
                       </label>
                       <input
                         type="number"
                         id="teleno"
-                        className="flex-1 border px-2 py-1"
+                        className="flex-1 md:w-36 border px-2 py-1"
                         value={formData.teleno}
                         onChange={handleChangeData}
                         min="0"
@@ -438,16 +438,19 @@ const AddLedger = () => {
                         htmlFor="sms"
                         className="w-36 md:w-48 test-sm md:text-lg font-medium"
                       >
-                        SMS NO.
+                        SMS Msg.
                       </label>
-                      <input
+                      <select
                         type="number"
                         id="sms"
                         value={formData.sms}
                         onChange={handleChangeData}
                         className="flex-1 border px-2 py-1"
                         min="0"
-                      />
+                      >
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                      </select>
                     </div>
                   </div>
                   <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
@@ -535,7 +538,7 @@ const AddLedger = () => {
                       <input
                         type="text"
                         id="gst"
-                        className="flex-1 border px-2 py-1"
+                        className="flex-1 lg:w-44 border px-2 py-1"
                         value={formData.gst}
                         onChange={handleChangeData}
                       />
@@ -550,7 +553,7 @@ const AddLedger = () => {
                       <input
                         type="date"
                         id="gstDate"
-                        className="flex-1 border px-2 py-1"
+                        className="flex-1 lg:w-32 border px-2 py-1"
                         value={formData.gstDate}
                         onChange={handleChangeData}
                       />
@@ -566,7 +569,7 @@ const AddLedger = () => {
                       </label>
                       <select
                         id="regtype"
-                        className="xl:w-[214px] flex-1 border px-2 py-1"
+                        className="xl:w-[178px] flex-1 border px-2 py-1"
                         value={formData.regtype}
                         onChange={handleChangeData}
                       >
@@ -587,7 +590,7 @@ const AddLedger = () => {
                       </label>
                       <select
                         id="type"
-                        className="xl:w-[214px] md:flex-1 border px-2 py-1"
+                        className="flex-1 lg:w-32 border px-2 py-1"
                         value={formData.type}
                         onChange={handleChangeData}
                       >
@@ -612,7 +615,7 @@ const AddLedger = () => {
                       <input
                         type="text"
                         id="cst"
-                        className="flex-1 border px-2 py-1"
+                        className="flex-1 lg:w-44 border px-2 py-1"
                         value={formData.cst}
                         onChange={handleChangeData}
                       />
@@ -627,7 +630,7 @@ const AddLedger = () => {
                       <input
                         type="date"
                         id="cstDate"
-                        className="flex-1 border px-2 py-1"
+                        className="flex-1 lg:w-32 border px-2 py-1"
                         value={formData.cstDate}
                         onChange={handleChangeData}
                       />
@@ -644,7 +647,7 @@ const AddLedger = () => {
                       <input
                         type="text"
                         id="LST"
-                        className="flex-1 border px-2 py-1"
+                        className="flex-1 lg:w-44 border px-2 py-1"
                         value={formData.LST}
                         onChange={handleChangeData}
                       />
@@ -659,7 +662,7 @@ const AddLedger = () => {
                       <input
                         type="date"
                         id="lstDate"
-                        className="flex-1 border px-2 py-1"
+                        className="flex-1 lg:w-32 border px-2 py-1"
                         value={formData.lstDate}
                         onChange={handleChangeData}
                       />
@@ -692,20 +695,20 @@ const AddLedger = () => {
 
         <div className="w-full flex flex-col xl:flex-row justify-between border p-2">
           <div className="grid  grid-cols-1 md:grid-cols-2 xl:grid-cols-2 my-2 px-1 py-0.5"></div>
-          <div className="flex flex-col xl:flex-row gap-3">
+          <div className="flex flex-col xl:flex-row gap-3 mb-3 md:mb-0">
             {deleteid ? (
               ""
             ) : (
-              <button className="px-3 py-2 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+              <button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
                 Save
               </button>
             )}
 
-            <button className="px-3 py-2 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+            <button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
               Cancel
             </button>
             {editid || deleteid ? (
-              <button className="px-3 py-2 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+              <button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
                 Delete
               </button>
             ) : (
@@ -714,7 +717,7 @@ const AddLedger = () => {
 
             {/*<button className="px-3 py-2 rounded border ml-1">Previous</button> */}
           </div>
-          <button className="px-3 py-2 mt-2 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+          <button className="px-3 py-2 h-10 mt-3 xl:mt-0 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
             Copy
           </button>
         </div>

@@ -27,6 +27,7 @@ const AddItem = () => {
   const { deleteid } = useParams();
 
   const handleChangeData = (e) => {
+    console.log("handleChangeData called with:", e.target);
     const { id, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
 
@@ -35,7 +36,7 @@ const AddItem = () => {
         ...prev,
         [id]: newValue,
       };
-      console.log(updatedForm); // Move console.log inside the setState callback
+      // console.log(updatedForm); // Move console.log inside the setState callback
       return updatedForm;
     });
   };
@@ -45,18 +46,18 @@ const AddItem = () => {
       <div
         className={`${
           editid ? "bg-amber-500" : deleteid ?"bg-red-500": "bg-blue-800"
-        } font-bold text-xl`}
+        } font-bold text-lg`}
       >
         <h1 className="text-center text-white">
           {editid ? "Edit Item" : deleteid ? "Delete Item" : "Add Item"}
         </h1>
       </div>
       {/* ------------------------------- body ----------------------------------- */}
-      <form className="p-2 xl:p-10">
+      <form className="p-2 ">
         <div className="flex flex-col xl:flex-row">
           {/* ----------------- left part --------------- */}
           <div className="w-full xl:w-1/2 border py-5">
-            <div className="bg-blue-800 font-bold my-3 text-xl w-52">
+            <div className="bg-blue-800 font-bold my-3 text-lg w-52">
               <h1 className="text-center text-white">Basic Details</h1>
             </div>
             <div className="py-5 px-4">
@@ -65,7 +66,7 @@ const AddItem = () => {
                 <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                   <label
                     htmlFor="itemGroup"
-                    className="lg:w-32 lg:text-lg text-xl font-medium"
+                    className="lg:w-32 lg:text-lg text-lg font-medium"
                   >
                     Item Group
                   </label>
@@ -79,9 +80,9 @@ const AddItem = () => {
                 </div>
 
                 {/* Brand + Code No */}
-                <div className="flex flex-col md:flex-row flex-wrap xl:items-center gap-4">
+                <div className="flex flex-col md:flex-row flex-wrap  xl:items-center gap-4">
                   <div className="flex flex-col lg:flex-row lg:items-center">
-                    <label htmlFor="brand" className="lg:w-36 text-xl lg:text-lg font-medium">
+                    <label htmlFor="brand" className="lg:w-36 text-lg lg:text-lg font-medium">
                       Brand
                     </label>
                     <input
@@ -95,14 +96,14 @@ const AddItem = () => {
                   <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="codeNo"
-                      className="lg:w-36 text-xl lg:text-lg font-medium"
+                      className="lg:w-36 text-lg lg:text-lg font-medium"
                     >
                       Code No
                     </label>
                     <input
                       type="number"
                       id="codeNo"
-                      className="flex-1 border px-2 py-1"
+                      className="flex-1 lg:w-48 border px-2 py-1"
                       value={formData.codeNo}
                       onChange={handleChangeData}
                       min="0"
@@ -114,7 +115,7 @@ const AddItem = () => {
                 <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                   <label
                     htmlFor="itemName"
-                    className="lg:w-32 lg:text-lg text-xl font-medium"
+                    className="lg:w-32 lg:text-lg text-lg font-medium"
                   >
                     Item Name
                   </label>
@@ -131,7 +132,7 @@ const AddItem = () => {
                 <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                   <label
                     htmlFor="printName"
-                    className="lg:w-32 lg:text-lg text-xl font-medium"
+                    className="lg:w-32 lg:text-lg text-lg font-medium"
                   >
                     Print Name
                   </label>
@@ -147,7 +148,7 @@ const AddItem = () => {
 
                 {/* Remarks */}
                 <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-                  <label htmlFor="remarks" className="lg:w-32 lg:text-lg text-xl font-medium">
+                  <label htmlFor="remarks" className="lg:w-32 lg:text-lg text-lg font-medium">
                     Remarks
                   </label>
                   <input
@@ -162,7 +163,7 @@ const AddItem = () => {
                 {/* HSN Code + Tax Category */}
                 <div className=" flex flex-col md:flex-row flex-wrap  xl:items-center gap-4">
                   <div className="flex flex-col lg:flex-row lg:items-center">
-                    <label htmlFor="hsn" className="lg:w-36 text-xl lg:text-lg font-medium">
+                    <label htmlFor="hsn" className="lg:w-36 text-lg lg:text-lg font-medium">
                       HSN Code
                     </label>
                     <input
@@ -174,7 +175,7 @@ const AddItem = () => {
                     />
                   </div>
                   <div className="flex flex-col lg:flex-row lg:items-center">
-                    <label htmlFor="tax" className="lg:w-36 text-xl lg:text-lg font-medium">
+                    <label htmlFor="tax" className="lg:w-36 text-lg lg:text-lg font-medium">
                       Tax Category
                     </label>
                     <select
@@ -199,7 +200,7 @@ const AddItem = () => {
           </div>
           {/* ---- right part ------- */}
           <div className="w-full xl:w-1/2 border py-5">
-            <div className="bg-blue-800 font-bold my-3 text-xl w-52">
+            <div className="bg-blue-800 font-bold my-3 text-lg w-52">
               <h1 className="text-white text-center">Price Details</h1>
             </div>
             <div className="space-x-4">
@@ -208,7 +209,7 @@ const AddItem = () => {
                   <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="retail"
-                      className="lg:w-32 lg:text-lg text-xl font-medium"
+                      className="lg:w-32 lg:text-lg text-lg font-medium"
                     >
                       Retail
                     </label>
@@ -222,7 +223,7 @@ const AddItem = () => {
                     />
                   </div>
                   <div className="flex flex-col lg:flex-row lg:items-center">
-                    <label htmlFor="mrp" className="lg:w-32 lg:text-lg text-xl font-medium">
+                    <label htmlFor="mrp" className="lg:w-32 lg:text-lg text-lg font-medium">
                       MRP
                     </label>
                     <input
@@ -243,7 +244,7 @@ const AddItem = () => {
         <div className="flex flex-col xl:flex-row ">
           {/* ----------------- left part --------------- */}
           <div className="w-full xl:w-1/2 border py-5">
-            <div className="bg-blue-800 font-bold my-3 text-xl w-52">
+            <div className="bg-blue-800 font-bold my-3 text-lg w-52">
               <h1 className="text-center text-white">Stock Option</h1>
             </div>
 
@@ -254,7 +255,7 @@ const AddItem = () => {
                   <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="barcode"
-                      className="lg:w-32 lg:text-lg text-xl font-medium"
+                      className="lg:w-32 lg:text-lg text-lg font-medium"
                   
                     >
                       Barcode SR
@@ -268,7 +269,7 @@ const AddItem = () => {
                     />
                   </div>
                   <div className="flex flex-col lg:flex-row lg:items-center">
-                    <label htmlFor="rack" className="lg:w-32 lg:text-lg text-xl font-medium">
+                    <label htmlFor="rack" className="lg:w-32 lg:text-lg text-lg font-medium">
                       Rack/Bin
                     </label>
                     <input
@@ -286,7 +287,7 @@ const AddItem = () => {
                  <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="stockunit"
-                      className="lg:w-32 lg:text-lg text-xl font-medium"
+                      className="lg:w-32 lg:text-lg text-lg font-medium"
                     >
                       Stock Unit
                     </label>
@@ -304,7 +305,7 @@ const AddItem = () => {
                   <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="minStock"
-                      className="lg:w-32 lg:text-lg text-xl font-medium"
+                      className="lg:w-32 lg:text-lg text-lg font-medium"
                     >
                       Minimun Stock
                     </label>
@@ -320,7 +321,7 @@ const AddItem = () => {
                   <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="maxStock"
-                      className="lg:w-32 lg:text-lg text-xl font-medium"
+                      className="lg:w-32 lg:text-lg text-lg font-medium"
                     >
                       Maximum Stock
                     </label>
@@ -339,7 +340,7 @@ const AddItem = () => {
           </div>
           {/* ---- right part ------- */}
           <div className="w-full xl:w-1/2 border py-5">
-            <div className="bg-blue-800 font-bold my-3 text-xl w-52">
+            <div className="bg-blue-800 font-bold my-3 text-lg w-52">
               <h1 className="text-white text-center">Item Images</h1>
             </div>
             <div className="py-5 px-4">
@@ -348,7 +349,7 @@ const AddItem = () => {
                 <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                   <label
                     htmlFor="remarkstockunit"
-                    className="lg:w-32 lg:text-lg text-xl font-medium"
+                    className="lg:w-32 lg:text-lg text-lg font-medium"
                   >
                     Update Images ??
                   </label>
@@ -404,7 +405,7 @@ const AddItem = () => {
         <div className="w-full flex flex-col xl:flex-row justify-between border p-2">
           <div className="grid  grid-cols-1 md:grid-cols-2 xl:grid-cols-2 my-2 px-1 py-0.5">
             <div className="grid grid-cols-2 py-1 gap-3">
-              <label htmlFor="openstock" className="font-medium lg:text-lg text-xl" >
+              <label htmlFor="openstock" className="font-medium lg:text-lg text-lg" >
                 Opening Stock
               </label>
               <input
@@ -416,7 +417,7 @@ const AddItem = () => {
               />
             </div>
             <div className="grid grid-cols-2 xl:ml-3 gap-3">
-              <label htmlFor="isActive" className="font-medium lg:text-lg text-xl">
+              <label htmlFor="isActive" className="font-medium lg:text-lg text-lg">
                 Is Active
               </label>
               <select id="isActive" className="border px-2 py-1 w-36" value={formData.isActive} onChange={handleChangeData}>
@@ -425,18 +426,18 @@ const AddItem = () => {
               </select>
             </div>
           </div>
-          <div className="flex flex-col xl:flex-row gap-3">
+          <div className="flex flex-col xl:flex-row gap-3 mb-3 xl:mb-0">
             {
-              deleteid ? '':<button className="px-3 py-2 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+              deleteid ? '':<button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
                 Save
               </button>
             }
                
-            <button className="px-3 py-2 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+            <button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
               Cancel
             </button>
             {editid || deleteid ? (
-              <button className="px-3 py-2 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+              <button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
                 Delete
               </button>
             ) : (
@@ -445,7 +446,7 @@ const AddItem = () => {
 
             {/*<button className="px-3 py-2 rounded border ml-1">Previous</button> */}
           </div>
-          <button className="px-3 py-2 mt-2 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+          <button className="px-3 py-2 h-10 mt-3 xl:mt-0 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
             Copy
           </button>
         </div>

@@ -157,6 +157,14 @@ const Ledger = () => {
     "Cl.Balance": "0 Dr",
     Active: "Yes",
   },
+  {
+    Sr: 19,
+    "Ledger Name": "Purchase Return",
+    "Ledger Group": "Purchase Accounts",
+    "Op.Balance": "0 Dr",
+    "Cl.Balance": "0 Dr",
+    Active: "Yes",
+  },
 ];
 
 

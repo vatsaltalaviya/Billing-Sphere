@@ -95,8 +95,8 @@ const SalePurchase = () => {
       <div className="flex flex-col gap-4  mb-5 py-2">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex flex-col lg:flex-row gap-2">
-            <label htmlFor="no" className="w-32 text-xl font-medium">
-              NO
+            <label htmlFor="no" className="w-32 text-lg font-medium">
+              No
             </label>
             <input
               type="text"
@@ -108,7 +108,7 @@ const SalePurchase = () => {
             />
           </div>
           <div className="flex flex-col lg:flex-row gap-2">
-            <label htmlFor="Date" className="w-32 text-xl font-medium">
+            <label htmlFor="Date" className="w-32 text-lg font-medium">
               Date
             </label>
             <input
@@ -121,7 +121,7 @@ const SalePurchase = () => {
             />
           </div>
           <div className="flex flex-col lg:flex-row gap-2">
-            <label htmlFor="Type" className="w-32 text-xl font-medium">
+            <label htmlFor="Type" className="w-32 text-lg font-medium">
               Type
             </label>
             <select
@@ -139,7 +139,7 @@ const SalePurchase = () => {
         </div>
         <div className="flex flex-col flex-wrap lg:flex-row gap-4">
           <div className="flex flex-col lg:flex-row gap-2">
-            <label htmlFor="party" className="w-32 text-xl font-medium">
+            <label htmlFor="party" className="w-32 text-lg font-medium">
               Party
             </label>
             <select
@@ -158,7 +158,7 @@ const SalePurchase = () => {
             </select>
           </div>
           <div className="flex flex-col lg:flex-row gap-2">
-            <label htmlFor="Place" className="w-32 text-xl font-medium">
+            <label htmlFor="Place" className="w-32 text-lg font-medium">
               Place
             </label>
             <select
@@ -179,7 +179,7 @@ const SalePurchase = () => {
         </div>
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex flex-col lg:flex-row gap-2">
-            <label htmlFor="dcno" className="w-32 text-xl font-medium">
+            <label htmlFor="dcno" className="w-32 text-lg font-medium">
               DC NO
             </label>
             <input
@@ -192,7 +192,7 @@ const SalePurchase = () => {
             />
           </div>
           <div className="flex flex-col lg:flex-row gap-2">
-            <label htmlFor="date" className="w-32 text-xl font-medium">
+            <label htmlFor="date" className="w-32 text-lg font-medium">
               Date
             </label>
             <input
@@ -366,7 +366,7 @@ const SalePurchase = () => {
       </div>
       <div className="flex flex-col lg:flex-row w-full items-start gap-4 justify-between mt-4">
         <div className="flex flex-col lg:flex-row gap-2 w-full">
-          <label htmlFor="remark" className="w-32 text-xl font-medium">
+          <label htmlFor="remark" className="w-32 text-lg font-medium">
             Remark
           </label>
           <input

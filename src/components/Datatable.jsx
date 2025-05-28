@@ -22,11 +22,14 @@ const Datatable = ({ data }) => {
     tabIndex={0}
     onKeyDown={handleKeyDown}
     >
-      <table className="table-auto w-full border border-black text-xs md:text-sm xl:text-xl ">
+      <table className="table-auto w-full border border-black text-xs md:text-sm xl:text-[16.5px] ">
         <thead>
           <tr className="bg-white text-purple-900 font-bold text-left">
             {columns.map((col, i) => (
-              <th key={i} className="border border-black px-3 py-1">
+              <th
+                key={i}
+                className={`border border-black px-3 py-1 ${(i === 0 || i === columns.length - 1) ? 'text-center' : ''}`}
+              >
                 {col}
               </th>
             ))}
@@ -37,12 +40,12 @@ const Datatable = ({ data }) => {
             <tr
               key={rowIndex}
               onClick={()=>setselectedRow(rowIndex)}
-              className={` font-medium cursor-pointer ${selectedRow === rowIndex ?'bg-blue-500 ':'bg-white text-black' }`}
+              className={`font-medium cursor-pointer ${selectedRow === rowIndex ?'bg-blue-500 text-white ':'bg-white text-black' }`}
             >
               {columns.map((col, colIndex) => (
                 <td
                   key={colIndex}
-                  className={`border border-black px-3 py-1 `}
+                  className={`border border-black px-3 py-1 ${(colIndex === 0 || colIndex === columns.length - 1) ? 'text-center' : ''}`}
                 >
                   {row[col]}
                 </td>

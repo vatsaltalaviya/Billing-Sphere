@@ -121,12 +121,12 @@ const Home = () => {
             <h1 className="text-center bg-red-600 uppercase text-white font-bold">
               Quick Aceess
             </h1>
-            <div className="p-3 flex flex-col md:flex-row">
+            <div className="p-3 flex flex-col gap-4 md:flex-row ">
               <div className="w-full md:w-1/2">
                 <h1 className="text-xl font-bold text-red-700 underline underline-offset-4">
                   Transaction
                 </h1>
-                <div className="w-full md:w-52 gap-0.5 flex flex-col mt-2">
+                <div className="w-full gap-0.5 flex flex-col mt-2">
                   <ButtonGroup
                     className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
                     data={Transaction}
@@ -137,7 +137,7 @@ const Home = () => {
                 <h1 className="text-xl font-bold text-red-700 underline underline-offset-4">
                   Account Report
                 </h1>
-                <div className="w-full md:w-52 gap-0.5 flex flex-col mt-2">
+                <div className="w-full gap-0.5 flex flex-col mt-2">
                   <ButtonGroup
                     className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
                     data={AccountReport}
@@ -145,12 +145,12 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div className="p-3 flex flex-col md:flex-row">
+            <div className="p-3 flex flex-col gap-4 md:flex-row">
               <div className="w-full md:w-1/2">
                 <h1 className="text-xl font-bold text-red-700 underline underline-offset-4">
                   Masters
                 </h1>
-                <div className="w-full md:w-52 gap-0.5 flex flex-col mt-2">
+                <div className="w-full  gap-0.5 flex flex-col mt-2">
                   <ButtonGroup
                     className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
                     data={Master}
@@ -161,7 +161,7 @@ const Home = () => {
                 <h1 className="text-xl font-bold text-red-700 underline underline-offset-4">
                   Inventory Report
                 </h1>
-                <div className="w-full md:w-52 gap-0.5 flex flex-col mt-2">
+                <div className="w-full  gap-0.5 flex flex-col mt-2">
                   <ButtonGroup
                     className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
                     data={InventoryReport}
@@ -169,12 +169,12 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div className="p-3 flex flex-col md:flex-row xl:mb-14">
+            <div className="p-3 flex flex-col gap-4 md:flex-row xl:mb-14">
               <div className="w-full md:w-1/2">
                 <h1 className="text-xl font-bold text-red-700 underline underline-offset-4">
                   Favourite Shortcuts
                 </h1>
-                <div className="w-full md:w-52 gap-0.5 flex flex-col mt-2">
+                <div className="w-full gap-0.5 flex flex-col mt-2">
                   <ButtonGroup
                     className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
                     data={FavouriteShortCut1}
@@ -182,7 +182,7 @@ const Home = () => {
                 </div>
               </div>
               <div className="w-full md:w-1/2">
-                <div className="w-full md:w-52 gap-0.5 flex flex-col mt-10">
+                <div className="w-full gap-0.5 flex flex-col mt-10">
                   <ButtonGroup
                     className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
                     data={FavouriteShortCut2}

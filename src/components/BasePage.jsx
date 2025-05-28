@@ -10,22 +10,33 @@ const BasePage = ({Sidebardata,heading,tableData,mode,subHeading}) => {
 
   return (
     <div className='h-screen w-full relative bg-white overflow-hidden'>
-      <div className={`${mode == "Sales" ?'bg-green-500':'bg-blue-500'} ${mode == "Purchase" ? 'bg-orange-400':'bg-blue-500'} ${mode == "Receipt" ? 'bg-emerald-400':'bg-blue-500'} ${mode == "Payment" ? 'bg-orange-300':'bg-blue-500'} flex justify-between text-xl font-bold text-white`}>
-        {subHeading && <h1 className={`px-10 bg-yellow-900`}>{subHeading}</h1>}
-        <h1 className='text-center'>{heading}</h1>
-      <button
-            className="text-xl px-5 block xl:hidden"
-            onClick={() => setshowSidebar(!showSidebar)}
-          >
-            <i className="ri-menu-line "></i>
-          </button>
-      {/* <button
-            className="text-xl px-5 block xl:hidden"
-            onClick={() => setshowSidebar(!showSidebar)}
-          >
-            <i className="ri-close-fill"></i>
-          </button> */}
-      <div className="lg:flex hidden "></div>
+      <div className={`${mode == "Sales" ?'bg-green-500':'bg-blue-500'} ${mode == "Purchase" ? 'bg-orange-400':'bg-blue-500'} ${mode == "Receipt" ? 'bg-emerald-400':'bg-blue-500'} ${mode == "Payment" ? 'bg-orange-300':'bg-blue-500'} text-xl font-bold text-white`}
+      >
+        {subHeading ? (
+          <div className="flex justify-between items-center w-full">
+            <div className="flex md:hidden"></div>
+            <h1 className={`px-10 bg-yellow-900 hidden md:block`}>{subHeading}</h1>
+            <h1 className='text-center flex-1'>{heading}</h1>
+            <div className="lg:flex hidden"></div>
+            <button
+              className="text-xl px-5 block xl:hidden"
+              onClick={() => setshowSidebar(!showSidebar)}
+            >
+              <i className="ri-menu-line "></i>
+            </button>
+          </div>
+        ) : (
+          <div className="flex justify-between xl:justify-center items-center w-full">
+            <div className="flex md:hidden"></div>
+            <h1 className='text-center '>{heading}</h1>
+            <button
+              className="text-xl px-5 block xl:hidden"
+              onClick={() => setshowSidebar(!showSidebar)}
+            >
+              <i className="ri-menu-line "></i>
+            </button>
+          </div>
+        )}
       </div>
       <div className='flex justify-end'>
         {/* ------------------ displaying main content according their mode or table data -------------------------------- */}
