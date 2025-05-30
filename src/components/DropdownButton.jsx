@@ -1,38 +1,92 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const DropdownGroup = ({ dropdownData }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [openSubmenu, setOpenSubmenu] = useState(null);
+  const dropdownRef = useRef(null);
 
   const toggleDropdown = (name) => {
-    setOpenDropdown((prev) => (prev === name ? null : name));
+    setOpenDropdown(prev => (prev === name ? null : name));
+    setOpenSubmenu(null);
   };
 
-  const handleSelect = (dropdownName, option) => {
-    console.log(`Selected from ${dropdownName}: ${option}`);
+  const handleSelect = (group, option) => {
+    console.log(`Selected from ${group}: ${option}`);
     setOpenDropdown(null);
+    setOpenSubmenu(null);
   };
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenDropdown(null);
+        setOpenSubmenu(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className="flex flex-wrap gap-2 w-full justify-center sm:justify-start">
+    <div className="flex flex-wrap w-full justify-center sm:justify-start">
       {dropdownData.map((dropdown) => (
         <div key={dropdown.name} className="relative inline-block text-left w-full sm:w-auto  sm:mb-0">
           <button
             onClick={() => toggleDropdown(dropdown.name)}
-            className="w-full sm:w-auto px-4 py-2 bg-white font-semibold  md:border md:rounded text-sm sm:text-base"
+            className="px-4 py-2 bg-white border w-full text-sm font-semibold"
           >
-            {dropdown.label} ▾
+            {dropdown.name} ▾
           </button>
+
           {openDropdown === dropdown.name && (
-            <div className="absolute left-0 mt-2 w-full sm:w-40 bg-white border rounded shadow-lg z-50">
-              {dropdown.options.map((option) => (
-                <div
-                  key={option}
-                  onClick={() => handleSelect(dropdown.name, option)}
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm sm:text-base"
-                >
-                  {option}
-                </div>
-              ))}
+            <div className='flex'>
+            <div className="absolute text-sm tracking-tighter left-0 mt-2 bg-white border rounded shadow z-50 w-60 table-data">
+              {/* Check for groups (nested) or flat options */}
+              {dropdown.options ? (
+                dropdown.options.map((option, gIdx) => (
+                  <div key={gIdx} className="relative group">
+                    <div
+                      onMouseEnter={() => setOpenSubmenu(option.name)  }
+                      // onClick={() => setOpenDropdown(option.name)}
+                    
+                      className="px-4 py-1 hover:bg-gray-100 cursor-pointer text-sm font-medium flex justify-between items-center"
+                    >
+                      {option.name} 
+                      {option.submenu && (
+                        <span className="text-xs text-gray-500">▸</span>
+                      )}
+                    </div>
+                    {openSubmenu === option.name && option.submenu && (
+                      <div className="absolute left-full top-0 mt-0 bg-white border rounded shadow z-50 max-h-[30vh] overflow-y-auto table-data w-60">
+                        {option.submenu.map((subOpt, sIdx) => (
+                          <div
+                            key={subOpt.name}
+                            onClick={() => handleSelect(dropdown.name, subOpt)}
+                            className="px-4 py-1 hover:bg-gray-100 cursor-pointer text-sm"
+                          >
+                            {subOpt.name}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  
+                  
+                ))
+              ) : (
+                dropdown.options.map((opt, idx) => (
+                  <div
+                    key={idx}
+                    onClick={() => handleSelect(dropdown.name, opt)}
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                  >
+                    {opt}
+                  </div>
+                ))
+              )}
+            </div>
             </div>
           )}
         </div>

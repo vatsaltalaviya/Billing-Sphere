@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import SearchableDropdown from "./SearchableDropdown";
+import { items } from "../assets/Dummydata";
 
 const ReceptPayment = ({ mode }) => {
   // Each row: { entryType, debit, credit, remark, ledger }
@@ -85,7 +86,9 @@ const ReceptPayment = ({ mode }) => {
                   </td>
                   <td className="border p-0 col-span-3">
                     <SearchableDropdown
+                    options={items}
                       value={row.ledger}
+                      className="w-full h-full px-2 py-1 outline-none"
                       onChange={val => handleRowChange(idx, "ledger", val)}
                     />
                   </td>

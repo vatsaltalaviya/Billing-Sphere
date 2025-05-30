@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import SearchableDropdown from "../../components/SearchableDropdown";
+import { ledgergroup } from "../../assets/LedgerGroup";
+import { indianStates } from "../../assets/Dummydata";
 
 const AddLedger = () => {
   // Default form state for AddLedger
@@ -43,48 +46,11 @@ const AddLedger = () => {
     Adhar: "", // Aadhar NO
   };
 
-  const indianStates = [
-    "Andhra Pradesh",
-    "Arunachal Pradesh",
-    "Assam",
-    "Bihar",
-    "Chhattisgarh",
-    "Goa",
-    "Gujarat",
-    "Haryana",
-    "Himachal Pradesh",
-    "Jharkhand",
-    "Karnataka",
-    "Kerala",
-    "Madhya Pradesh",
-    "Maharashtra",
-    "Manipur",
-    "Meghalaya",
-    "Mizoram",
-    "Nagaland",
-    "Odisha",
-    "Punjab",
-    "Rajasthan",
-    "Sikkim",
-    "Tamil Nadu",
-    "Telangana",
-    "Tripura",
-    "Uttar Pradesh",
-    "Uttarakhand",
-    "West Bengal",
-    "Andaman and Nicobar Islands",
-    "Chandigarh",
-    "Dadra and Nagar Haveli and Daman and Diu",
-    "Delhi",
-    "Jammu and Kashmir",
-    "Ladakh",
-    "Lakshadweep",
-    "Puducherry",
-  ];
 
   const [formData, setformData] = useState(defaultForm);
   const { editid } = useParams();
   const { deleteid } = useParams();
+
 
   const handleChangeData = (e) => {
     const { id, value, type, checked } = e.target;
@@ -96,9 +62,15 @@ const AddLedger = () => {
         [id]: newValue,
       };
       console.log(updatedForm); // Move console.log inside the setState callback
+      
       return updatedForm;
     });
   };
+
+     const SelectedLedgerGroup = ledgergroup.find(
+        (group) => group.title === formData.LedgerGroup
+      )
+  console.log(SelectedLedgerGroup);
 
   return (
     <div className="h-screen w-full bg-white">
@@ -180,15 +152,9 @@ const AddLedger = () => {
                   >
                     Ledger Group
                   </label>
-                  <select
-                    id="LedgerGroup"
-                    className="w-36 md:w-48 md:flex-1 border px-2 py-1"
-                    value={formData.LedgerGroup}
-                    onChange={handleChangeData}
-                  >
-                    <option value="">Select Ledger Group</option>
-                    <option value="bank">Bank</option>
-                  </select>
+                  
+                  <SearchableDropdown className="flex-1 border px-2 py-1 xl:ml-9" id="LedgerGroup" options={ledgergroup}  value={formData.LedgerGroup}
+                    onChange={handleChangeData}/>
                 </div>
 
                 {/* OP Balance */}
@@ -272,7 +238,9 @@ const AddLedger = () => {
           </div>
           {/* ---- right part ------- */}
           <div className="w-full xl:w-1/2 border py-5">
-            <div>
+            {SelectedLedgerGroup && SelectedLedgerGroup.mailingDetails &&(
+              <>
+              <div>
               <div className="bg-blue-800 font-bold my-3 text-xl w-52">
                 <h1 className="text-white text-center">Mailing Details</h1>
               </div>
@@ -690,6 +658,8 @@ const AddLedger = () => {
                 </div>
               </div>
             </div>
+              </>
+            )}
           </div>
         </div>
 

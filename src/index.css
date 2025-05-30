@@ -15,3 +15,11 @@ input[type=number] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
+summary {
+  list-style: none;
+}
+
+/* Remove marker in Webkit browsers (Chrome, Safari, Edge) */
+summary::-webkit-details-marker {
+  display: none;
+}

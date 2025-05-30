@@ -43,7 +43,7 @@ const BasePage = ({Sidebardata,heading,tableData,mode,subHeading}) => {
        <div className='w-full h-screen overflow-y-auto p-5 sm:p-2 table-data'>
             {tableData && <MasterPart tableData={tableData}/>}
             {(mode === "Sales" || mode === "Purchase") && (
-              <SalePurchase />
+              <SalePurchase mode={mode}/>
             )}
             {(mode === "Receipt" || mode === "Payment") && (
               <ReceptPayment mode={mode}/>

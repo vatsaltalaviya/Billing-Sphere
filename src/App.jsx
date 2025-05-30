@@ -4,12 +4,13 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import AddItem from './pages/Items/AddItem'
 import Item from './pages/Items/Item'
-import Ledger from './pages/Ledger/ledger'
+import Ledger from './pages/Ledger/Ledger'
 import AddLedger from './pages/Ledger/AddLedger'
 import Sales from './pages/Sales/Sales'
 import Purchase from './pages/Purchase/Purchase'
 import Receipt from './pages/Receipt/Receipt'
 import Payment from './pages/Payment/Payment'
+import Start from './pages/Start'
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
       <Route path='/dashboard/purchase' element={<Purchase />} /> 
       <Route path='/dashboard/receipt' element={<Receipt />} /> 
       <Route path='/dashboard/payment' element={<Payment />} /> 
+      
     </Routes>
     </div>
     </>

@@ -2,79 +2,41 @@ import React, { useState } from "react";
 import DropdownButton from "../components/DropdownButton";
 import ButtonGroup from "../components/ButtonGroup";
 import { useNavigate } from "react-router-dom";
+import { rows } from "../assets/Dummydata";
+import {
+  AccountReport,
+  FavouriteShortCut1,
+  FavouriteShortCut2,
+  InventoryReport,
+  Master,
+  Transaction,
+} from "../assets/DashBoard";
+import { dropdownData } from "../assets/Dropdown";
+import DropDowmForMobile from "../components/DropDowmForMobile";
 
 const Home = () => {
   const [showMenu, setshowMenu] = useState(false);
   const navigate = useNavigate();
 
-  const dropdownData = [
-    {
-      name: "dropdown1",
-      label: "Account",
-      options: ["Profile", "Settings", "Logout"],
-    },
-    {
-      name: "dropdown2",
-      label: "Inventory",
-      options: ["Option A", "Option B", "Option C"],
-    },
-    {
-      name: "dropdown3",
-      label: "Admin",
-      options: ["Option A", "Option B", "Option C"],
-    },
-    {
-      name: "dropdown4",
-      label: "Utility",
-      options: ["Option A", "Option B", "Option C"],
-    },
-  ];
 
-  const Transaction = [
-    "Sales",
-    "Receipt",
-    "purchase",
-    "Payment",
-    "Receivable",
-    "Payable",
-  ];
-  const InventoryReport = ["Stock Status", "Stock Vouchers", "Sales Register"];
-  const AccountReport = [
-    "Trial Balance",
-    "Leadger Stmnt",
-    "Voucher Regi",
-    "Busi. View",
-  ];
-  const Master = ["Ledger", "Items"];
-  const FavouriteShortCut1 = ["Quick Voucher", "Pur/Return", "purchase Regis"];
-  const FavouriteShortCut2 = ["Movment Summ", "GST Report"];
+  const sanitizeLabel = (label) => label.toLowerCase().replace(/[\s./\\]/g, "");
 
-  const rows = [
-    { description: "SALES", may1: "1,230.00", may25: "1,230.00", year: "0.01" },
-    { description: "PURCHASE", may1: "0", may25: "0", year: "0" },
-    {
-      description: "RECEIPT",
-      may1: "1,000.00",
-      may25: "1,000.00",
-      year: "0.01",
-    },
-    { description: "PAYMENT", may1: "0", may25: "500.00", year: "0" },
-    {
-      description: "EXPENSE",
-      may1: "1,000.00",
-      may25: "1,500.00",
-      year: "0.02",
-    },
-    { description: "CASH BALANCE -F2", may1: "230.00", may25: "", year: "" },
-    { description: "BANK BALANCE -F3", may1: "0", may25: "", year: "" },
-    { description: "STOCK VALUE -F4", may1: "0", may25: "", year: "" },
-    { description: "CUSTOMER BALANCE -F5", may1: "0", may25: "", year: "" },
-    { description: "VENDOR BALANCE -F6", may1: "0", may25: "", year: "" },
-  ];
+  const toNavObjArray = (arr) =>
+    arr.map((name) => ({
+      name,
+      onClick: () => navigate(`/dashboard/${sanitizeLabel(name)}`),
+    }));
+
+  const TransactionObj = toNavObjArray(Transaction);
+  const InventoryReportObj = toNavObjArray(InventoryReport);
+  const AccountReportObj = toNavObjArray(AccountReport);
+  const MasterObj = toNavObjArray(Master);
+  const FavouriteShortCut1Obj = toNavObjArray(FavouriteShortCut1);
+  const FavouriteShortCut2Obj = toNavObjArray(FavouriteShortCut2);
 
   return (
     <div className="p-0 md:px-10 xl:px-32 relative w-full">
-      <div className="py-5  hidden md:flex justify-between md:w-auto">
+      <div className="py-5 hidden md:flex justify-between md:w-auto">
         <DropdownButton dropdownData={dropdownData} />
         <button
           className="px-3 py-1 bg-white font-bold text-sm border rounded"
@@ -94,23 +56,16 @@ const Home = () => {
             className="text-xl px-5"
             onClick={() => setshowMenu(!showMenu)}
           >
-            <i className="ri-menu-line "></i>
+            <i className={`${showMenu ? 'ri-close-large-fill':'ri-menu-line '}`}></i>
           </button>
         </div>
         <div
-          className={`py-5 bg-white w-full transform transition-all duration-200 z-10 ${
-            showMenu ? "translate-y-[0%]" : " -translate-y-[200%]"
+          className={`w-full bg-gray-300 transform transition-all duration-200 z-10 ${
+            showMenu ? "translate-x-[0%]" : " -translate-x-[200%]"
           }`}
         >
-          <DropdownButton dropdownData={dropdownData} />
-          <button
-            className="px-3 py-1 bg-white font-bold text-sm border rounded"
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            Logout<i className="ri-logout-circle-r-line"></i>
-          </button>
+          <DropDowmForMobile />
+          
         </div>
       </div>
 
@@ -129,7 +84,7 @@ const Home = () => {
                 <div className="w-full gap-0.5 flex flex-col mt-2">
                   <ButtonGroup
                     className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
-                    data={Transaction}
+                    data={TransactionObj}
                   />
                 </div>
               </div>
@@ -140,7 +95,7 @@ const Home = () => {
                 <div className="w-full gap-0.5 flex flex-col mt-2">
                   <ButtonGroup
                     className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
-                    data={AccountReport}
+                    data={AccountReportObj}
                   />
                 </div>
               </div>
@@ -153,7 +108,7 @@ const Home = () => {
                 <div className="w-full  gap-0.5 flex flex-col mt-2">
                   <ButtonGroup
                     className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
-                    data={Master}
+                    data={MasterObj}
                   />
                 </div>
               </div>
@@ -164,7 +119,7 @@ const Home = () => {
                 <div className="w-full  gap-0.5 flex flex-col mt-2">
                   <ButtonGroup
                     className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
-                    data={InventoryReport}
+                    data={InventoryReportObj}
                   />
                 </div>
               </div>
@@ -177,7 +132,7 @@ const Home = () => {
                 <div className="w-full gap-0.5 flex flex-col mt-2">
                   <ButtonGroup
                     className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
-                    data={FavouriteShortCut1}
+                    data={FavouriteShortCut1Obj}
                   />
                 </div>
               </div>
@@ -185,7 +140,7 @@ const Home = () => {
                 <div className="w-full gap-0.5 flex flex-col mt-9">
                   <ButtonGroup
                     className="border text-lg font-semibold px-4 bg-amber-300 block w-full text-left hover:bg-amber-500"
-                    data={FavouriteShortCut2}
+                    data={FavouriteShortCut2Obj}
                   />
                 </div>
               </div>

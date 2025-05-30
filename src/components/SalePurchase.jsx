@@ -1,55 +1,10 @@
 import React, { useState } from "react";
 import SearchableDropdown from "./SearchableDropdown";
+import { indianStates, items, party, saletype, Sundry } from "../assets/Dummydata";
 
-const SalePurchase = () => {
-  const indianStates = [
-    "Andhra Pradesh",
-    "Arunachal Pradesh",
-    "Assam",
-    "Bihar",
-    "Chhattisgarh",
-    "Goa",
-    "Gujarat",
-    "Haryana",
-    "Himachal Pradesh",
-    "Jharkhand",
-    "Karnataka",
-    "Kerala",
-    "Madhya Pradesh",
-    "Maharashtra",
-    "Manipur",
-    "Meghalaya",
-    "Mizoram",
-    "Nagaland",
-    "Odisha",
-    "Punjab",
-    "Rajasthan",
-    "Sikkim",
-    "Tamil Nadu",
-    "Telangana",
-    "Tripura",
-    "Uttar Pradesh",
-    "Uttarakhand",
-    "West Bengal",
-    "Andaman and Nicobar Islands",
-    "Chandigarh",
-    "Dadra and Nagar Haveli and Daman and Diu",
-    "Delhi",
-    "Jammu and Kashmir",
-    "Ladakh",
-    "Lakshadweep",
-    "Puducherry",
-  ];
+const SalePurchase = ({mode}) => {
+ 
 
-  // Dummy options for dropdowns
-  const productOptions = ["Chocolate box", "Lays Chips", "Coke", "Fanta"];
-  const sundryOptions = [
-    "Packing Charges",
-    "Freight",
-    "Discount",
-    "Other Sundry",
-  ];
-  const partyOptions = ["Cash in Hand", "ABC Traders", "XYZ Distributors"];
 
   // Controlled form state
   const [formFields, setFormFields] = useState({
@@ -58,6 +13,7 @@ const SalePurchase = () => {
     party: "",
     place: "",
     dcno: "",
+    billno: "",
     dcdate: "",
     type: "Cash",
     remark: "",
@@ -108,7 +64,7 @@ const SalePurchase = () => {
             />
           </div>
           <div className="flex flex-col lg:flex-row gap-2">
-            <label htmlFor="Date" className="w-32 text-lg font-medium">
+            <label htmlFor="Date" className="w-28 text-lg font-medium">
               Date
             </label>
             <input
@@ -124,17 +80,15 @@ const SalePurchase = () => {
             <label htmlFor="Type" className="w-32 text-lg font-medium">
               Type
             </label>
-            <select
+            <SearchableDropdown
+            options={saletype}
               id="Type"
               name="type"
-              className="flex-1 border px-2 py-2"
+              className="flex-1 lg:w-36 border px-2 py-2"
               value={formFields.type}
               onChange={handleFieldChange}
-            >
-              <option value="Cash">Cash</option>
-              <option value="Debit">Debit</option>
-              <option value="MultiMobile">MultiMobile</option>
-            </select>
+            />
+             
           </div>
         </div>
         <div className="flex flex-col flex-wrap lg:flex-row gap-4">
@@ -142,23 +96,18 @@ const SalePurchase = () => {
             <label htmlFor="party" className="w-32 text-lg font-medium">
               Party
             </label>
-            <select
+            <SearchableDropdown
+            options={party}
               id="party"
               name="party"
-              className="flex-1 min-w-0 lg:w-[822px] border px-2 py-2"
+              className="flex-1 min-w-full lg:w-[795px] lg:ml-4 border px-2 py-2"
               value={formFields.party}
               onChange={handleFieldChange}
-            >
-              <option value=""></option>
-              {partyOptions.map((party) => (
-                <option key={party} value={party}>
-                  {party}
-                </option>
-              ))}
-            </select>
+            />
+              
           </div>
           <div className="flex flex-col lg:flex-row gap-2">
-            <label htmlFor="Place" className="w-32 text-lg font-medium">
+            <label htmlFor="Place" className="w-32 lg:pl-4 text-lg font-medium">
               Place
             </label>
             <select
@@ -178,7 +127,8 @@ const SalePurchase = () => {
           </div>
         </div>
         <div className="flex flex-col lg:flex-row gap-4">
-          <div className="flex flex-col lg:flex-row gap-2">
+          {mode === "Sales" ? (
+            <div className="flex flex-col lg:flex-row gap-2">
             <label htmlFor="dcno" className="w-32 text-lg font-medium">
               DC NO
             </label>
@@ -191,8 +141,23 @@ const SalePurchase = () => {
               onChange={handleFieldChange}
             />
           </div>
+          ):(<div className="flex flex-col lg:flex-row gap-2">
+            <label htmlFor="billno" className="w-32 text-lg font-medium">
+              Bill NO
+            </label>
+            <input
+              type="number"
+              id="billno"
+              name="billno"
+              className="flex-1 lg:w-[535px] border px-2 py-2"
+              value={formFields.billno}
+              onChange={handleFieldChange}
+            />
+          </div>)}
+          
+          
           <div className="flex flex-col lg:flex-row gap-2">
-            <label htmlFor="date" className="w-32 text-lg font-medium">
+            <label htmlFor="date" className="w-24 text-lg font-medium">
               Date
             </label>
             <input
@@ -239,7 +204,8 @@ const SalePurchase = () => {
                 <td className="border p-0 col-span-3">
                   <SearchableDropdown
                     value={row.item}
-                    options={productOptions}
+                    options={items}
+                    className="w-full h-full "
                     onChange={(val) => {
                       const updated = [...productRows];
                       updated[idx].item = val;
@@ -400,7 +366,7 @@ const SalePurchase = () => {
                     <td className="border p-0 col-span-3">
                       <SearchableDropdown
                         value={row.sundry}
-                        options={sundryOptions}
+                        options={Sundry}
                         onChange={(val) => {
                           const updated = [...sundryRows];
                           updated[idx].sundry = val;
@@ -450,8 +416,8 @@ const SalePurchase = () => {
               type="number"
               id="roundof"
               className="w-32 xl:flex-1 text-right px-2 py-1"
-              defaultValue="0"
               value="100000"
+              readOnly
             />
           </div>
           <div className="flex">
@@ -462,8 +428,8 @@ const SalePurchase = () => {
               type="number"
               id="netTotal"
               className="w-32 xl:flex-1 text-right px-2 py-1"
-              defaultValue="0"
               value="100000"
+              readOnly
             />
           </div>
         </div>
