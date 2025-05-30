@@ -3,7 +3,22 @@ import BasePage from '../../components/BasePage';
 
 const Item = () => {
  
-  const ItemSidebardata = ["New","Edit","Delete","Export to excel","Bulk Upd" , "Op. Balance", "MultiEdit","Filters","MinMax up","Copy item","Img galary","Dup Items","Non/Used"]
+ const ItemSidebarData = [
+  { name: "New", onClick: () => {}, navigate:'/dashboard/items/new' },
+  { name: "Edit", onClick: () => {} },
+  { name: "Delete", onClick: () => {} },
+  { name: "Export to excel", onClick: () => {} },
+  { name: "Bulk Upd", onClick: () => {} },
+  { name: "Op. Balance", onClick: () => {} },
+  { name: "MultiEdit", onClick: () => {} },
+  { name: "Filters", onClick: () => {} },
+  { name: "MinMax up", onClick: () => {} },
+  { name: "Copy item", onClick: () => {} },
+  { name: "Img galary", onClick: () => {} },
+  { name: "Dup Items", onClick: () => {} },
+  { name: "Non/Used", onClick: () => {} }
+];
+
   const tableData = [
     {
       Sr: 1,
@@ -40,7 +55,7 @@ const Item = () => {
   
   return (
     <div className='w-full'>
-      <BasePage heading="Item Master" Sidebardata={ItemSidebardata} tableData={tableData}/>
+      <BasePage heading="Item Master" Sidebardata={ItemSidebarData} tableData={tableData}/>
     </div>
   )
 }

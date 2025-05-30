@@ -3,7 +3,21 @@ import BasePage from '../../components/BasePage'
 
 const Ledger = () => {
 
-    const LedgerSidebarData = ["New" , "Edit","Delete","Export-Excel","BulkUpd","Filter","Label Prn","Envelopes","Op. Bal","Statement","Dup Ledgers","Non/Used"]
+   const ledgerSidebarData = [
+  { name: "New", onClick: () => {},navigate:"/dashboard/ledger/new" },
+  { name: "Edit", onClick: () => {} },
+  { name: "Delete", onClick: () => {} },
+  { name: "Export-Excel", onClick: () => {} },
+  { name: "BulkUpd", onClick: () => {} },
+  { name: "Filter", onClick: () => {} },
+  { name: "Label Prn", onClick: () => {} },
+  { name: "Envelopes", onClick: () => {} },
+  { name: "Op. Bal", onClick: () => {} },
+  { name: "Statement", onClick: () => {} },
+  { name: "Dup Ledgers", onClick: () => {} },
+  { name: "Non/Used", onClick: () => {} }
+];
+
     const ledgerTableData = [
   {
     Sr: 1,
@@ -170,7 +184,7 @@ const Ledger = () => {
 
   return (
     <div className='w-full'>
-      <BasePage heading="Ledger Master" Sidebardata={LedgerSidebarData} tableData={ledgerTableData}/>
+      <BasePage heading="Ledger Master" Sidebardata={ledgerSidebarData} tableData={ledgerTableData}/>
     </div>
   )
 }
