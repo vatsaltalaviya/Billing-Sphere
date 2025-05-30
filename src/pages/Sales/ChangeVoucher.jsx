@@ -20,7 +20,7 @@ const ChangeVoucher = ({ onClose }) => {
                 <option value="Tax Invoice">Tax Invoice</option>
               </select>
             </div>
-            <div className="flex flex-col md:flex-row gap-2 ml-5 items-center ">
+            <div className="flex flex-col md:flex-row gap-2 xl:ml-5 items-center ">
               <button className=" px-5 h-10 font-medium bg-amber-300 border border-amber-600 hover:bg-amber-500">
                 Select
               </button>

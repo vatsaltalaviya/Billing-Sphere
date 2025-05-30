@@ -1,9 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchableDropdown from "./SearchableDropdown";
-import { indianStates, items, party, saletype, Sundry } from "../assets/Dummydata";
+import {
+  indianStates,
+  items,
+  party,
+  saletype,
+  Sundry,
+} from "../assets/Dummydata";
 
-const SalePurchase = ({mode}) => {
- 
+const SalePurchase = ({ mode }) => {
+  const [selectedProductRow, setSelectedProductRow] = useState(0);
+
+// Table state for 15 product rows
+  const [productRows, setProductRows] = useState(
+    Array.from({ length: 15 }, () => ({
+      item: "",
+      qty: "",
+      unit: "",
+      rate: "",
+      amount: "",
+      disc: "",
+      d1: "",
+      netAmt: "",
+    }))
+  );
+
+
 
   // Controlled form state
   const [formFields, setFormFields] = useState({
@@ -18,19 +40,7 @@ const SalePurchase = ({mode}) => {
     remark: "",
   });
 
-  // Table state for 15 product rows
-  const [productRows, setProductRows] = useState(
-    Array.from({ length: 15 }, () => ({
-      item: "",
-      qty: "",
-      unit: "",
-      rate: "",
-      amount: "",
-      disc: "",
-      d1: "",
-      netAmt: "",
-    }))
-  );
+  
   // Table state for 4 sundry rows
   const [sundryRows, setSundryRows] = useState(
     Array.from({ length: 4 }, () => ({
@@ -44,10 +54,7 @@ const SalePurchase = ({mode}) => {
     const { id, value } = e.target;
     setFormFields((prev) => ({ ...prev, [id]: value }));
   };
-  
 
-  console.log(productRows);
-  
 
   return (
     <div className="w-full bg-white overflow-y-auto">
@@ -84,14 +91,13 @@ const SalePurchase = ({mode}) => {
               Type
             </label>
             <SearchableDropdown
-            options={saletype}
+              options={saletype}
               id="Type"
               name="type"
               className="flex-1 lg:w-36 border px-2 py-2"
               value={formFields.type}
               onChange={handleFieldChange}
             />
-             
           </div>
         </div>
         <div className="flex flex-col flex-wrap lg:flex-row gap-4">
@@ -100,14 +106,13 @@ const SalePurchase = ({mode}) => {
               Party
             </label>
             <SearchableDropdown
-            options={party}
+              options={party}
               id="party"
               name="party"
               className="flex-1 min-w-full lg:w-[795px] lg:ml-4 border px-2 py-2"
               value={formFields.party}
               onChange={handleFieldChange}
             />
-              
           </div>
           <div className="flex flex-col lg:flex-row gap-2">
             <label htmlFor="Place" className="w-32 xl:pl-4 text-lg font-medium">
@@ -132,33 +137,34 @@ const SalePurchase = ({mode}) => {
         <div className="flex flex-col lg:flex-row gap-4">
           {mode === "Sales" ? (
             <div className="flex flex-col lg:flex-row gap-2">
-            <label htmlFor="dcno" className="w-32 text-lg font-medium">
-              DC NO
-            </label>
-            <input
-              type="number"
-              id="dcno"
-              name="dcno"
-              className="flex-1 lg:w-[535px] border px-2 py-2"
-              value={formFields.dcno}
-              onChange={handleFieldChange}
-            />
-          </div>
-          ):(<div className="flex flex-col lg:flex-row gap-2">
-            <label htmlFor="billno" className="w-32 text-lg font-medium">
-              Bill NO
-            </label>
-            <input
-              type="number"
-              id="billno"
-              name="billno"
-              className="flex-1 lg:w-[535px] border px-2 py-2"
-              value={formFields.billno}
-              onChange={handleFieldChange}
-            />
-          </div>)}
-          
-          
+              <label htmlFor="dcno" className="w-32 text-lg font-medium">
+                DC NO
+              </label>
+              <input
+                type="number"
+                id="dcno"
+                name="dcno"
+                className="flex-1 lg:w-[535px] border px-2 py-2"
+                value={formFields.dcno}
+                onChange={handleFieldChange}
+              />
+            </div>
+          ) : (
+            <div className="flex flex-col lg:flex-row gap-2">
+              <label htmlFor="billno" className="w-32 text-lg font-medium">
+                Bill NO
+              </label>
+              <input
+                type="number"
+                id="billno"
+                name="billno"
+                className="flex-1 lg:w-[535px] border px-2 py-2"
+                value={formFields.billno}
+                onChange={handleFieldChange}
+              />
+            </div>
+          )}
+
           <div className="flex flex-col lg:flex-row gap-2">
             <label htmlFor="date" className="w-24 text-lg font-medium">
               Date
@@ -393,7 +399,7 @@ const SalePurchase = ({mode}) => {
                 ))}
               </tbody>
             </table>
-            </div>
+          </div>
         </div>
       </div>
 

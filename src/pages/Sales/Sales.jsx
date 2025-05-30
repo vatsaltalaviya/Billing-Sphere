@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import BasePage from "../../components/BasePage";
 import ChangeVoucher from "./ChangeVoucher";
 import SearchItem from "./SearchItem";
@@ -27,7 +27,9 @@ const Sales = () => {
       navigate:'',
     },
     { name: "Search Item", onClick: () => {setshowSearchItem(true)} },
-    { name: "New Line", onClick: () => {} },
+    { name: "New Line", onClick: () => {
+      
+    } },
     { name: "Audit Trail", onClick: () => {} },
     { name: "Previous", onClick: () => {} },
     { name: "Next", onClick: () => {} },
@@ -43,6 +45,7 @@ const Sales = () => {
         subHeading="Bill of Supply"
         mode="Sales"
         Sidebardata={salesSidebarData}
+       
       />
       {showVoucher && <ChangeVoucher onClose={()=>setshowVoucher(false)} />}
       {showSearchItem && <SearchItem onClose={()=>setshowSearchItem(false)} />}
