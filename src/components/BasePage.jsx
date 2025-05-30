@@ -57,7 +57,7 @@ const BasePage = ({Sidebardata,heading,tableData,mode,subHeading}) => {
         <div className={` w-64 bg-white transform transition-all absolute duration-200 z-10 ${
             showSidebar ? "translate-x-[0%]" : " translate-x-[200%]"
           }`}>
-            <ButtonGroup className='w-full py-2 border mb-0.5 font-bold text-left px-3' data={Sidebardata} />
+            <ButtonGroup className='w-full py-2 border mb-0.5 font-bold text-left px-3' setshowSidebar={setshowSidebar} data={Sidebardata} />
         </div>
       </div>
     </div>

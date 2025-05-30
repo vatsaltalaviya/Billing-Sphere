@@ -1,22 +1,20 @@
-import React from 'react';
+import React, { useRef } from 'react'
 
-const PopUp = ({ show, onClose, children, title }) => {
-  if (!show) return null;
+const PopUp = ({children,onClose}) => {
+  const BackGroundRef = useRef()
+  const closePopUp = (e) => {
+    if (BackGroundRef.current === e.target) {
+      // Handle close logic here
+      onClose();
+    }
+  }
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 min-w-[300px] max-w-[90vw] relative">
-        {title && <h2 className="text-xl font-bold mb-4 text-center">{title}</h2>}
-        <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-2xl font-bold"
-          onClick={onClose}
-          aria-label="Close"
-        >
-          &times;
-        </button>
-        <div className="mt-2">{children}</div>
+    <div ref={BackGroundRef} onClick={closePopUp} className="fixed inset-0 bg-opacity-10 backdrop-blur-sm flex items-center justify-center">
+      <div className="mt-10 flex flex-col gap-5">
+        {children}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PopUp;
+export default PopUp

@@ -1,19 +1,29 @@
 import React, { useState } from "react";
 import BasePage from "../../components/BasePage";
+import ChangeVoucher from "./ChangeVoucher";
 
 const Sales = () => {
 
 
+  const [showVoucher, setshowVoucher] = useState(false)
+
+
   const salesSidebarData = [
-    { name: "List", onClick: () => {
-      console.log("List clicked");
+    {
+      name: "List",
+      onClick: () => {
+        console.log("List clicked");
+      },
+      navigate: "/dashboard/sales/list",
     },
-    navigate:"/dashboard/sales/list"
-  },
     { name: "New", onClick: () => {} },
     { name: "Print", onClick: () => {} },
     { name: "All Print", onClick: () => {} },
-    { name: "Change Type", onClick: () => {} },
+    {
+      name: "Change Type",
+      onClick: () => {setshowVoucher(true)},
+      navigate:'',
+    },
     { name: "Search Item", onClick: () => {} },
     { name: "New Line", onClick: () => {} },
     { name: "Audit Trail", onClick: () => {} },
@@ -32,8 +42,7 @@ const Sales = () => {
         mode="Sales"
         Sidebardata={salesSidebarData}
       />
-
- 
+      {showVoucher && <ChangeVoucher onClose={()=>setshowVoucher(false)} />}
     </div>
   );
 };

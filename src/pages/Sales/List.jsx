@@ -10,7 +10,7 @@ const List = () => {
           List of Tax INVOICE Voucher
         </h1>
       </div>
-      <div className=" h-[80vh] overflow-auto relative p-10 table-data border-b">
+      <div className=" h-[80vh] overflow-auto relative p-4 xl:p-10 table-data border-b">
         <Datatable data={lists}/>
       </div>
       <div className="w-full border flex flex-col xl:flex-row justify-center px-2 mt-3 mb-10">

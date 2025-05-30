@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const ButtonGroup = ({ data, className }) => {
+const ButtonGroup = ({ data, className , setshowSidebar}) => {
   const navigate = useNavigate();
 
   return (
@@ -9,8 +9,11 @@ const ButtonGroup = ({ data, className }) => {
       {data.map((btn) => (
         <button
           key={btn.name}
-          onClick={() => {btn.onClick ? btn.onClick() : handleClick(btn.name); {btn.navigate&&navigate(btn.navigate)}}}
-        
+          onClick={() => {
+            if (btn.onClick) btn.onClick();
+            if (btn.navigate) navigate(btn.navigate);
+            if (setshowSidebar) setshowSidebar(false);
+          }}
           className={className}
         >
           <span>{btn.name}</span>

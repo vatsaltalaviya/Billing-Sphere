@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import SearchableDropdown from "./SearchableDropdown";
 import { indianStates, items, party, saletype, Sundry } from "../assets/Dummydata";
+import ChangeVoucher from "../pages/Sales/ChangeVoucher";
 
 const SalePurchase = ({mode}) => {
  
 
+  
 
   // Controlled form state
   const [formFields, setFormFields] = useState({
@@ -107,7 +109,7 @@ const SalePurchase = ({mode}) => {
               
           </div>
           <div className="flex flex-col lg:flex-row gap-2">
-            <label htmlFor="Place" className="w-32 lg:pl-4 text-lg font-medium">
+            <label htmlFor="Place" className="w-32 xl:pl-4 text-lg font-medium">
               Place
             </label>
             <select

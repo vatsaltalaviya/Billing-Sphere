@@ -1,4 +1,3 @@
-import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -10,8 +9,9 @@ import Sales from './pages/Sales/Sales'
 import Purchase from './pages/Purchase/Purchase'
 import Receipt from './pages/Receipt/Receipt'
 import Payment from './pages/Payment/Payment'
-import Start from './pages/Start'
 import List from './pages/Sales/List'
+import PopUp from './components/PopUp'
+import ChangeVoucher from './pages/Sales/ChangeVoucher'
 
 const App = () => {
   return (
@@ -40,6 +40,7 @@ const App = () => {
       {/* sales */}
       <Route path='/dashboard/sales' element={<Sales />} /> 
       <Route path='/dashboard/sales/list' element={<List />} /> 
+      <Route path='/dashboard/sales/voucherType' element={<ChangeVoucher />} /> 
 
 
       <Route path='/dashboard/purchase' element={<Purchase />} /> 
