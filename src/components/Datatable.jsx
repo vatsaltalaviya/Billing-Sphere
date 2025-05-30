@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 
-const Datatable = ({ data }) => {
-  if (!data || data.length === 0) return <div>No data found</div>;
+const Datatable = ({ data , list }) => {
+  
+  if ((!data || data.length === 0 ) && (!list || list.length === 0) ) return <div>No data found</div>;
+ 
 
   const [selectedRow, setselectedRow] = useState(0);
-  const columns = Object.keys(data[0]);
+
+  const rows = (data && data.length > 0) ? data : list;
+  const columns = rows && rows.length > 0 ? Object.keys(rows[0]) : [];
 
    const handleKeyDown = (e) =>{
     if(e.key === "ArrowDown"){
@@ -34,9 +38,22 @@ const Datatable = ({ data }) => {
               </th>
             ))}
           </tr>
+          {/* Search row */}
+          <tr>
+            {data &&columns.map((col, i) => (
+              <th key={i} className="border ">
+                <input
+                  type="text"
+                  id={col}
+                  placeholder={`Search here`}
+                  className="w-full px-2 py-1  md:text-sm xl:text-[16.5px] placeholder:font-medium"
+                />
+              </th>
+            ))}
+          </tr>
         </thead>
         <tbody>
-          {data.map((row, rowIndex) => (
+          {data&& data.map((row, rowIndex) => (
             <tr
               key={rowIndex}
               onClick={()=>setselectedRow(rowIndex)}
@@ -52,6 +69,25 @@ const Datatable = ({ data }) => {
               ))}
             </tr>
           ))}
+
+          {list && list.map((item, index) => (
+            <tr
+              key={index}
+              className={`font-medium cursor-pointer ${selectedRow === index ? 'bg-blue-500 text-white' : 'bg-white text-black'}`}
+            >
+              
+              {columns.map((col, colIndex) => (
+                <td
+                  key={colIndex}
+                  className={`border border-black px-3 py-1 ${(colIndex === 0 || colIndex === columns.length - 1) ? 'text-center' : ''}`}
+                >
+                  {item[col]}
+                </td>
+              ))}
+            </tr>
+          ))
+
+          }
         </tbody>
       </table>
     </div>

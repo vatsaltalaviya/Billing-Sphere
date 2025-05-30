@@ -1,8 +1,4 @@
 import React, { useState } from 'react';
-import Login from './Login';
-import MenuItem from '../components/MenuItem';
-import Navbar from '../components/Navbar';
-import '../components/Drop.css'
 
 const Start = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -59,7 +55,7 @@ const Start = () => {
     //   )}
     // </div>
     <div className="flex items-center h-screen justify-center relative">
-      <Navbar />
+     
     </div>
   );
 };

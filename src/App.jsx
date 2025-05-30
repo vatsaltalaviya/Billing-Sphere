@@ -11,6 +11,7 @@ import Purchase from './pages/Purchase/Purchase'
 import Receipt from './pages/Receipt/Receipt'
 import Payment from './pages/Payment/Payment'
 import Start from './pages/Start'
+import List from './pages/Sales/List'
 
 const App = () => {
   return (
@@ -19,6 +20,8 @@ const App = () => {
     <Routes>
       <Route path='/' element={<Login />} />
      <Route path='/dashboard' element={<Home />} />
+
+     {/* items */}
       <Route path='/dashboard/items' element={<Item />} /> 
       <Route path='/dashboard/items/new' element={<AddItem />} /> 
       <Route path='/dashboard/items/edit/:editid' element={<AddItem />} /> 
@@ -26,6 +29,7 @@ const App = () => {
       <Route path='/dashboard/items/delete/:deleteid' element={<AddItem />} /> 
       <Route path='/dashboard/items/delete' element={<AddItem />} /> 
 
+      {/* ledger */}
       <Route path='/dashboard/ledger' element={<Ledger />} /> 
       <Route path='/dashboard/ledger/new' element={<AddLedger />} /> 
       <Route path='/dashboard/ledger/edit/:editid' element={<AddLedger />} /> 
@@ -33,7 +37,11 @@ const App = () => {
       <Route path='/dashboard/ledger/delete/:deleteid' element={<AddLedger />} /> 
       <Route path='/dashboard/ledger/delete' element={<AddLedger />} /> 
       
+      {/* sales */}
       <Route path='/dashboard/sales' element={<Sales />} /> 
+      <Route path='/dashboard/sales/list' element={<List />} /> 
+
+
       <Route path='/dashboard/purchase' element={<Purchase />} /> 
       <Route path='/dashboard/receipt' element={<Receipt />} /> 
       <Route path='/dashboard/payment' element={<Payment />} /> 

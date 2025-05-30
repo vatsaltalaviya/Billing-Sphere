@@ -14,7 +14,7 @@ const MasterPart = ({tableData }) => {
       </div>
       {/* -------------------------------- table ------------------------------ */}
       <div className={`w-full max-h-[85vh] table-data overflow-y-auto xl:border-b`}>
-        <Datatable data={tableData}/>
+        <Datatable list={tableData}/>
       </div>
     </div>
   )

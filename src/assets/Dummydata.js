@@ -133,3 +133,41 @@ export const indianStates = [
     "Lakshadweep",
     "Puducherry",
   ];
+
+
+  export const lists = [
+    {
+        Date: "2023-10-01",
+        No: "INV001",
+        Type: "Cash",
+        Print: "Print",
+        RefNO: "REF001",
+        RefNO2: "REF002",
+        Perticulars: "Sale of goods",
+        Remark: "No remarks",
+        Amount: "1000.00"
+
+    },
+    {
+        Date: "2023-10-02",
+        No: "INV002",
+        Type: "Debit",
+        Print: "Print",
+        RefNO: "REF003",
+        RefNO2: "REF004",
+        Perticulars: "Purchase of goods",
+        Remark: "No remarks",
+        Amount: "500.00"
+    },
+    {
+        Date: "2023-10-03",
+        No: "INV003",
+        Type: "MultiMobile",
+        Print: "Print",
+        RefNO: "REF005",
+        RefNO2: "",
+        Perticulars: "Service charges",
+        Remark: "No remarks",
+        Amount: "200.00"
+    }
+  ]

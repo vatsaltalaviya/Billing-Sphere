@@ -7,7 +7,9 @@ const Sales = () => {
   const salesSidebarData = [
     { name: "List", onClick: () => {
       console.log("List clicked");
-    } },
+    },
+    navigate:"/dashboard/sales/list"
+  },
     { name: "New", onClick: () => {} },
     { name: "Print", onClick: () => {} },
     { name: "All Print", onClick: () => {} },
