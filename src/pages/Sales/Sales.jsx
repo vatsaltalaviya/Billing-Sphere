@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import BasePage from "../../components/BasePage";
 import ChangeVoucher from "./ChangeVoucher";
+import SearchItem from "./SearchItem";
 
 const Sales = () => {
 
 
   const [showVoucher, setshowVoucher] = useState(false)
+  const [showSearchItem, setshowSearchItem] = useState(false)
 
 
   const salesSidebarData = [
@@ -24,7 +26,7 @@ const Sales = () => {
       onClick: () => {setshowVoucher(true)},
       navigate:'',
     },
-    { name: "Search Item", onClick: () => {} },
+    { name: "Search Item", onClick: () => {setshowSearchItem(true)} },
     { name: "New Line", onClick: () => {} },
     { name: "Audit Trail", onClick: () => {} },
     { name: "Previous", onClick: () => {} },
@@ -43,6 +45,7 @@ const Sales = () => {
         Sidebardata={salesSidebarData}
       />
       {showVoucher && <ChangeVoucher onClose={()=>setshowVoucher(false)} />}
+      {showSearchItem && <SearchItem onClose={()=>setshowSearchItem(false)} />}
     </div>
   );
 };

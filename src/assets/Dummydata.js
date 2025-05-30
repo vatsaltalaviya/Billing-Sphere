@@ -6,7 +6,7 @@ export const items =[
 
     },
     {
-        name:"Fenata",
+        name:"Fenta",
         price: 10,
         quantity: 10,
 
@@ -56,15 +56,15 @@ export  const rows = [
 
 export const Sundry = [
     {
-        sundryname:"Cash Discount",
+        name:"Cash Discount",
         amount:0,
     },
     {
-        sundryname:"Labour Charges",
+        name:"Labour Charges",
         amount:0,
     },
     {
-        sundryname:"Transportation",
+        name:"Transportation",
         amount:0,
     },
     

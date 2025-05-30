@@ -5,6 +5,8 @@ const PopUp = ({children,onClose}) => {
   const closePopUp = (e) => {
     if (BackGroundRef.current === e.target) {
       // Handle close logic here
+      console.log(BackGroundRef.current === e.target);
+      
       onClose();
     }
   }

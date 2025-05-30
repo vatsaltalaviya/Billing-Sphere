@@ -40,7 +40,6 @@ const App = () => {
       {/* sales */}
       <Route path='/dashboard/sales' element={<Sales />} /> 
       <Route path='/dashboard/sales/list' element={<List />} /> 
-      <Route path='/dashboard/sales/voucherType' element={<ChangeVoucher />} /> 
 
 
       <Route path='/dashboard/purchase' element={<Purchase />} /> 

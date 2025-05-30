@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import SearchableDropdown from "./SearchableDropdown";
 import { indianStates, items, party, saletype, Sundry } from "../assets/Dummydata";
-import ChangeVoucher from "../pages/Sales/ChangeVoucher";
 
 const SalePurchase = ({mode}) => {
  
-
-  
 
   // Controlled form state
   const [formFields, setFormFields] = useState({
@@ -44,9 +41,13 @@ const SalePurchase = ({mode}) => {
 
   // Handler for top form fields
   const handleFieldChange = (e) => {
-    const { name, value } = e.target;
-    setFormFields((prev) => ({ ...prev, [name]: value }));
+    const { id, value } = e.target;
+    setFormFields((prev) => ({ ...prev, [id]: value }));
   };
+  
+
+  console.log(productRows);
+  
 
   return (
     <div className="w-full bg-white overflow-y-auto">
@@ -207,10 +208,10 @@ const SalePurchase = ({mode}) => {
                   <SearchableDropdown
                     value={row.item}
                     options={items}
-                    className="w-full h-full "
+                    className="w-full h-full px-2"
                     onChange={(val) => {
                       const updated = [...productRows];
-                      updated[idx].item = val;
+                      updated[idx].item = val.target.value;
                       setProductRows(updated);
                     }}
                   />
