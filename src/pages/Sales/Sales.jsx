@@ -14,6 +14,8 @@ const Sales = () => {
 
   // for create new form
   const [triggerNew, setTriggerNew] = useState(false);
+  // for privious and next
+  const [triggerPrevious, setTriggerPrevious] = useState(1);
 
   // popup states
   const [showVoucher, setshowVoucher] = useState(false);
@@ -94,7 +96,7 @@ const Sales = () => {
 
 
   const salesSidebarData = [
-    { name: "List", onClick: () => console.log("List clicked"), navigate: "/dashboard/sales/list" },
+    { name: "List", onClick: () =>{}, navigate: "/dashboard/sales/list" },
     { name: "New", onClick: () => setTriggerNew((prev) => !prev)  },
     { name: "Print", onClick: () => {} },
     { name: "All Print", onClick: () => {} },
@@ -112,8 +114,8 @@ const Sales = () => {
       onClick: handleNewLine,
     },
     { name: "Audit Trail", onClick: () => {} },
-    { name: "Previous", onClick: () => {} },
-    { name: "Next", onClick: () => {} },
+    { name: "Previous", onClick: () =>setTriggerPrevious(prev => (prev > 1 ? prev - 1 : 1)) },
+    { name: "Next", onClick: () => setTriggerPrevious((perv) => perv + 1) },
     { name: "Search No", onClick: () => setshowSearchNo(true) },
     { name: "Attach. Img", onClick: () => setshowAttachImages(true) },
     { name: "Vch Setup", onClick: () => {} },
@@ -132,6 +134,7 @@ const Sales = () => {
         onRowsChange={handleRowsChange}
         createNewRow={createNewRow}
         triggerNew={triggerNew}
+        triggerPrevious={triggerPrevious}
       />
       {showVoucher && <ChangeVoucher onClose={() => setshowVoucher(false)} />}
       {showSearchItem && <SearchItem onClose={() => setshowSearchItem(false)} />}

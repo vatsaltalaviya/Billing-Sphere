@@ -16,6 +16,7 @@ const SalePurchase = ({
   onRowsChange,
   createNewRow,
   triggerNew,
+  triggerPrevious
 }) => {
   const [showSystemError, setShowSystemError] = useState(false);
 
@@ -56,7 +57,7 @@ const SalePurchase = ({
 
   // Controlled form state
   const [formFields, setFormFields] = useState({
-    no: "1",
+    no: "",
     date: "",
     party: "",
     place: "",
@@ -66,6 +67,17 @@ const SalePurchase = ({
     type: "Cash",
     remark: "",
   });
+
+
+  // for privious and next voucher
+  useEffect(() => {
+  if (triggerPrevious !== undefined && triggerPrevious !== null) {
+    setFormFields(prev => ({
+      ...prev,
+      no: triggerPrevious.toString()
+    }));
+  }
+}, [triggerPrevious]);
 
   // Table state for 4 sundry rows
   const [sundryRows, setSundryRows] = useState(
@@ -80,6 +92,12 @@ const SalePurchase = ({
     const { id, value } = e.target;
     setFormFields((prev) => ({ ...prev, [id]: value }));
   };
+
+
+
+
+const data = salesData.find((item) => item.no === formFields.no);
+
 
   // check if any product row or form field has data
   const hasData = () => {
@@ -144,6 +162,9 @@ const SalePurchase = ({
       handleNewVoucher();
     }
   }, [triggerNew]);
+
+  console.log(formFields.no);
+  
 
   return (
     <div className="w-full bg-white overflow-y-auto">

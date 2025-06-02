@@ -13,7 +13,8 @@ const BasePage = ({
   selectedProductRow,
   onDropdownRef,
   onRowsChange,
-  triggerNew
+  triggerNew,
+  triggerPrevious
 }) => {
 
   const [showSidebar, setshowSidebar] = useState(false)
@@ -58,6 +59,7 @@ const BasePage = ({
                 onDropdownRef={onDropdownRef}
                 onRowsChange={onRowsChange}
                 triggerNew={triggerNew}
+                triggerPrevious={triggerPrevious}
               />
             )}
             {(mode === "Receipt" || mode === "Payment") && (

@@ -32,12 +32,12 @@ export const items =[
 ]
 export const salesData = [
   {
-    no: "001",
+    no: "1",
     date: "2025-05-30",
     type: "Sales",
     party: "ABC Traders",
     place: "Rajkot",
-    dcNo: "DC1001",
+    dcNo: "1001",
     dcDate: "2025-05-29",
     items: [
       {
@@ -63,12 +63,12 @@ export const salesData = [
     ],
   },
   {
-    no: "002",
-    date: "2025-05-30",
+    no: "2",
+    date: "2025-05-25",
     type: "Sales",
     party: "XYZ Mart",
     place: "Ahmedabad",
-    dcNo: "DC1002",
+    dcNo: "1002",
     dcDate: "2025-05-29",
     items: [
       {
