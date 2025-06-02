@@ -6,9 +6,19 @@ import {
   party,
   saletype,
   Sundry,
+  salesData
 } from "../assets/Dummydata";
+import SystemErrorMessage from "./SystemErrorMessage";
 
-const SalePurchase = ({ mode, onDropdownRef, onRowsChange,createNewRow }) => {
+const SalePurchase = ({
+  mode,
+  onDropdownRef,
+  onRowsChange,
+  createNewRow,
+  triggerNew,
+}) => {
+  const [showSystemError, setShowSystemError] = useState(false);
+
   // Table state for 15 product rows
   const [productRows, setProductRows] = useState(
     Array.from({ length: 15 }, () => ({
@@ -26,8 +36,7 @@ const SalePurchase = ({ mode, onDropdownRef, onRowsChange,createNewRow }) => {
   if (createNewRow) {
     setProductRows((prevRows) => [...prevRows, createNewRow()]);
   }
-  
-  
+
   // Ref for searchable dropdowns
   const dropdownRefs = useRef([]);
 
@@ -71,6 +80,70 @@ const SalePurchase = ({ mode, onDropdownRef, onRowsChange,createNewRow }) => {
     const { id, value } = e.target;
     setFormFields((prev) => ({ ...prev, [id]: value }));
   };
+
+  // check if any product row or form field has data
+  const hasData = () => {
+    // Check if any product row has data
+    const productHasData = productRows.some((row) =>
+      Object.values(row).some(
+        (val) => val !== "" && val !== null && val !== undefined
+      )
+    );
+    // Check if any form field (except 'no' and 'type') has data
+    const formHasData = Object.entries(formFields).some(
+      ([key, val]) =>
+        key !== "no" &&
+        key !== "type" &&
+        val !== "" &&
+        val !== null &&
+        val !== undefined
+    );
+    return productHasData || formHasData;
+  };
+
+  const handleNewVoucher = () => {
+    if (hasData()) {
+      setShowSystemError(true);
+    } else {
+      setProductRows(
+        Array.from({ length: 15 }, () => ({
+          item: "",
+          qty: "",
+          unit: "",
+          rate: "",
+          amount: "",
+          disc: "",
+          d1: "",
+          netAmt: "",
+        }))
+      );
+      setSundryRows(
+        Array.from({ length: 4 }, () => ({
+          sundry: "",
+          amount: "",
+        }))
+      );
+      setFormFields((prev) => ({
+        ...prev,
+        no:  (parseInt(prev.no) + 1).toString()  ,
+        date: "",
+        party: "",
+        place: "",
+        dcno: "",
+        billno: "",
+        dcdate: "",
+        type: "Cash",
+        remark: "",
+      }));
+    }
+  };
+
+  // Listen for triggerNew changes
+  useEffect(() => {
+    if (triggerNew) {
+      handleNewVoucher();
+    }
+  }, [triggerNew]);
 
   return (
     <div className="w-full bg-white overflow-y-auto">
@@ -514,6 +587,12 @@ const SalePurchase = ({ mode, onDropdownRef, onRowsChange,createNewRow }) => {
           </div>
         </div>
       </div>
+      {showSystemError && (
+        <SystemErrorMessage
+          message="Please save or cancel the current voucher before creating a new one."
+          onClose={() => setShowSystemError(false)}
+        />
+      )}
     </div>
   );
 };

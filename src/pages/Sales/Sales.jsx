@@ -2,15 +2,24 @@ import React, { useRef, useState, useEffect } from "react";
 import BasePage from "../../components/BasePage";
 import ChangeVoucher from "./ChangeVoucher";
 import SearchItem from "./SearchItem";
+import SearchNo from "./SearchNo";
+import AttachItems from "./AttachItems";
 
 const Sales = () => {
+
+  // for add new rows
   const productRows = useRef([]);
   const [dropdownRefs, setDropdownRefs] = useState([]);
   const [selectedProductRow, setSelectedProductRow] = useState(0);
 
+  // for create new form
+  const [triggerNew, setTriggerNew] = useState(false);
+
   // popup states
   const [showVoucher, setshowVoucher] = useState(false);
   const [showSearchItem, setshowSearchItem] = useState(false);
+  const [showSearchNo, setshowSearchNo] = useState(false);
+  const [showAttachImages, setshowAttachImages] = useState(false);
 
   // Handle child sending updated product rows
   const handleRowsChange = (rows) => {
@@ -83,9 +92,10 @@ const Sales = () => {
 };
 
 
+
   const salesSidebarData = [
     { name: "List", onClick: () => console.log("List clicked"), navigate: "/dashboard/sales/list" },
-    { name: "New", onClick: () => {} },
+    { name: "New", onClick: () => setTriggerNew((prev) => !prev)  },
     { name: "Print", onClick: () => {} },
     { name: "All Print", onClick: () => {} },
     {
@@ -104,8 +114,8 @@ const Sales = () => {
     { name: "Audit Trail", onClick: () => {} },
     { name: "Previous", onClick: () => {} },
     { name: "Next", onClick: () => {} },
-    { name: "Search No", onClick: () => {} },
-    { name: "Attach. Img", onClick: () => {} },
+    { name: "Search No", onClick: () => setshowSearchNo(true) },
+    { name: "Attach. Img", onClick: () => setshowAttachImages(true) },
     { name: "Vch Setup", onClick: () => {} },
     { name: "Print Setup", onClick: () => {} },
   ];
@@ -121,9 +131,12 @@ const Sales = () => {
         onDropdownRef={handleDropdownRef}
         onRowsChange={handleRowsChange}
         createNewRow={createNewRow}
+        triggerNew={triggerNew}
       />
       {showVoucher && <ChangeVoucher onClose={() => setshowVoucher(false)} />}
       {showSearchItem && <SearchItem onClose={() => setshowSearchItem(false)} />}
+      {showSearchNo && <SearchNo onClose={() => setshowSearchNo(false)} />}
+      {showAttachImages && <AttachItems onClose={() => setshowAttachImages(false)} />}
     </div>
   );
 };

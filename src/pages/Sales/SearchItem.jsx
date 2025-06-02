@@ -29,7 +29,7 @@ const SearchItem = ({ onClose }) => {
             </div>
             <div className="flex flex-col md:flex-row gap-2 mt-20 items-center ">
               <button className=" px-5 h-10 font-medium bg-amber-300 border border-amber-600 hover:bg-amber-500">
-                Select
+                Show
               </button>
               <button
                 onClick={onClose}

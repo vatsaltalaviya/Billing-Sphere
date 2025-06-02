@@ -30,6 +30,62 @@ export const items =[
 
     },
 ]
+export const salesData = [
+  {
+    no: "001",
+    date: "2025-05-30",
+    type: "Sales",
+    party: "ABC Traders",
+    place: "Rajkot",
+    dcNo: "DC1001",
+    dcDate: "2025-05-29",
+    items: [
+      {
+        itemName: "Chocolate Box",
+        qty: 10,
+        unit: "pcs",
+        rate: 50,
+        amount: 500,
+        disc: 5,
+        d1: "2%",
+        netAmount: 490,
+      },
+      {
+        itemName: "Cookies Pack",
+        qty: 5,
+        unit: "pcs",
+        rate: 30,
+        amount: 150,
+        disc: 0,
+        d1: "0%",
+        netAmount: 150,
+      },
+    ],
+  },
+  {
+    no: "002",
+    date: "2025-05-30",
+    type: "Sales",
+    party: "XYZ Mart",
+    place: "Ahmedabad",
+    dcNo: "DC1002",
+    dcDate: "2025-05-29",
+    items: [
+      {
+        itemName: "Juice Bottle",
+        qty: 6,
+        unit: "btl",
+        rate: 60,
+        amount: 360,
+        disc: 0,
+        d1: "5%",
+        netAmount: 342,
+      },
+    ],
+  },
+ 
+];
+
 
 export  const rows = [
     { description: "SALES", may1: "1,230.00", may25: "1,230.00", year: "0.01" },
