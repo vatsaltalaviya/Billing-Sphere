@@ -27,8 +27,6 @@ const SalePurchase = ({ mode, onDropdownRef, onRowsChange,createNewRow }) => {
     setProductRows((prevRows) => [...prevRows, createNewRow()]);
   }
   
-
-  console.log(productRows);
   
   // Ref for searchable dropdowns
   const dropdownRefs = useRef([]);

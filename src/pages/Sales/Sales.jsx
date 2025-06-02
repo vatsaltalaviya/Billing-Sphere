@@ -36,36 +36,37 @@ const Sales = () => {
   return productRows.current.push(newRow);
 };
 
-
-
-  const isProductRowFilled = (row) =>
-    row.item || row.qty || row.unit || row.rate || row.amount || row.disc || row.d1 || row.netAmt;
-
-  const isRowEmpty = (row) =>
-    Object.values(row).every((val) => val === "" || val === null || val === undefined);
-
-
   // handle new line creation
   const handleNewLine = () => {
   let rowToSelect = 0;
 
+  // Function to check if a row is filled
+   const isProductRowFilled = (row) =>
+    row.item || row.qty || row.unit || row.rate || row.amount || row.disc || row.d1 || row.netAmt;
+
+   // Function to check if a row is empty
+  const isRowEmpty = (row) =>
+    Object.values(row).every((val) => val === "" || val === null || val === undefined);
+
+
+
+  // get current rows from the ref
   const currentRows = productRows.current;
 
   if (currentRows.length === 0) {
     createNewRow();
     rowToSelect = 0;
   }
-  if(currentRows.length > 15){
-   createNewRow();
-   rowToSelect = currentRows.length - 1;
-  }
-  else {
-    const allFilled = currentRows.every(isProductRowFilled);
 
-    if (allFilled) {
+  else {
+    // Check if all rows are filled
+    const allFilled = currentRows.every(isProductRowFilled);
+    // If all rows are filled or more than 15 rows, create a new row
+    if (allFilled || currentRows.length > 15) {
       createNewRow();
-      rowToSelect = currentRows.length;
-    } else {
+      rowToSelect = currentRows.length-1;
+    } 
+    else {
       const firstEmptyIdx = currentRows.findIndex(isRowEmpty);
       if (firstEmptyIdx !== -1) {
         rowToSelect = firstEmptyIdx;
