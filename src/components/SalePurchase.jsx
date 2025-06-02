@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SearchableDropdown from "./SearchableDropdown";
 import {
   indianStates,
@@ -8,10 +8,8 @@ import {
   Sundry,
 } from "../assets/Dummydata";
 
-const SalePurchase = ({ mode }) => {
-  const [selectedProductRow, setSelectedProductRow] = useState(0);
-
-// Table state for 15 product rows
+const SalePurchase = ({ mode, onDropdownRef, onRowsChange,createNewRow }) => {
+  // Table state for 15 product rows
   const [productRows, setProductRows] = useState(
     Array.from({ length: 15 }, () => ({
       item: "",
@@ -25,11 +23,33 @@ const SalePurchase = ({ mode }) => {
     }))
   );
 
+  if (createNewRow) {
+    setProductRows((prevRows) => [...prevRows, createNewRow()]);
+  }
+  
 
+  console.log(productRows);
+  
+  // Ref for searchable dropdowns
+  const dropdownRefs = useRef([]);
+
+  // Notify parent when rows change
+  useEffect(() => {
+    if (onRowsChange) {
+      onRowsChange(productRows);
+    }
+  }, [productRows]);
+
+  // Pass refs up to parent
+  useEffect(() => {
+    if (onDropdownRef) {
+      onDropdownRef(dropdownRefs.current);
+    }
+  }, [dropdownRefs.current]);
 
   // Controlled form state
   const [formFields, setFormFields] = useState({
-    no: "",
+    no: "1",
     date: "",
     party: "",
     place: "",
@@ -40,7 +60,6 @@ const SalePurchase = ({ mode }) => {
     remark: "",
   });
 
-  
   // Table state for 4 sundry rows
   const [sundryRows, setSundryRows] = useState(
     Array.from({ length: 4 }, () => ({
@@ -54,7 +73,6 @@ const SalePurchase = ({ mode }) => {
     const { id, value } = e.target;
     setFormFields((prev) => ({ ...prev, [id]: value }));
   };
-
 
   return (
     <div className="w-full bg-white overflow-y-auto">
@@ -74,12 +92,12 @@ const SalePurchase = ({ mode }) => {
             />
           </div>
           <div className="flex flex-col lg:flex-row gap-2">
-            <label htmlFor="Date" className="w-28 text-lg font-medium">
+            <label htmlFor="date" className="w-28 text-lg font-medium">
               Date
             </label>
             <input
               type="date"
-              id="Date"
+              id="date"
               name="date"
               className="flex-1 border px-2 py-2"
               value={formFields.date}
@@ -87,12 +105,12 @@ const SalePurchase = ({ mode }) => {
             />
           </div>
           <div className="flex flex-col lg:flex-row gap-2">
-            <label htmlFor="Type" className="w-32 text-lg font-medium">
+            <label htmlFor="type" className="w-32 text-lg font-medium">
               Type
             </label>
             <SearchableDropdown
               options={saletype}
-              id="Type"
+              id="type"
               name="type"
               className="flex-1 lg:w-36 border px-2 py-2"
               value={formFields.type}
@@ -115,14 +133,14 @@ const SalePurchase = ({ mode }) => {
             />
           </div>
           <div className="flex flex-col lg:flex-row gap-2">
-            <label htmlFor="Place" className="w-32 xl:pl-4 text-lg font-medium">
+            <label htmlFor="place" className="w-32 xl:pl-4 text-lg font-medium">
               Place
             </label>
             <select
-              id="state"
+              id="place"
               name="place"
               className="w-full md:w-52 md:flex-1 border px-2 py-2"
-              value={formFields.place}
+              value={formFields.place || ""}
               onChange={handleFieldChange}
             >
               <option value="">Select State</option>
@@ -212,6 +230,7 @@ const SalePurchase = ({ mode }) => {
                 <td className="border px-2 py-1">{idx + 1}</td>
                 <td className="border p-0 col-span-3">
                   <SearchableDropdown
+                    ref={(el) => (dropdownRefs.current[idx] = el)}
                     value={row.item}
                     options={items}
                     className="w-full h-full px-2"
@@ -219,6 +238,33 @@ const SalePurchase = ({ mode }) => {
                       const updated = [...productRows];
                       updated[idx].item = val.target.value;
                       setProductRows(updated);
+
+                      // Check if current row is filled
+                      if (val.target.value) {
+                        const isCurrentRowFilled =
+                          updated[idx].item !== "" &&
+                          updated[idx].qty !== "" &&
+                          updated[idx].rate !== "";
+
+                        if (
+                          isCurrentRowFilled &&
+                          idx === productRows.length - 1 &&
+                          productRows.length < 15
+                        ) {
+                          // Add new row automatically
+                          const newRow = {
+                            item: "",
+                            qty: "",
+                            unit: "",
+                            rate: "",
+                            amount: "",
+                            disc: "",
+                            d1: "",
+                            netAmt: "",
+                          };
+                          setProductRows([...updated, newRow]);
+                        }
+                      }
                     }}
                   />
                 </td>
@@ -231,6 +277,33 @@ const SalePurchase = ({ mode }) => {
                       const updated = [...productRows];
                       updated[idx].qty = e.target.value;
                       setProductRows(updated);
+
+                      // Check if current row is filled
+                      if (e.target.value) {
+                        const isCurrentRowFilled =
+                          updated[idx].item !== "" &&
+                          updated[idx].qty !== "" &&
+                          updated[idx].rate !== "";
+
+                        if (
+                          isCurrentRowFilled &&
+                          idx === productRows.length - 1 &&
+                          productRows.length < 15
+                        ) {
+                          // Add new row automatically
+                          const newRow = {
+                            item: "",
+                            qty: "",
+                            unit: "",
+                            rate: "",
+                            amount: "",
+                            disc: "",
+                            d1: "",
+                            netAmt: "",
+                          };
+                          setProductRows([...updated, newRow]);
+                        }
+                      }
                     }}
                   />
                 </td>

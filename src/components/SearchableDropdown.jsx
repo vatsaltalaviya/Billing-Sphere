@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useImperativeHandle, useRef, useState } from "react";
 
 export default function SearchableDropdown({
   id,
@@ -6,8 +6,16 @@ export default function SearchableDropdown({
   value,
   onChange,
   className,
+  ref
 }) {
+
+   const inputRef = useRef();
  
+   useImperativeHandle(ref, () => ({
+    focusInput: () => {
+      inputRef.current && inputRef.current.focus();
+    }
+  }));
 
   const dropdownOptions = options && Array.isArray(options) ? options : "";
 
@@ -62,6 +70,7 @@ export default function SearchableDropdown({
         <input
           id={id}
           type="text"
+          ref={inputRef}
           value={searchTerm}
           className={className}
           onChange={(e) => {
@@ -82,7 +91,7 @@ export default function SearchableDropdown({
         />
         {showOptions && (
           <ul
-            className={`absolute w-full bg-white table-data z-10 max-h-40 overflow-y-auto rounded shadow`}
+            className={`absolute w-full bg-white table-data z-50 max-h-40 overflow-y-auto rounded shadow`}
           >
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (

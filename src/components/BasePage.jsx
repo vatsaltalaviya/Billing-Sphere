@@ -4,7 +4,16 @@ import MasterPart from './MasterPart'
 import SalePurchase from './SalePurchase'
 import ReceptPayment from './ReceptPayment'
 
-const BasePage = ({Sidebardata,heading,tableData,mode,subHeading}) => {
+const BasePage = ({
+  Sidebardata,
+  heading,
+  tableData,
+  mode,
+  subHeading,
+  selectedProductRow,
+  onDropdownRef,
+  onRowsChange
+}) => {
 
   const [showSidebar, setshowSidebar] = useState(false)
 
@@ -41,9 +50,13 @@ const BasePage = ({Sidebardata,heading,tableData,mode,subHeading}) => {
       <div className='flex justify-end'>
         {/* ------------------ displaying main content according their mode or table data -------------------------------- */}
        <div className='w-full h-screen overflow-y-auto p-5 sm:p-2 table-data'>
-            {tableData && <MasterPart tableData={tableData}/>}
-            {(mode === "Sales" || mode === "Purchase") && (
-              <SalePurchase mode={mode}/>
+            {tableData && <MasterPart tableData={tableData}/>}            {(mode === "Sales" || mode === "Purchase") && (
+              <SalePurchase 
+                mode={mode}
+                selectedProductRow={selectedProductRow}
+                onDropdownRef={onDropdownRef}
+                onRowsChange={onRowsChange}
+              />
             )}
             {(mode === "Receipt" || mode === "Payment") && (
               <ReceptPayment mode={mode}/>
