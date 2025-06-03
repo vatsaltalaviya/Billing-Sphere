@@ -14,14 +14,15 @@ const BasePage = ({
   onDropdownRef,
   onRowsChange,
   triggerNew,
-  triggerPrevious
+  triggerPrevious,
+  focusDateTrigger
 }) => {
 
   const [showSidebar, setshowSidebar] = useState(false)
 
   return (
     <div className='h-screen w-full relative bg-white overflow-hidden'>
-      <div className={`${mode == "Sales" ?'bg-green-500':'bg-blue-500'} ${mode == "Purchase" ? 'bg-orange-400':'bg-blue-500'} ${mode == "Receipt" ? 'bg-emerald-400':'bg-blue-500'} ${mode == "Payment" ? 'bg-orange-300':'bg-blue-500'} text-xl font-bold text-white`}
+      <div className={`${mode == "Sales" ?'bg-green-500':'bg-blue-500'} ${mode == "Purchase" ? 'bg-orange-400':'bg-blue-500'} ${mode == "Receipt" && 'bg-emerald-400'} ${mode == "Payment" && 'bg-orange-300'} ${mode == "Journal" && 'bg-purple-500'} ${mode == "Contra" && 'bg-indigo-500'} ${mode=="CreditNote" && 'bg-fuchsia-500'} ${mode=="DebitNote" && 'bg-fuchsia-500'} ${mode=="GST" && 'bg-fuchsia-500'} text-xl font-bold text-white`}
       >
         {subHeading ? (
           <div className="flex justify-between items-center w-full">
@@ -52,7 +53,8 @@ const BasePage = ({
       <div className='flex justify-end'>
         {/* ------------------ displaying main content according their mode or table data -------------------------------- */}
        <div className='w-full h-screen overflow-y-auto p-5 sm:p-2 table-data'>
-            {tableData && <MasterPart tableData={tableData}/>}            {(mode === "Sales" || mode === "Purchase") && (
+            {tableData && <MasterPart tableData={tableData}/>}            
+            {(mode === "Sales" || mode === "Purchase") && (
               <SalePurchase 
                 mode={mode}
                 selectedProductRow={selectedProductRow}
@@ -62,8 +64,8 @@ const BasePage = ({
                 triggerPrevious={triggerPrevious}
               />
             )}
-            {(mode === "Receipt" || mode === "Payment") && (
-              <ReceptPayment mode={mode}/>
+            {(mode === "Receipt" || mode === "Payment" || mode == "Journal" ||mode == "Contra" ||mode == "CreditNote" || mode == "DebitNote" || mode == "GST") && (
+              <ReceptPayment mode={mode} triggerPrevious={triggerPrevious} focusDateTrigger={focusDateTrigger}/>
             )}
         </div>
         

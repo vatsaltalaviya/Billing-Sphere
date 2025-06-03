@@ -23,3 +23,13 @@ summary {
 summary::-webkit-details-marker {
   display: none;
 }
+
+@media print{
+  .invoice-print{
+    display: none;
+  }
+  .invoice-data{
+    padding: 0;
+    margin: 0;
+  }
+}

@@ -3,10 +3,12 @@ import BasePage from "../../components/BasePage";
 import ChangeVoucher from "./ChangeVoucher";
 import SearchItem from "./SearchItem";
 import SearchNo from "./SearchNo";
-import AttachItems from "./AttachItems";
+import { useLocation } from "react-router-dom";
+import AttachImage from "./AttachImage";
 
 const Sales = () => {
 
+  const location = useLocation();
   // for add new rows
   const productRows = useRef([]);
   const [dropdownRefs, setDropdownRefs] = useState([]);
@@ -46,6 +48,14 @@ const Sales = () => {
   };
   return productRows.current.push(newRow);
 };
+
+
+// use when in list click new then new voucher is created
+   useEffect(() => {
+    if (location.state?.triggerNew) {
+      setTriggerNew((perv)=> !perv); // This will trigger handleNewVoucher in SalePurchase
+    }
+  }, [location.state]);
 
   // handle new line creation
   const handleNewLine = () => {
@@ -98,8 +108,8 @@ const Sales = () => {
   const salesSidebarData = [
     { name: "List", onClick: () =>{}, navigate: "/dashboard/sales/list" },
     { name: "New", onClick: () => setTriggerNew((prev) => !prev)  },
-    { name: "Print", onClick: () => {} },
-    { name: "All Print", onClick: () => {} },
+    { name: "Print", onClick: () => {},navigate: "/dashboard/print" },
+    { name: "All Print", onClick: () => {} ,navigate: "/dashboard/print" },
     {
       name: "Change Type",
       onClick: () => setshowVoucher(true),
@@ -139,7 +149,7 @@ const Sales = () => {
       {showVoucher && <ChangeVoucher onClose={() => setshowVoucher(false)} />}
       {showSearchItem && <SearchItem onClose={() => setshowSearchItem(false)} />}
       {showSearchNo && <SearchNo onClose={() => setshowSearchNo(false)} />}
-      {showAttachImages && <AttachItems onClose={() => setshowAttachImages(false)} />}
+      {showAttachImages && <AttachImage onClose={() => setshowAttachImages(false)} />}
     </div>
   );
 };

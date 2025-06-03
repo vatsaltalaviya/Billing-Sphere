@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SearchableDropdown from "./SearchableDropdown";
 import { items } from "../assets/Dummydata";
 
-const ReceptPayment = ({ mode }) => {
+const ReceptPayment = ({ mode ,triggerPrevious ,focusDateTrigger}) => {
   // Each row: { entryType, debit, credit, remark, ledger }
   const [rows, setRows] = useState([
     { entryType: "Cr", debit: "", credit: "", remark: "", ledger: "" }
   ]);
+  const [No, setNo] = useState(1)
+  const [date, setDate] = useState('')
+  const [narration, setNarration] = useState('')
+  const dateRef = useRef();
+  
+  useEffect(() => {
+    if (focusDateTrigger) {
+      dateRef.current.focus();
+    }
+  }, [focusDateTrigger]);
+
 
   // Handler for changing a field in a row
   const handleRowChange = (idx, field, value) => {
@@ -31,6 +42,15 @@ const ReceptPayment = ({ mode }) => {
     }
   };
 
+
+  // Effect to set the initial value of No when triggerPrevious changes
+useEffect(() => {
+  if (triggerPrevious !== undefined && triggerPrevious !== null) {
+    setNo(triggerPrevious);
+  }
+}, [triggerPrevious]);
+  
+
   return (
     <div className="w-full bg-white overflow-y-auto">
       <div className="flex flex-col lg:flex-row justify-between border-b gap-4">
@@ -38,7 +58,7 @@ const ReceptPayment = ({ mode }) => {
           <label htmlFor="no" className="w-20 text-lg font-medium">
             No
           </label>
-          <input type="text" id="no" className="flex-1 h-10 border px-2 py-2" />
+          <input type="text" id="no" value={No} onChange={(e)=>setNo(e.target.value)} className="flex-1 h-10 border px-2 py-2" />
         </div>
         <div className="flex flex-col lg:flex-row gap-2 pb-2 lg:pb-0">
           <label htmlFor="Date" className="w-20 text-lg font-medium">
@@ -48,6 +68,9 @@ const ReceptPayment = ({ mode }) => {
             type="date"
             id="Date"
             className="flex-1 h-10 border px-2 py-2"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            ref={dateRef}
           />
         </div>
       </div>
@@ -89,7 +112,12 @@ const ReceptPayment = ({ mode }) => {
                     options={items}
                       value={row.ledger}
                       className="w-full h-full px-2 py-1 outline-none"
-                      onChange={val => handleRowChange(idx, "ledger", val)}
+                      onChange={(val) => {
+                        const updated = [...rows];
+                        console.log(updated);
+                        updated[idx].ledger = val.target.value // Use the selected item's name
+                        setRows(updated);
+                      }}
                     />
                   </td>
                   <td className="border p-0">
@@ -133,6 +161,8 @@ const ReceptPayment = ({ mode }) => {
               type="text"
               id="narration"
               className="w-full lg:w-sm h-10 px-2 py-2 border"
+              value={narration}
+              onChange={(e) => setNarration(e.target.value)}
             />
           </div>
 

@@ -96,9 +96,6 @@ const SalePurchase = ({
 
 
 
-const data = salesData.find((item) => item.no === formFields.no);
-
-
   // check if any product row or form field has data
   const hasData = () => {
     // Check if any product row has data
@@ -163,8 +160,7 @@ const data = salesData.find((item) => item.no === formFields.no);
     }
   }, [triggerNew]);
 
-  console.log(formFields.no);
-  
+console.log(sundryRows)
 
   return (
     <div className="w-full bg-white overflow-y-auto">
@@ -543,7 +539,7 @@ const data = salesData.find((item) => item.no === formFields.no);
                         options={Sundry}
                         onChange={(val) => {
                           const updated = [...sundryRows];
-                          updated[idx].sundry = val;
+                          updated[idx].sundry = val.target.value;
                           setSundryRows(updated);
                         }}
                       />

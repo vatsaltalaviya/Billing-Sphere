@@ -32,7 +32,7 @@ export const items =[
 ]
 export const salesData = [
   {
-    no: "1",
+    no: "3",
     date: "2025-05-30",
     type: "Sales",
     party: "ABC Traders",
@@ -227,3 +227,24 @@ export const indianStates = [
         Amount: "200.00"
     }
   ]
+
+  export const transactions = [
+  {
+    date: "01/05/2025",
+    vchNo: 3,
+    particulars: "Agent Commission- 100 Cr Cash Discount- 100 Dr",
+    amount: 100.00
+  },
+  {
+    date: "01/05/2025",
+    vchNo: 2,
+    particulars: "Bank Charges- 1000 Cr Agent Commission- 500 Dr Cash Discount- 300 Dr",
+    amount: 1000.00
+  },
+  {
+    date: "01/05/2025",
+    vchNo: 1,
+    particulars: "Cash In Hand- 1000 Cr Agent Commission- 1000 Dr",
+    amount: 1000.00
+  }
+];

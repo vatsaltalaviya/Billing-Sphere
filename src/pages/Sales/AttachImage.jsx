@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import PopUp from '../../components/PopUp'
 
-const AttachItems = ({onClose}) => {
+const AttachImage = ({onClose}) => {
     const inputRef = useRef(null);
   const [preview, setPreview] = useState(null);
 
@@ -85,4 +85,4 @@ const AttachItems = ({onClose}) => {
   )
 }
 
-export default AttachItems
+export default AttachImage

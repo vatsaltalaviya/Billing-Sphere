@@ -12,6 +12,13 @@ import Payment from './pages/Payment/Payment'
 import List from './pages/Sales/List'
 import PopUp from './components/PopUp'
 import ChangeVoucher from './pages/Sales/ChangeVoucher'
+import InvoicePage from './components/InvoiceData'
+import PrintPage from './components/PrintPage'
+import Journal from './pages/Receipt/Journal'
+import Contra from './pages/Receipt/Contra'
+import CreditNote from './pages/Receipt/CreditNote'
+import DebitNote from './pages/Receipt/DebitNote'
+import GstExp from './pages/Receipt/GstExp'
 
 const App = () => {
   return (
@@ -39,12 +46,24 @@ const App = () => {
       
       {/* sales */}
       <Route path='/dashboard/sales' element={<Sales />} /> 
-      <Route path='/dashboard/sales/list' element={<List />} /> 
+      <Route path='/dashboard/sales/list' element={<List mode="sales"/>} /> 
 
 
       <Route path='/dashboard/purchase' element={<Purchase />} /> 
+      <Route path='/dashboard/purchase/list' element={<List mode="purchase"/>} />   
+
       <Route path='/dashboard/receipt' element={<Receipt />} /> 
+      <Route path='/dashboard/receipt/list' element={<List mode="receipt"/>} />
+
       <Route path='/dashboard/payment' element={<Payment />} /> 
+      <Route path='/dashboard/payment/list' element={<List mode="payment"/>} />   
+      
+      <Route path='/dashboard/journal' element={<Journal />} /> 
+      <Route path='/dashboard/contra' element={<Contra />} /> 
+      <Route path='/dashboard/creditnote' element={<CreditNote />} /> 
+      <Route path='/dashboard/debitnote' element={<DebitNote />} /> 
+      <Route path='/dashboard/gstexpense' element={<GstExp />} /> 
+      <Route path='/dashboard/print' element={<PrintPage />} /> 
       
     </Routes>
     </div>

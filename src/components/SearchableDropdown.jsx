@@ -103,9 +103,7 @@ export default function SearchableDropdown({
                   {typeof option === "string" ? option : option.name}
                 </li>
               ))
-            ) : (
-              <li className="px-2 py-2 text-gray-400">No results</li>
-            )}
+            ) : ''}
           </ul>
         )}
       </div>
