@@ -1,18 +1,19 @@
 import React, { useState } from 'react'
-import BasePage from '../../components/BasePage'
+import BasePage from '../components/BasePage'
 import ChangeReVoucher from './ChangeReVoucher';
-import AttachImage from '../Sales/AttachImage';
+import AttachImage from './AttachImage';
 
-const Journal = () => {
- const [showVoucher, setshowVoucher] = useState(false);
+const Payment = () => {
 
-  const [triggerPrevious, setTriggerPrevious] = useState(1);
-  const [focusDateTrigger, setFocusDateTrigger] = useState(false);
-  const [showAttachImages, setshowAttachImages] = useState(false);
+  
+    const [showVoucher, setshowVoucher] = useState(false);
+  
+    const [triggerPrevious, setTriggerPrevious] = useState(1);
+    const [focusDateTrigger, setFocusDateTrigger] = useState(false);
+    const [showAttachImages, setshowAttachImages] = useState(false);
 
-
-    const ReceiptsidebarData = [
-      { name: "List", onClick: () => {},navigate: "/dashboard/receipt/list" },
+    const PaymentSidebar = [
+     { name: "List", onClick: () => {},navigate: "/dashboard/receipt/list" },
   { name: "Print", onClick: () => {},navigate: "/dashboard/print" },
   { name: "Payment", onClick: () => {} ,navigate: "/dashboard/payment" },
   { name: "Receipt", onClick: () => {} ,navigate: "/dashboard/receipt"},
@@ -29,16 +30,14 @@ const Journal = () => {
   { name: "Attach. Img", onClick: () => {setshowAttachImages(true)} },
   { name: "Vch Setup", onClick: () => {} },
   { name: "Print Setup", onClick: () => {} },]
-    
-    
-  return (
-     <div>
-      <BasePage heading="Voucher Entry" subHeading='Journal' mode="Journal" Sidebardata={ReceiptsidebarData} triggerPrevious={triggerPrevious} focusDateTrigger={focusDateTrigger}/>
+     return (
+    <div>
+      <BasePage heading="Voucher Entry" subHeading="Payment" mode="Payment" Sidebardata={PaymentSidebar} triggerPrevious={triggerPrevious} focusDateTrigger={focusDateTrigger}/>
    
-    {showVoucher && <ChangeReVoucher onClose={()=>setshowVoucher(false)}/>}
+         {showVoucher && <ChangeReVoucher onClose={()=>setshowVoucher(false)}/>}
       {showAttachImages && <AttachImage onClose={() => setshowAttachImages(false)} />}
     </div>
   )
 }
 
-export default Journal
+export default Payment

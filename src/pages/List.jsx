@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Datatable from "../../components/Datatable";
-import { lists } from "../../assets/Dummydata";
+import Datatable from "../components/Datatable";
+import { lists } from "../assets/Dummydata";
 import { useNavigate } from "react-router-dom";
-import Range from "../../components/Range";
-import { transactions } from "../../assets/Dummydata";
+import Range from "../components/Range";
+import { transactions } from "../assets/Dummydata";
 
 const List = ({mode}) => {
 

@@ -160,7 +160,6 @@ const SalePurchase = ({
     }
   }, [triggerNew]);
 
-console.log(sundryRows)
 
   return (
     <div className="w-full bg-white overflow-y-auto">

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import PopUp from "../../components/PopUp";
-import SearchableDropdown from "../../components/SearchableDropdown";
-import { items } from "../../assets/Dummydata";
+import PopUp from "../components/PopUp";
+import SearchableDropdown from "../components/SearchableDropdown";
+import { items } from "../assets/Dummydata";
 
 const SearchItem = ({ onClose }) => {
   const [searchitems, setsearchitem] = useState({searchItem:''});

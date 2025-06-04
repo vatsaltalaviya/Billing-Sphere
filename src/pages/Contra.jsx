@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import BasePage from "../../components/BasePage";
-import ChangeReVoucher from "./ChangeReVoucher";
-import AttachImage from "../Sales/AttachImage";
+import React, { useState } from 'react'
+import BasePage from '../components/BasePage'
+import ChangeReVoucher from './ChangeReVoucher';
+import AttachImage from './AttachImage';
 
 const Contra = () => {
   const [showVoucher, setshowVoucher] = useState(false);

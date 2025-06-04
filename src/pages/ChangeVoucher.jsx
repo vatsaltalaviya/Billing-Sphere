@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import PopUp from "../../components/PopUp";
+import PopUp from "../components/PopUp";
 
 const ChangeVoucher = ({ onClose }) => {
   return (

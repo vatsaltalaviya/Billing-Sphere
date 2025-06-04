@@ -1,14 +1,16 @@
-import React, { useRef, useState, useEffect } from "react";
-import BasePage from "../../components/BasePage";
-import ChangeVoucher from "./ChangeVoucher";
-import SearchItem from "./SearchItem";
-import SearchNo from "./SearchNo";
-import { useLocation } from "react-router-dom";
-import AttachImage from "./AttachImage";
+import React, { useEffect, useRef, useState } from 'react'
+import BasePage from '../components/BasePage'
+import { useLocation } from 'react-router-dom';
+import SearchItem from './SearchItem';
+import SearchNo from './SearchNo';
+import AttachImage from './AttachImage';
+import ChangeVoucher from './ChangeVoucher';
 
-const Sales = () => {
 
-  const location = useLocation();
+const Purchase = () => {
+
+
+    const location = useLocation();
   // for add new rows
   const productRows = useRef([]);
   const [dropdownRefs, setDropdownRefs] = useState([]);
@@ -104,12 +106,11 @@ const Sales = () => {
 };
 
 
-
-  const salesSidebarData = [
-    { name: "List", onClick: () =>{}, navigate: "/dashboard/sales/list" },
+    const salesSidebarData = [
+    { name: "List", onClick: () =>{}, navigate: "/dashboard/purchase/list" },
     { name: "New", onClick: () => setTriggerNew((prev) => !prev)  },
-    { name: "Print", onClick: () => {},navigate: "/dashboard/print" },
-    { name: "All Print", onClick: () => {} ,navigate: "/dashboard/print" },
+    { name: "Print", onClick: () => {} ,navigate: "/dashboard/print"},
+    { name: "All Print", onClick: () => {} ,navigate: "/dashboard/print"},
     {
       name: "Change Type",
       onClick: () => setshowVoucher(true),
@@ -131,27 +132,22 @@ const Sales = () => {
     { name: "Vch Setup", onClick: () => {} },
     { name: "Print Setup", onClick: () => {} },
   ];
-
   return (
-    <div className="w-full">
-      <BasePage
-        heading="Sales Entry"
-        subHeading="Bill of Supply"
-        mode="Sales"
-        Sidebardata={salesSidebarData}
+    <div className='w-full'>
+      <BasePage heading="Purchase Entry" subHeading='Retail Purchase' mode="Purchase"
+       Sidebardata={salesSidebarData}
         selectedProductRow={selectedProductRow}
         onDropdownRef={handleDropdownRef}
         onRowsChange={handleRowsChange}
         createNewRow={createNewRow}
         triggerNew={triggerNew}
-        triggerPrevious={triggerPrevious}
-      />
-      {showVoucher && <ChangeVoucher onClose={() => setshowVoucher(false)} />}
+        triggerPrevious={triggerPrevious} />
+        {showVoucher && <ChangeVoucher onClose={() => setshowVoucher(false)} />}
       {showSearchItem && <SearchItem onClose={() => setshowSearchItem(false)} />}
       {showSearchNo && <SearchNo onClose={() => setshowSearchNo(false)} />}
       {showAttachImages && <AttachImage onClose={() => setshowAttachImages(false)} />}
     </div>
-  );
-};
+  )
+}
 
-export default Sales;
+export default Purchase

@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import BasePage from '../../components/BasePage'
+import BasePage from '../components/BasePage'
 import ChangeReVoucher from './ChangeReVoucher';
-import AttachImage from '../Sales/AttachImage';
+import AttachImage from './AttachImage';
 
-const Receipt = () => {
-
-  const [showVoucher, setshowVoucher] = useState(false);
+const DebitNote = () => {
+    const [showVoucher, setshowVoucher] = useState(false);
 
   const [triggerPrevious, setTriggerPrevious] = useState(1);
   const [focusDateTrigger, setFocusDateTrigger] = useState(false);
@@ -30,16 +29,14 @@ const Receipt = () => {
   { name: "Attach. Img", onClick: () => {setshowAttachImages(true)} },
   { name: "Vch Setup", onClick: () => {} },
   { name: "Print Setup", onClick: () => {} },]
-
- 
   return (
     <div>
-      <BasePage heading="Voucher Entry" subHeading='Receipt' mode="Receipt" Sidebardata={ReceiptsidebarData} triggerPrevious={triggerPrevious} focusDateTrigger={focusDateTrigger}/>
-
-      {showVoucher && <ChangeReVoucher onClose={()=>setshowVoucher(false)}/>}
+      <BasePage heading="Voucher Entry" subHeading='Debit Note W/O st' mode="DebitNote" Sidebardata={ReceiptsidebarData} triggerPrevious={triggerPrevious} focusDateTrigger={focusDateTrigger}/>
+  
+     {showVoucher && <ChangeReVoucher onClose={()=>setshowVoucher(false)}/>}
       {showAttachImages && <AttachImage onClose={() => setshowAttachImages(false)} />}
     </div>
   )
 }
 
-export default Receipt
+export default DebitNote

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import PopUp from '../../components/PopUp'
+import PopUp from '../components/PopUp'
 import { useNavigate } from 'react-router-dom'
 
 const ChangeReVoucher = ({onClose}) => {
