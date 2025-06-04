@@ -5,6 +5,7 @@ export
             options: [
                 {
                     name: "voucher Entry",
+                    navigate:"/dashboard/receipt"
                 },
                 {
                     name: "Quick Voucher Entry",

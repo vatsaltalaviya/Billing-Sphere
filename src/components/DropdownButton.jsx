@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const DropdownGroup = ({ dropdownData }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const dropdownRef = useRef(null);
+
+  const navigate = useNavigate();
 
   const toggleDropdown = (name) => {
     setOpenDropdown(prev => (prev === name ? null : name));
@@ -49,7 +52,8 @@ const DropdownGroup = ({ dropdownData }) => {
                   <div key={gIdx} className="relative group">
                     <div
                       onMouseEnter={() => setOpenSubmenu(option.name)  }
-                      // onClick={() => setOpenDropdown(option.name)}
+                      
+                      onClick={() => {option.navigate && navigate(option.navigate)}}
                     
                       className="px-4 py-1 hover:bg-gray-100 cursor-pointer text-sm font-medium flex justify-between items-center"
                     >
