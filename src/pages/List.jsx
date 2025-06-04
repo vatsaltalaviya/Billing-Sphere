@@ -4,6 +4,7 @@ import { lists } from "../assets/Dummydata";
 import { useNavigate } from "react-router-dom";
 import Range from "../components/Range";
 import { transactions } from "../assets/Dummydata";
+import ListTable from "../components/ListTable";
 
 const List = ({mode}) => {
 
@@ -21,10 +22,10 @@ const List = ({mode}) => {
         </h1>
       </div>
       <div className=" h-[80vh] overflow-auto relative p-4 xl:p-10 table-data border-b">
-        {mode == "sales" &&<Datatable data={lists}/>}
-        {mode == "purchase" &&<Datatable data={lists}/>}
-        {mode == "receipt" &&<Datatable data={transactions}/>}
-        {mode == "payment" &&<Datatable data={transactions}/>}
+        {mode == "sales" &&<ListTable data={lists}/>}
+        {mode == "purchase" &&<ListTable data={lists}/>}
+        {mode == "receipt" &&<ListTable data={transactions}/>}
+        {mode == "payment" &&<ListTable data={transactions}/>}
       </div>
       <div className="w-full border flex flex-col xl:flex-row justify-center px-2 mt-3 mb-10">
           <div className="flex flex-col xl:flex-row w-full">

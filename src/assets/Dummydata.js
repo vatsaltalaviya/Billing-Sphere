@@ -167,6 +167,30 @@ export const saletype =[
 
     },
     {
+        Date: "2023-10-01",
+        No: "INV001",
+        Type: "Cash",
+        Print: "Print",
+        RefNO: "REF001",
+        RefNO2: "REF002",
+        Perticulars: "Sale of goods",
+        Remark: "No remarks",
+        Amount: "1000.00"
+
+    },
+    {
+        Date: "2023-10-01",
+        No: "INV001",
+        Type: "Cash",
+        Print: "Print",
+        RefNO: "REF001",
+        RefNO2: "REF002",
+        Perticulars: "Sale of goods",
+        Remark: "No remarks",
+        Amount: "1000.00"
+
+    },
+    {
         Date: "2023-10-02",
         No: "INV002",
         Type: "Debit",
