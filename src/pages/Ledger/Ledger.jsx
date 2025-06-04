@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 import BasePage from '../../components/BasePage'
 import FilterLedger from './FilterLedger';
+import BulkUpd from './BulkUpd';
 
 const Ledger = () => {
   const [filterLedger, setFilterLedger] = useState(false)
+  const [showBulkData, setshowBulkData] = useState(false)
 
    const ledgerSidebarData = [
   { name: "New", onClick: () => {},navigate:"/dashboard/ledger/new" },
   { name: "Edit", onClick: () => {} ,navigate:"/dashboard/ledger/edit/1" },
   { name: "Delete", onClick: () => {} ,navigate:"/dashboard/ledger/delete/1" },
   { name: "Export-Excel", onClick: () => {} },
-  { name: "BulkUpd", onClick: () => {} },
+  { name: "BulkUpd", onClick: () => {setshowBulkData(true)} },
   { name: "Filter", onClick: () => {setFilterLedger(true)} },
   { name: "Label Prn", onClick: () => {} },
   { name: "Envelopes", onClick: () => {} },
@@ -189,6 +191,7 @@ const Ledger = () => {
       <BasePage heading="Ledger Master" Sidebardata={ledgerSidebarData} tableData={ledgerTableData}/>
 
       {filterLedger && <FilterLedger onClose={()=>setFilterLedger(false)}/>}
+      {showBulkData && <BulkUpd onClose={()=>setshowBulkData(false)}/>}
     </div>
   )
 }

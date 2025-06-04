@@ -6,7 +6,8 @@ export default function SearchableDropdown({
   value,
   onChange,
   className,
-  ref
+  ref,
+  disabled
 }) {
 
    const inputRef = useRef();
@@ -69,6 +70,7 @@ export default function SearchableDropdown({
       <div ref={dropdownRef} className="w-full relative">
         <input
           id={id}
+          disabled={disabled}
           type="text"
           ref={inputRef}
           value={searchTerm}
