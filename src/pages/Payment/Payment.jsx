@@ -1,29 +1,41 @@
-import React from 'react'
+import React, { useState } from 'react'
 import BasePage from '../../components/BasePage'
+import ChangeReVoucher from '../Receipt/ChangeReVoucher';
+import AttachImage from '../Sales/AttachImage';
 
 const Payment = () => {
+
+  
+    const [showVoucher, setshowVoucher] = useState(false);
+  
+    const [triggerPrevious, setTriggerPrevious] = useState(1);
+    const [focusDateTrigger, setFocusDateTrigger] = useState(false);
+    const [showAttachImages, setshowAttachImages] = useState(false);
+
     const PaymentSidebar = [
-  { name: "List", onClick: () => {} },
-  { name: "Print", onClick: () => {} },
-  { name: "Payment", onClick: () => {} },
-  { name: "Receipt", onClick: () => {} },
-  { name: "Journal", onClick: () => {} },
-  { name: "Contra", onClick: () => {} },
-  { name: "C/Note", onClick: () => {} },
-  { name: "D/Note", onClick: () => {} },
-  { name: "GST Exp", onClick: () => {} },
-  { name: "Previous", onClick: () => {} },
-  { name: "Next", onClick: () => {} },
+     { name: "List", onClick: () => {},navigate: "/dashboard/receipt/list" },
+  { name: "Print", onClick: () => {},navigate: "/dashboard/print" },
+  { name: "Payment", onClick: () => {} ,navigate: "/dashboard/payment" },
+  { name: "Receipt", onClick: () => {} ,navigate: "/dashboard/receipt"},
+  { name: "Journal", onClick: () => {} ,navigate: "/dashboard/journal"},
+  { name: "Contra", onClick: () => {} , navigate: "/dashboard/contra"},
+  { name: "C/Note", onClick: () => {} , navigate: "/dashboard/creditnote"},
+  { name: "D/Note", onClick: () => {} ,navigate: "/dashboard/debitnote"},
+  { name: "GST Exp", onClick: () => {} ,navigate: "/dashboard/gstexpense"},
+  { name: "Previous", onClick: () => {setTriggerPrevious(prev => (prev > 1 ? prev - 1 : 1))} },
+  { name: "Next", onClick: () => {setTriggerPrevious(prev => ( prev + 1))} },
   { name: "Audit Trail", onClick: () => {} },
-  { name: "Change Vch", onClick: () => {} },
-  { name: "Goto Date", onClick: () => {} },
-  { name: "Attach. Img", onClick: () => {} },
+  { name: "Change Vch", onClick: () => {setshowVoucher(true)} },
+  { name: "Goto Date", onClick: () => {setFocusDateTrigger((p)=> !p)} },
+  { name: "Attach. Img", onClick: () => {setshowAttachImages(true)} },
   { name: "Vch Setup", onClick: () => {} },
-  { name: "Print Setup", onClick: () => {} },
-];
+  { name: "Print Setup", onClick: () => {} },]
      return (
     <div>
-      <BasePage heading="Voucher Entry" subHeading="Payment" mode="Payment" Sidebardata={PaymentSidebar}/>
+      <BasePage heading="Voucher Entry" subHeading="Payment" mode="Payment" Sidebardata={PaymentSidebar} triggerPrevious={triggerPrevious} focusDateTrigger={focusDateTrigger}/>
+   
+         {showVoucher && <ChangeReVoucher onClose={()=>setshowVoucher(false)}/>}
+      {showAttachImages && <AttachImage onClose={() => setshowAttachImages(false)} />}
     </div>
   )
 }

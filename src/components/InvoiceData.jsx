@@ -26,8 +26,8 @@ const InvoicePage = () => {
       </div>
 
       {/* Party and Invoice Info */}
-      <div className="grid grid-cols-2 border-b border-black text-sm">
-        <div className=" w-[372px] border">
+      <div className="flex border-b border-black text-sm">
+        <div className=" w-[780px] border">
           <div className="font-semibold">
             To, <span className="font-normal">{invoice.partyName}</span>
           </div>

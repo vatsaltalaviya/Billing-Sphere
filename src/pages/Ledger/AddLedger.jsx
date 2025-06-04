@@ -14,6 +14,9 @@ const AddLedger = () => {
     LedgerGroup: "", // Ledger Group
     opBalance: "", // Opening Balance (01/04/2025)
     opBalanceType: "CR", // CR/DR for Opening Balance
+    billwise:'no',
+    creditDays:'',
+    creditLimit:'',
     remarks: "", // Remarks
     alertOn: false, // Alert on checkbox
     isActive: "NO", // Is Active
@@ -68,7 +71,7 @@ const AddLedger = () => {
   };
 
      const SelectedLedgerGroup = ledgergroup.find(
-        (group) => group.title === formData.LedgerGroup
+        (group) => group.name === formData.LedgerGroup
       )
   console.log(SelectedLedgerGroup);
 
@@ -148,7 +151,7 @@ const AddLedger = () => {
                 <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4">
                   <label
                     htmlFor="LedgerGroup"
-                    className="w-32 md:w-44 test-sm md:text-lg font-medium"
+                    className="w-36 md:w-44 test-sm md:text-lg font-medium"
                   >
                     Ledger Group
                   </label>
@@ -156,6 +159,48 @@ const AddLedger = () => {
                   <SearchableDropdown className="flex-1 border px-2 py-1 xl:ml-9" id="LedgerGroup" options={ledgergroup}  value={formData.LedgerGroup}
                     onChange={handleChangeData}/>
                 </div>
+
+
+
+                <div className="flex flex-col md:flex-row flex-wrap xl:items-center xl:justify-between gap-1 lg:gap-4 mt-3">
+                    <div className="flex flex-col lg:flex-row lg:items-center ">
+                      <label
+                        htmlFor="billwise"
+                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                      >
+                        Billwise Accounting
+                      </label>
+                      <select
+                        id="billwise"
+                        className="flex-1 md:w-32 border px-2 py-1"
+                        value={formData.billwise}
+                        onChange={handleChangeData}
+                        min="0"
+                      >
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                      </select>
+                    </div>
+                    
+                    {formData.billwise == 'yes' &&(
+                      <div className="flex flex-col lg:flex-row lg:items-center">
+                      <label
+                        htmlFor="creditDays"
+                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                      >
+                        Credit Days
+                      </label>
+                      <input
+                        type="number"
+                        id="creditDays"
+                        className="flex-1 md:w-36 border px-2 py-1"
+                        value={formData.creditDays}
+                        onChange={handleChangeData}
+                        min="0"
+                      />
+                    </div>
+                    )}
+                  </div>
 
                 {/* OP Balance */}
                 <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 my-10">
@@ -186,6 +231,23 @@ const AddLedger = () => {
                     </select>
                   </div>
                 </div>
+
+                <div className="flex flex-col lg:flex-row lg:items-center">
+                      <label
+                        htmlFor="creditLimit"
+                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                      >
+                        Credit Limit
+                      </label>
+                      <input
+                        type="number"
+                        id="creditLimit"
+                        className="w-32 md:w-36 border px-2 py-1"
+                        value={formData.creditLimit}
+                        onChange={handleChangeData}
+                        min="0"
+                      />
+                    </div>
 
                 {/* Remarks */}
                 <div className="flex flex-col lg:flex-row lg:flex-wrap lg:items-center gap-1 lg:gap-4 mt-24">

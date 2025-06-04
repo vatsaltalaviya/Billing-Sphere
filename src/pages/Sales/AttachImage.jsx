@@ -17,6 +17,7 @@ const AttachImage = ({onClose}) => {
       setPreview(imageUrl); // ✅ preview image
     }
   };
+
   return (
      <PopUp onClose={onClose}>
       <div className="md:w-[500px] border bg-white flex flex-col">
@@ -45,7 +46,7 @@ const AttachImage = ({onClose}) => {
                       <input type="file" accept='image/*' ref={inputRef} style={{display:'none'}} onChange={handleFileChange} />
                     </div>
                     <div className="w-42 font-medium text-sm">
-                      <button className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
+                      <button onClick={()=>setPreview(null)} className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
                         Delete
                       </button>
                     </div>
