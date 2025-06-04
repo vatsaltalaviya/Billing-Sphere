@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SearchableDropdown from "../../components/SearchableDropdown";
 import { ledgergroup } from "../../assets/LedgerGroup";
-import { indianStates } from "../../assets/Dummydata";
+import { indianStates } from "../../assets/IndianStates";
 
 const AddLedger = () => {
+  const navigate = useNavigate();
+
   // Default form state for AddLedger
   const defaultForm = {
     // Basic Details
@@ -736,7 +738,7 @@ const AddLedger = () => {
               </button>
             )}
 
-            <button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+            <button onClick={()=>navigate('/dashboard/ledger')} className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
               Cancel
             </button>
             {editid || deleteid ? (

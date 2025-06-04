@@ -4,7 +4,8 @@ import SearchableDropdown from "../../components/SearchableDropdown";
 import { items } from "../../assets/Dummydata";
 
 const SearchItem = ({ onClose }) => {
-  const [searchitem, setsearchitem] = useState("");
+  const [searchitems, setsearchitem] = useState({searchItem:''});
+    console.log(searchitems);
 
   return (
     <PopUp onClose={onClose}>
@@ -16,14 +17,15 @@ const SearchItem = ({ onClose }) => {
           <form action="">
             <div>
               <SearchableDropdown
-                id="searchItems"
+                id="searchItem"
                 className="w-full border h-10 px-2"
                 options={items}
-                value={searchitem}
+                value={searchitems.searchItem}
                 onChange={(val) => {
-                  const updated = [...productRows];
-                  updated[idx].item = val;
+                  const updated = {...searchitems};
+                  updated.searchItem = val.target.value;
                   setsearchitem(updated);
+                
                 }}
               />
             </div>

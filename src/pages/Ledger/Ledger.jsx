@@ -1,15 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import BasePage from '../../components/BasePage'
+import FilterLedger from './FilterLedger';
 
 const Ledger = () => {
+  const [filterLedger, setFilterLedger] = useState(false)
 
    const ledgerSidebarData = [
   { name: "New", onClick: () => {},navigate:"/dashboard/ledger/new" },
-  { name: "Edit", onClick: () => {} },
-  { name: "Delete", onClick: () => {} },
+  { name: "Edit", onClick: () => {} ,navigate:"/dashboard/ledger/edit/1" },
+  { name: "Delete", onClick: () => {} ,navigate:"/dashboard/ledger/delete/1" },
   { name: "Export-Excel", onClick: () => {} },
   { name: "BulkUpd", onClick: () => {} },
-  { name: "Filter", onClick: () => {} },
+  { name: "Filter", onClick: () => {setFilterLedger(true)} },
   { name: "Label Prn", onClick: () => {} },
   { name: "Envelopes", onClick: () => {} },
   { name: "Op. Bal", onClick: () => {} },
@@ -185,6 +187,8 @@ const Ledger = () => {
   return (
     <div className='w-full'>
       <BasePage heading="Ledger Master" Sidebardata={ledgerSidebarData} tableData={ledgerTableData}/>
+
+      {filterLedger && <FilterLedger onClose={()=>setFilterLedger(false)}/>}
     </div>
   )
 }

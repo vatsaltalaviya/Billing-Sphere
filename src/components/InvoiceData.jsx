@@ -1,6 +1,6 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
-const InvoicePage = () => {
+const InvoicePage = forwardRef((props,ref) => {
   const invoice = {
     invoiceNo: "TI/1",
     invoiceDate: "01/05/2025",
@@ -14,7 +14,7 @@ const InvoicePage = () => {
   };
 
   return (
-   <div className="bg-white w-[210mm]  mx-auto py-6 border border-black text-xs">
+   <div ref={ref} className="bg-white w-[210mm]  mx-auto pt-6 border-2 border-black text-xs">
       {/* Header */}
       <div className="text-center text-xl font-bold mb-2">DemoAccount</div>
 
@@ -126,6 +126,6 @@ const InvoicePage = () => {
       </div>
     </div>
   );
-};
+});
 
 export default InvoicePage;

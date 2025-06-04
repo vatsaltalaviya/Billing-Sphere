@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import SearchableDropdown from "./SearchableDropdown";
 import {
-  indianStates,
   items,
   party,
   saletype,
@@ -9,6 +8,7 @@ import {
   salesData
 } from "../assets/Dummydata";
 import SystemErrorMessage from "./SystemErrorMessage";
+import { indianStates } from "../assets/IndianStates";
 
 const SalePurchase = ({
   mode,
