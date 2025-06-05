@@ -1,21 +1,19 @@
 import React, { useState } from 'react'
 import BasePage from '../../components/BasePage';
 import OpItemBal from './OpItemBal';
-import Filteritem from './Filteritem';
 
 const Item = () => {
  const [showopitemBal, setOpitemBal] = useState(false)
- const [showFilteritem, setshowFilteritem] = useState(false)
 
  const ItemSidebarData = [
   { name: "New", onClick: () => {}, navigate:'/dashboard/items/new' },
-  { name: "Edit", onClick: () => {} },
-  { name: "Delete", onClick: () => {} },
+  { name: "Edit", onClick: () => {} ,navigate:`/dashboard/items/edit/1`},
+  { name: "Delete", onClick: () => {} ,navigate:`/dashboard/items/delete/1`},
   { name: "Export to excel", onClick: () => {} },
-  { name: "Bulk Upd", onClick: () => {} },
+  { name: "Bulk Upd", onClick: () => {} ,navigate:`/dashboard/items/bu` },
   { name: "Op. Balance", onClick: () => {setOpitemBal(true)} },
   { name: "MultiEdit", onClick: () => {} },
-  { name: "Filters", onClick: () => {setshowFilteritem(true)} },
+  { name: "Filters", onClick: () => {},navigate: `/dashboard/items/fi` },
   { name: "MinMax up", onClick: () => {} },
   { name: "Copy item", onClick: () => {} },
   { name: "Img galary", onClick: () => {} },
@@ -62,7 +60,6 @@ const Item = () => {
       <BasePage heading="Item Master" Sidebardata={ItemSidebarData} tableData={tableData}/>
 
       {showopitemBal && <OpItemBal onClose={()=>setOpitemBal(false)}/>}
-      {showFilteritem && <Filteritem onClose={()=>setshowFilteritem(false)}/>}
     </div>
   )
 }

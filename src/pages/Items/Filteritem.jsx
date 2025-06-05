@@ -3,7 +3,7 @@ import PopUp from '../../components/PopUp';
 
 const Filteritem = ({onClose}) => {
   return (
-  <PopUp onClose={onClose}>
+  <div className='w-full h-full flex justify-center items-center'>
     <div className='lg:w-[800px] border bg-white'>
         <div className='flex justify-center bg-blue-600'>
             <h1 className='text-xl font-semibold text-white'>Filter Report Parameter</h1>
@@ -133,7 +133,7 @@ const Filteritem = ({onClose}) => {
             </form>
         </div>
     </div>
-   </PopUp>
+  </div>
   )
 }
 
