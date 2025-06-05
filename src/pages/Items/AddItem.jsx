@@ -422,8 +422,8 @@ const AddItem = () => {
                 Is Active
               </label>
               <select id="isActive" className="border px-2 py-1 w-36" value={formData.isActive} onChange={handleChangeData}>
-                <option value="NO">NO</option>
-                <option value="YES">YES</option>
+                <option value="no">NO</option>
+                <option value="yes">YES</option>
               </select>
             </div>
           </div>

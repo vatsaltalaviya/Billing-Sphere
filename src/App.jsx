@@ -16,6 +16,9 @@ import Contra from './pages/Contra'
 import CreditNote from './pages/CreditNote'
 import DebitNote from './pages/DebitNote'
 import GstExp from './pages/GstExp'
+import ItemGroup from './pages/Items/ItemGroup'
+import Brand from './pages/Items/Brand'
+import HsnPage from './pages/Items/HsnPage'
 
 const App = () => {
   return (
@@ -28,6 +31,9 @@ const App = () => {
      {/* items */}
       <Route path='/dashboard/items' element={<Item />} /> 
       <Route path='/dashboard/items/new' element={<AddItem />} /> 
+      <Route path='/dashboard/items/itemgroup' element={<ItemGroup />} /> 
+      <Route path='/dashboard/items/brand' element={<Brand />} /> 
+      <Route path='/dashboard/items/brand' element={<HsnPage />} /> 
       <Route path='/dashboard/items/edit/:editid' element={<AddItem />} /> 
       <Route path='/dashboard/items/edit' element={<AddItem />} /> 
       <Route path='/dashboard/items/delete/:deleteid' element={<AddItem />} /> 

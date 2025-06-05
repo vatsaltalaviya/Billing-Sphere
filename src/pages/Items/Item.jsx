@@ -1,17 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import BasePage from '../../components/BasePage';
+import OpItemBal from './OpItemBal';
+import Filteritem from './Filteritem';
 
 const Item = () => {
- 
+ const [showopitemBal, setOpitemBal] = useState(false)
+ const [showFilteritem, setshowFilteritem] = useState(false)
+
  const ItemSidebarData = [
   { name: "New", onClick: () => {}, navigate:'/dashboard/items/new' },
   { name: "Edit", onClick: () => {} },
   { name: "Delete", onClick: () => {} },
   { name: "Export to excel", onClick: () => {} },
   { name: "Bulk Upd", onClick: () => {} },
-  { name: "Op. Balance", onClick: () => {} },
+  { name: "Op. Balance", onClick: () => {setOpitemBal(true)} },
   { name: "MultiEdit", onClick: () => {} },
-  { name: "Filters", onClick: () => {} },
+  { name: "Filters", onClick: () => {setshowFilteritem(true)} },
   { name: "MinMax up", onClick: () => {} },
   { name: "Copy item", onClick: () => {} },
   { name: "Img galary", onClick: () => {} },
@@ -56,6 +60,9 @@ const Item = () => {
   return (
     <div className='w-full'>
       <BasePage heading="Item Master" Sidebardata={ItemSidebarData} tableData={tableData}/>
+
+      {showopitemBal && <OpItemBal onClose={()=>setOpitemBal(false)}/>}
+      {showFilteritem && <Filteritem onClose={()=>setshowFilteritem(false)}/>}
     </div>
   )
 }

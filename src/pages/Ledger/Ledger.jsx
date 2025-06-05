@@ -2,10 +2,16 @@ import React, { useState } from 'react'
 import BasePage from '../../components/BasePage'
 import FilterLedger from './FilterLedger';
 import BulkUpd from './BulkUpd';
+import LabelPrn from './LabelPrn';
+import EnvelopPrn from './EnvelopPrn';
+import OpBalance from './OpBalance';
 
 const Ledger = () => {
   const [filterLedger, setFilterLedger] = useState(false)
   const [showBulkData, setshowBulkData] = useState(false)
+  const [showLabelPrn, setshowLabelPrn] = useState(false)
+  const [showEnvelopPrn, setshowEnvelopPrn] = useState(false)
+  const [showOpBal, setshowOpBal] = useState(false)
 
    const ledgerSidebarData = [
   { name: "New", onClick: () => {},navigate:"/dashboard/ledger/new" },
@@ -14,9 +20,10 @@ const Ledger = () => {
   { name: "Export-Excel", onClick: () => {} },
   { name: "BulkUpd", onClick: () => {setshowBulkData(true)} },
   { name: "Filter", onClick: () => {setFilterLedger(true)} },
-  { name: "Label Prn", onClick: () => {} },
+  { name: "Label Prn", onClick: () => {setshowLabelPrn(true)} },
+  { name: "Envelop Prn", onClick: () => {setshowEnvelopPrn(true)} },
   { name: "Envelopes", onClick: () => {} },
-  { name: "Op. Bal", onClick: () => {} },
+  { name: "Op. Bal", onClick: () => {setshowOpBal(true)} },
   { name: "Statement", onClick: () => {} },
   { name: "Dup Ledgers", onClick: () => {} },
   { name: "Non/Used", onClick: () => {} }
@@ -192,6 +199,9 @@ const Ledger = () => {
 
       {filterLedger && <FilterLedger onClose={()=>setFilterLedger(false)}/>}
       {showBulkData && <BulkUpd onClose={()=>setshowBulkData(false)}/>}
+      {showLabelPrn && <LabelPrn onClose={()=>setshowLabelPrn(false)}/>}
+      {showEnvelopPrn && <EnvelopPrn onClose={()=>setshowEnvelopPrn(false)}/>}
+      {showOpBal && <OpBalance onClose={()=>setshowOpBal(false)}/>}
     </div>
   )
 }

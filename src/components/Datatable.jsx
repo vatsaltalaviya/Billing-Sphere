@@ -22,7 +22,6 @@ const Datatable = ({ data, list }) => {
     }
   };
 
-  console.log(selectedRow , RowData);
   
   return (
     <div
