@@ -79,7 +79,6 @@ export default function SearchableDropdown({
             setSearchTerm(e.target.value);
             setShowOptions(true);
             if (onChange) {
-              
                 onChange({
                   target: {
                     id: id,

@@ -7,16 +7,19 @@ const AttachImage = ({onClose}) => {
 
   const handleButtonClick = (e) => {
     e.preventDefault();
-    inputRef.current.click(); // ✅ opens file explorer
+    inputRef.current.click(); //  opens file explorer
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
       const imageUrl = URL.createObjectURL(file);
-      setPreview(imageUrl); // ✅ preview image
+      setPreview(imageUrl); //  preview image
     }
   };
+  const handleDeleteClick =(e)=>{
+    setPreview(null)
+  }
 
   return (
      <PopUp onClose={onClose}>
@@ -46,7 +49,7 @@ const AttachImage = ({onClose}) => {
                       <input type="file" accept='image/*' ref={inputRef} style={{display:'none'}} onChange={handleFileChange} />
                     </div>
                     <div className="w-42 font-medium text-sm">
-                      <button onClick={()=>setPreview(null)} className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
+                      <button type='button' onClick={()=>handleDeleteClick()} className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
                         Delete
                       </button>
                     </div>

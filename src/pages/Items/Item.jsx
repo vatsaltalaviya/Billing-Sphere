@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import BasePage from '../../components/BasePage';
 import OpItemBal from './OpItemBal';
 import MinMaxQty from './MinMaxQty';
+import CopyItem from './CopyItem';
 
 const Item = () => {
  const [showopitemBal, setOpitemBal] = useState(false)
  const [showMinMax, setMinMax] = useState(false)
+ const [showCopyItem, setshowCopyItem] = useState(false)
 
  const ItemSidebarData = [
   { name: "New", onClick: () => {}, navigate:'/dashboard/items/new' },
@@ -17,7 +19,7 @@ const Item = () => {
   { name: "MultiEdit", onClick: () => {} },
   { name: "Filters", onClick: () => {},navigate: `/dashboard/items/fi` },
   { name: "MinMax up", onClick: () => {setMinMax(true)} },
-  { name: "Copy item", onClick: () => {} },
+  { name: "Copy item", onClick: () => {setshowCopyItem(true)} },
   { name: "Img galary", onClick: () => {} },
   { name: "Dup Items", onClick: () => {} },
   { name: "Non/Used", onClick: () => {} }
@@ -63,6 +65,7 @@ const Item = () => {
 
       {showopitemBal && <OpItemBal onClose={()=>setOpitemBal(false)}/>}
       {showMinMax && <MinMaxQty onClose={()=>setMinMax(false)}/>}
+      {showCopyItem && <CopyItem onClose={()=>setshowCopyItem(false)}/>}
     </div>
   )
 }

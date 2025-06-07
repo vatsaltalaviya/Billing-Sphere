@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const AddItem = () => {
@@ -22,6 +22,8 @@ const AddItem = () => {
     openstock: "",
     isActive: "NO", // Only use lowercase 'isActive'
   };
+   const inputRef = useRef(null);
+    const [preview, setPreview] = useState(null);
   const [formData, setformData] = useState(defaultForm);
   const { editid } = useParams();
   const { deleteid } = useParams();
@@ -40,7 +42,24 @@ const AddItem = () => {
       return updatedForm;
     });
   };
+   const handleButtonClick = (e) => {
+    e.preventDefault();
+    inputRef.current.click(); //  opens file explorer
+  };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const imageUrl = URL.createObjectURL(file);
+      setPreview(imageUrl); //  preview image
+    }
+  };
+  const handleDeleteClick =(e)=>{
+    setPreview(null)
+  }
+const HandleSubmit=(e)=>{
+  e.preventDefault();
+}
   return (
     <div className="h-screen w-full  bg-white">
       <div
@@ -54,7 +73,7 @@ const AddItem = () => {
         </h1>
       </div>
       {/* ------------------------------- body ----------------------------------- */}
-      <form className="p-2 " >
+      <form className="p-2 " onSubmit={HandleSubmit}>
         <div className="flex flex-col xl:flex-row">
           {/* ----------------- left part --------------- */}
           <div className="w-full xl:w-1/2 border py-5">
@@ -364,7 +383,7 @@ const AddItem = () => {
                 <div className="flex items-center gap-4">
                   <div className="h-52 w-52">
                     <img
-                      src="#"
+                      src={preview}
                       alt=""
                       className="h-full w-full object-cover"
 
@@ -372,12 +391,14 @@ const AddItem = () => {
                   </div>
                   <div className="flex flex-col gap-2">
                     <div className="w-42 font-medium text-sm">
-                      <button className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
+                      <button  type='button' onClick={handleButtonClick} className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
                         Add
                       </button>
+                      <input type="file" accept='image/*' ref={inputRef} style={{display:'none'}} onChange={handleFileChange} />
+
                     </div>
                     <div className="w-42 font-medium text-sm">
-                      <button className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
+                      <button  type='button' onClick={()=>handleDeleteClick()} className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
                         Delete
                       </button>
                     </div>
