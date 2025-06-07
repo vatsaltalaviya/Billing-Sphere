@@ -21,6 +21,7 @@ import Brand from './pages/Items/Brand'
 import HsnPage from './pages/Items/HsnPage'
 import BulkItemUpd from './pages/Items/BulkItemUpd'
 import Filteritem from './pages/Items/Filteritem'
+import ImgGallery from './pages/Items/ImgGallery'
 
 const App = () => {
   return (
@@ -38,6 +39,8 @@ const App = () => {
       <Route path='/dashboard/items/brand' element={<HsnPage />} /> 
       <Route path='/dashboard/items/fi' element={<Filteritem />} /> 
       <Route path='/dashboard/items/bu' element={<BulkItemUpd />} /> 
+      <Route path='/dashboard/items/gallery' element={<ImgGallery />} /> 
+
       <Route path='/dashboard/items/edit/:editid' element={<AddItem />} /> 
       <Route path='/dashboard/items/edit' element={<AddItem />} /> 
       <Route path='/dashboard/items/delete/:deleteid' element={<AddItem />} /> 

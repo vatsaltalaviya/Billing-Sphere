@@ -20,7 +20,7 @@ const Item = () => {
   { name: "Filters", onClick: () => {},navigate: `/dashboard/items/fi` },
   { name: "MinMax up", onClick: () => {setMinMax(true)} },
   { name: "Copy item", onClick: () => {setshowCopyItem(true)} },
-  { name: "Img galary", onClick: () => {} },
+  { name: "Img gallery", onClick: () => {}, navigate:`/dashboard/items/gallery` },
   { name: "Dup Items", onClick: () => {} },
   { name: "Non/Used", onClick: () => {} }
 ];
