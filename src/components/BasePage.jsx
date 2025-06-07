@@ -3,6 +3,7 @@ import ButtonGroup from './ButtonGroup'
 import MasterPart from './MasterPart'
 import SalePurchase from './SalePurchase'
 import ReceptPayment from './ReceptPayment'
+import ReceivablePayable from './ReceivablePayable'
 
 const BasePage = ({
   Sidebardata,
@@ -67,6 +68,7 @@ const BasePage = ({
             {(mode === "Receipt" || mode === "Payment" || mode == "Journal" ||mode == "Contra" ||mode == "CreditNote" || mode == "DebitNote" || mode == "GST") && (
               <ReceptPayment mode={mode} triggerPrevious={triggerPrevious} focusDateTrigger={focusDateTrigger}/>
             )}
+            {(mode=="Receivable")&&(<ReceivablePayable />)}
         </div>
         
         {/* --------------------------------- display sidebar  --------------------------------------------- */}

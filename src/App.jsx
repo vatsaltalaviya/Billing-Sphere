@@ -22,6 +22,7 @@ import HsnPage from './pages/Items/HsnPage'
 import BulkItemUpd from './pages/Items/BulkItemUpd'
 import Filteritem from './pages/Items/Filteritem'
 import ImgGallery from './pages/Items/ImgGallery'
+import Receivable from './pages/Receivable'
 
 const App = () => {
   return (
@@ -45,6 +46,9 @@ const App = () => {
       <Route path='/dashboard/items/edit' element={<AddItem />} /> 
       <Route path='/dashboard/items/delete/:deleteid' element={<AddItem />} /> 
       <Route path='/dashboard/items/delete' element={<AddItem />} /> 
+
+
+      <Route path='/dashboard/receivable' element={<Receivable />} /> 
 
       {/* ledger */}
       <Route path='/dashboard/ledger' element={<Ledger />} /> 
