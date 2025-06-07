@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import BasePage from '../components/BasePage'
 
 const Receivable = () => {
+
     const receivableSidebar = [
-        {name:"Print" , onclick: ()=>{}},
-        {name:"Report" , onclick: ()=>{}},
+        {name:"Print" , onclick: ()=>{}, navigate:`/dashboard/print`},
+        {name:"Report" , onclick: ()=>{},navigate: `/dashboard/receivable`},
         {name:"StateMent" , onclick: ()=>{}},
         {name:"Make Payment" , onclick: ()=>{}},
         {name:"Prn Color" , onclick: ()=>{}},
