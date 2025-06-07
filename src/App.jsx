@@ -23,6 +23,8 @@ import BulkItemUpd from './pages/Items/BulkItemUpd'
 import Filteritem from './pages/Items/Filteritem'
 import ImgGallery from './pages/Items/ImgGallery'
 import Receivable from './pages/Receivable'
+import ReceivableTable from './pages/ReceivableTable'
+import RecTabReport from './components/RecTabReport'
 
 const App = () => {
   return (
@@ -37,7 +39,7 @@ const App = () => {
       <Route path='/dashboard/items/new' element={<AddItem />} /> 
       <Route path='/dashboard/items/itemgroup' element={<ItemGroup />} /> 
       <Route path='/dashboard/items/brand' element={<Brand />} /> 
-      <Route path='/dashboard/items/brand' element={<HsnPage />} /> 
+      <Route path='/dashboard/items/hsn' element={<HsnPage />} /> 
       <Route path='/dashboard/items/fi' element={<Filteritem />} /> 
       <Route path='/dashboard/items/bu' element={<BulkItemUpd />} /> 
       <Route path='/dashboard/items/gallery' element={<ImgGallery />} /> 
@@ -49,6 +51,8 @@ const App = () => {
 
 
       <Route path='/dashboard/receivable' element={<Receivable />} /> 
+      <Route path='/dashboard/receivable/receivereport' element={<ReceivableTable />} /> 
+      {/* <Route path='/dashboard/receivable/ra' element={<RecTabReport />} />  */}
 
       {/* ledger */}
       <Route path='/dashboard/ledger' element={<Ledger />} /> 

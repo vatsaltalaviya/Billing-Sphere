@@ -4,6 +4,8 @@ import MasterPart from './MasterPart'
 import SalePurchase from './SalePurchase'
 import ReceptPayment from './ReceptPayment'
 import ReceivablePayable from './ReceivablePayable'
+import ReceivableTable from '../pages/ReceivableTable'
+import RecTabReport from './RecTabReport'
 
 const BasePage = ({
   Sidebardata,
@@ -69,6 +71,7 @@ const BasePage = ({
               <ReceptPayment mode={mode} triggerPrevious={triggerPrevious} focusDateTrigger={focusDateTrigger}/>
             )}
             {(mode=="Receivable")&&(<ReceivablePayable />)}
+            {(mode=="ReceivableTable")&&(<RecTabReport />)}
         </div>
         
         {/* --------------------------------- display sidebar  --------------------------------------------- */}
