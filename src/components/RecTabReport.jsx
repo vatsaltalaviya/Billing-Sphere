@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 const data = [
   {
@@ -52,6 +52,8 @@ const data = [
 ];
 
 const RecTabReport = () => {
+  const [selectedRow, setselectedRow] = useState(null)
+  
   return (
     <div className="w-full">
       <div className="flex items-center ">
@@ -97,7 +99,11 @@ const RecTabReport = () => {
 
                   {/* Vouchers */}
                   {party.rows.map((row, j) => (
-                    <tr key={j} className={j % 2 === 0 ? "bg-blue-100" : ""}>
+                    <tr key={j} className={(j % 2 === 0 ? "bg-blue-100" : "")+(selectedRow && selectedRow.partyIndex === i && selectedRow.rowIndex === j ? "ring-2 ring-amber-400 " : "")}
+                    onClick={() => setselectedRow({ partyIndex: i, rowIndex: j, data: row, partyName: party.party,
+      totalAmount: party.totalDueAmount })}
+    style={{ cursor: "pointer" }}
+                    >
                       <td className="border px-2">{row.date}</td>
                       <td className="border px-2">{row.voucher}</td>
                       <td className="border px-2">{row.no}</td>
