@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
 const Datatable = ({ data, list }) => {
-  if ((!data || data.length === 0) && (!list || list.length === 0))
-    return <div>No data found</div>;
+  // if ((!data || data.length === 0) && (!list || list.length === 0))
+  //   return <div>No data found</div>;
 
   const [selectedRow, setSelectedRow] = useState(0);
   const [RowData, setRowData] = useState({});
-
+  
   const rows = data && data.length > 0 ? data : list;
   const columns = rows && rows.length > 0 ? Object.keys(rows[0]) : [];
 
@@ -25,7 +25,7 @@ const Datatable = ({ data, list }) => {
   
   return (
     <div
-      className="overflow-x-auto"
+      className="overflow-x-auto w-full"
       tabIndex={0}
       onKeyDown={handleKeyDown}
     >

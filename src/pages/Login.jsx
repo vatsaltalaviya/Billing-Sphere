@@ -1,14 +1,53 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { userdataContext } from '../context/UserContext';
 
 const Login = () => {
+
+  const {User , setUser} = useContext(userdataContext)
+
   const navigate = useNavigate();
   const [email, setemail] = useState("")
   const [Password, setPassword] = useState("")
-  const handleSubmit = (e)=>{
+  const [IsLoading, setIsloading] = useState(null)
+  // const [User, setUser] = useState(null)
+  const [invalid, setInvalid] = useState(null)
+
+  const handleSubmit = async(e)=>{
     e.preventDefault();
-    navigate('/dashboard')
+    const userData ={
+      email,
+      password:Password
+    }
+
+    try {
+      setIsloading(true)
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/signIn`,userData);
+      const data = response.data;
+      
+      if(data.success == true){
+        setUser(data)
+        setInvalid(false)
+        const token = data.token
+        localStorage.setItem('token',token)
+        localStorage.setItem('companies',data.data.companies[0])
+        sessionStorage.setItem('uid',data.data._id)
+        setIsloading(true)
+        console.log(data);
+        console.log(data.data.companies);
+        navigate('/dashboard')
+        
+      }
+      else{
+        setInvalid(true)
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
+
+  
   return (
     <div className="flex md:items-center h-screen md:justify-center relative">
       <div className="md:rounded w-full md:w-xl overflow-hidden bg-white md:border">
@@ -28,8 +67,12 @@ const Login = () => {
               <label htmlFor="password" className='w-32 text-lg md:text-xl font-semibold'>Password </label>
               <input className='border rounded p-2 text-xl flex-1' type="password" name="password" id="password" value={Password} onChange={(e)=>setPassword(e.target.value)}/>
             </div>
+            {invalid &&
+            (<div className='flex flex-col md:flex-row xl:items-center mt-1'>
+              <p className='font-semibold text-red-700 text-xl'>Invalid Email or Password </p>
+            </div>)}
             <div className='flex flex-col md:flex-row items-center mt-10 md:mt-3 gap-3'>
-              <button  className='border text-lg font-medium px-4 bg-amber-300 block w-full hover:bg-amber-500 rounded py-2'>Login</button>
+              <button  className='border flex gap-4 items-center justify-center text-lg font-medium px-4 bg-amber-300 w-full hover:bg-amber-500 rounded py-2'> {IsLoading &&  <span className='w-[25px] rounded-full bb h-[25px] border-4 border-gray-200 animate-spin'></span>}Login</button>
               <button type='reset' className='border text-lg font-medium px-4 bg-amber-300 block w-full hover:bg-amber-500 rounded py-2'>Cancel</button>
             </div>
           </div>

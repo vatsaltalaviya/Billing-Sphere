@@ -1,11 +1,16 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import BasePage from '../../components/BasePage';
 import OpItemBal from './OpItemBal';
 import MinMaxQty from './MinMaxQty';
 import CopyItem from './CopyItem';
+import { userdataContext } from '../../context/UserContext';
+import axios from 'axios';
 
 const Item = () => {
+   const {User} = useContext(userdataContext)
  const [showopitemBal, setOpitemBal] = useState(false)
+ const [TableData, setTableData] = useState([])
+ const [IsLoading, setIsLoading] = useState(null)
  const [showMinMax, setMinMax] = useState(false)
  const [showCopyItem, setshowCopyItem] = useState(false)
 
@@ -25,43 +30,43 @@ const Item = () => {
   { name: "Non/Used", onClick: () => {} }
 ];
 
-  const tableData = [
-    {
-      Sr: 1,
-      "Item Name": "Chocolate Box",
-      "Code No": "1212",
-      Group: "General",
-      Retail: 125,
-      MRP: 150,
-      "Cl.Stk": "0 Kg",
-      Active: "Yes",
-    },
-    {
-      Sr: 2,
-      "Item Name": "Maggie box",
-      "Code No": "121212",
-      Group: "General",
-      Retail: 130,
-      MRP: 170,
-      "Cl.Stk": "0 Kg",
-      Active: "Yes",
-    },
-    {
-      Sr: 3,
-      "Item Name": "pasta Box",
-      "Code No": "721641",
-      Group: "General",
-      Retail: 105,
-      MRP: 130,
-      "Cl.Stk": "0 Kg",
-      Active: "Yes",
-    },
+
+const fetchData = async()=>{
+ try {
+   const companyid = localStorage.getItem('companies');
+  setIsLoading(true);
+   const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/items/get-items/${companyid}`);
+   if(res.data.success){
+    setIsLoading(false)
+   }
+   const data = res.data.data;
+   setTableData(data);
    
-  ];
-  
+   
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+useEffect(()=>{
+  fetchData()
+},[])
+
+const tableData = TableData.map((items,index) =>({
+  Sr: index+1,
+      "Item Name": items.itemName,
+      "Code No": items.codeNo,
+      Group: items.itemGroup,
+      Retail: items.retail,
+      MRP: items.mrp,
+      "Cl.Stk":items.maximumStock,
+      Active: items.status == "Active"?"Yes":"No",
+}))
+ 
+
   return (
     <div className='w-full'>
-      <BasePage heading="Item Master" Sidebardata={ItemSidebarData} tableData={tableData}/>
+      <BasePage heading="Item Master" Sidebardata={ItemSidebarData} tableData={tableData} isLoading={IsLoading}/>
 
       {showopitemBal && <OpItemBal onClose={()=>setOpitemBal(false)}/>}
       {showMinMax && <MinMaxQty onClose={()=>setMinMax(false)}/>}

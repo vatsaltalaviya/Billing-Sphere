@@ -1,5 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import OpeningBal from "./OpeningBal";
+import axios from "axios";
+import SearchableDropdown from "../../components/SearchableDropdown";
 
 const AddItem = () => {
   const defaultForm = {
@@ -19,12 +22,17 @@ const AddItem = () => {
     minStock: "",
     maxStock: "",
     updateImage: "NO",
-    openstock: "",
+    images:'',
+    openstock: "NO",
     isActive: "NO", // Only use lowercase 'isActive'
   };
-   const inputRef = useRef(null);
-    const [preview, setPreview] = useState(null);
+  const inputRef = useRef(null);
+  const [preview, setPreview] = useState(null);
   const [formData, setformData] = useState(defaultForm);
+  const [OpeningBalanceData, setOpeningBalanceData] = useState([]);
+  const [showOpeningBal, setShowOpeningBal] = useState(false);
+  const token = localStorage.getItem("token");
+
   const { editid } = useParams();
   const { deleteid } = useParams();
 
@@ -42,7 +50,14 @@ const AddItem = () => {
       return updatedForm;
     });
   };
-   const handleButtonClick = (e) => {
+
+  // get data form opening Balance
+  const handleOpeningBalSave = (data) => {
+    setOpeningBalanceData(data);
+    setShowOpeningBal(false); // Optionally close the popup
+  };
+
+  const handleButtonClick = (e) => {
     e.preventDefault();
     inputRef.current.click(); //  opens file explorer
   };
@@ -54,18 +69,75 @@ const AddItem = () => {
       setPreview(imageUrl); //  preview image
     }
   };
-  const handleDeleteClick =(e)=>{
-    setPreview(null)
-  }
-const HandleSubmit=(e)=>{
-  e.preventDefault();
-}
+  const handleDeleteClick = (e) => {
+    setPreview(null);
+  };
+
+  useEffect(() => {
+    if (formData.openstock == "YES") {
+      setShowOpeningBal(true);
+    }
+  }, [formData.openstock])
+  
+const op = ['1','2','3']
+  const HandleSubmit = async (e) => {
+    e.preventDefault();
+    
+    const itemdata = {
+      itemGroup: formData.itemGroup, // should be the _id from your group master
+      companyCode: "C123", // set this as needed
+      itemBrand: formData.brand, // should be the _id from your brand master
+      itemName: formData.itemName,
+      printName: formData.printName,
+      codeNo: formData.codeNo,
+      barcode: formData.barcode,
+      taxCategory: formData.tax, // should be the _id from your tax master
+      hsnCode: formData.hsn, // should be the _id from your hsn master
+      storeLocation: formData.rack, // should be the _id from your location master
+      measurementUnit: formData.stockunit, // should be the _id from your unit master
+      minimumStock: Number(formData.minStock),
+      maximumStock: Number(formData.maxStock),
+      retail: Number(formData.retail),
+      mrp: Number(formData.mrp),
+      openingStock: OpeningBalanceData.openstock,
+      status: formData.isActive === "yes" ? "Active" : "Inactive",
+      images: preview ? [preview] : [],
+      openingBalance: OpeningBalanceData.map((row) => ({
+        unit: row.unit1, // should be the _id from your unit master
+        qty: Number(row.qty),
+        rate: Number(row.rate),
+        total: Number(row.total),
+      })),
+    };
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/items/create-item`,
+        itemdata,
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
+      const data = response.data;
+      console.log(data);
+      
+      if (data.success) {
+        alert("item added");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+  console.log(formData)
+
   return (
     <div className="h-screen w-full  bg-white">
       <div
-      
         className={`${
-          editid ? "bg-amber-500" : deleteid ?"bg-red-500": "bg-blue-800"
+          editid ? "bg-amber-500" : deleteid ? "bg-red-500" : "bg-blue-800"
         } font-bold text-lg`}
       >
         <h1 className="text-center text-white">
@@ -76,7 +148,7 @@ const HandleSubmit=(e)=>{
       <form className="p-2 " onSubmit={HandleSubmit}>
         <div className="flex flex-col xl:flex-row">
           {/* ----------------- left part --------------- */}
-          <div className="w-full xl:w-1/2 border py-5">
+          <div className="w-full xl:w-1/2 addtop py-5">
             <div className="bg-blue-800 font-bold my-3 text-lg w-52">
               <h1 className="text-center text-white">Basic Details</h1>
             </div>
@@ -90,25 +162,32 @@ const HandleSubmit=(e)=>{
                   >
                     Item Group
                   </label>
-                  <input
+                  <SearchableDropdown
                     type="text"
                     id="itemGroup"
+                    options={op}
+                    addlink='/dashboard/items/itemgroup'
                     value={formData.itemGroup}
                     onChange={handleChangeData}
-                    className="flex-1 border px-2 py-1"
+                    className="w-full flex-1 relative"
                   />
                 </div>
 
                 {/* Brand + Code No */}
                 <div className="flex flex-col md:flex-row flex-wrap  xl:items-center gap-4">
                   <div className="flex flex-col lg:flex-row lg:items-center">
-                    <label htmlFor="brand" className="lg:w-36 text-lg lg:text-lg font-medium">
+                    <label
+                      htmlFor="brand"
+                      className="lg:w-36 text-lg lg:text-lg font-medium"
+                    >
                       Brand
                     </label>
-                    <input
+                    <SearchableDropdown
                       type="text"
                       id="brand"
-                      className="flex-1 border px-2 py-1"
+                      addlink='/dashboard/items/brand'
+                      options={op}
+                      className="flex-1 relative"
                       value={formData.brand}
                       onChange={handleChangeData}
                     />
@@ -162,13 +241,15 @@ const HandleSubmit=(e)=>{
                     className="flex-1 border px-2 py-1"
                     value={formData.printName}
                     onChange={handleChangeData}
-
                   />
                 </div>
 
                 {/* Remarks */}
                 <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-                  <label htmlFor="remarks" className="lg:w-32 lg:text-lg text-lg font-medium">
+                  <label
+                    htmlFor="remarks"
+                    className="lg:w-32 lg:text-lg text-lg font-medium"
+                  >
                     Remarks
                   </label>
                   <input
@@ -183,19 +264,27 @@ const HandleSubmit=(e)=>{
                 {/* HSN Code + Tax Category */}
                 <div className=" flex flex-col md:flex-row flex-wrap  xl:items-center gap-4">
                   <div className="flex flex-col lg:flex-row lg:items-center">
-                    <label htmlFor="hsn" className="lg:w-36 text-lg lg:text-lg font-medium">
+                    <label
+                      htmlFor="hsn"
+                      className="lg:w-36 text-lg lg:text-lg font-medium"
+                    >
                       HSN Code
                     </label>
-                    <input
+                    <SearchableDropdown
                       type="text"
                       id="hsn"
-                      className="flex-1 border px-2 py-1"
+                      className="flex-1 relative"
+                      addlink='/dashboard/items/hsn'
+                      options={op}
                       value={formData.hsn}
                       onChange={handleChangeData}
                     />
                   </div>
                   <div className="flex flex-col lg:flex-row lg:items-center">
-                    <label htmlFor="tax" className="lg:w-36 text-lg lg:text-lg font-medium">
+                    <label
+                      htmlFor="tax"
+                      className="lg:w-36 text-lg lg:text-lg font-medium"
+                    >
                       Tax Category
                     </label>
                     <select
@@ -205,7 +294,9 @@ const HandleSubmit=(e)=>{
                       onChange={handleChangeData}
                     >
                       <option value="">Select Tax Category</option>
-                      <option value="0%">0% (Exempted/Nil Rated)</option>
+                      <option value="665f7c210efbceaa1f754b3d">
+                        0% (Exempted/Nil Rated)
+                      </option>
                       <option value="0.25%">0.25% GST</option>
                       <option value="3%">3% GST</option>
                       <option value="5%">5% GST</option>
@@ -219,7 +310,7 @@ const HandleSubmit=(e)=>{
             </div>
           </div>
           {/* ---- right part ------- */}
-          <div className="w-full xl:w-1/2 border py-5">
+          <div className="w-full xl:w-1/2 addtop py-5">
             <div className="bg-blue-800 font-bold my-3 text-lg w-52">
               <h1 className="text-white text-center">Price Details</h1>
             </div>
@@ -243,7 +334,10 @@ const HandleSubmit=(e)=>{
                     />
                   </div>
                   <div className="flex flex-col lg:flex-row lg:items-center">
-                    <label htmlFor="mrp" className="lg:w-32 lg:text-lg text-lg font-medium">
+                    <label
+                      htmlFor="mrp"
+                      className="lg:w-32 lg:text-lg text-lg font-medium"
+                    >
                       MRP
                     </label>
                     <input
@@ -263,7 +357,7 @@ const HandleSubmit=(e)=>{
 
         <div className="flex flex-col xl:flex-row ">
           {/* ----------------- left part --------------- */}
-          <div className="w-full xl:w-1/2 border py-5">
+          <div className="w-full xl:w-1/2 addbottom py-5">
             <div className="bg-blue-800 font-bold my-3 text-lg w-52">
               <h1 className="text-center text-white">Stock Option</h1>
             </div>
@@ -276,7 +370,6 @@ const HandleSubmit=(e)=>{
                     <label
                       htmlFor="barcode"
                       className="lg:w-32 lg:text-lg text-lg font-medium"
-                  
                     >
                       Barcode SR
                     </label>
@@ -284,41 +377,47 @@ const HandleSubmit=(e)=>{
                       type="text"
                       id="barcode"
                       className="flex-1 border px-2 py-1"
-                          value={formData.barcode}
+                      value={formData.barcode}
                       onChange={handleChangeData}
                     />
                   </div>
                   <div className="flex flex-col lg:flex-row lg:items-center">
-                    <label htmlFor="rack" className="lg:w-32 lg:text-lg text-lg font-medium">
+                    <label
+                      htmlFor="rack"
+                      className="lg:w-32 lg:text-lg text-lg font-medium"
+                    >
                       Rack/Bin
                     </label>
-                    <input
+                    <SearchableDropdown
                       type="text"
                       id="rack"
-                      className="flex-1 border px-2 py-1"
+                      options={op}
+                      addlink='/dashboard/items/rack'
+                      className="flex-1 relative"
                       value={formData.rack}
                       onChange={handleChangeData}
-
                     />
                   </div>
                 </div>
 
                 {/* stock unit */}
-                 <div className="flex flex-col lg:flex-row lg:items-center">
-                    <label
-                      htmlFor="stockunit"
-                      className="lg:w-32 lg:text-lg text-lg font-medium"
-                    >
-                      Stock Unit
-                    </label>
-                    <input
-                      type="text"
-                      id="stockunit"
-                      className="w-32 border px-2 py-1"
-                      value={formData.stockunit}
-                      onChange={handleChangeData}
-                    />
-                  </div>
+                <div className="flex flex-col lg:flex-row lg:items-center">
+                  <label
+                    htmlFor="stockunit"
+                    className="lg:w-32 lg:text-lg text-lg font-medium"
+                  >
+                    Stock Unit
+                  </label>
+                  <SearchableDropdown
+                    type="text"
+                    id="stockunit"
+                    options={op}
+                    addlink='/dashboard/items/stockUnit'
+                    className="w-52 relative"
+                    value={formData.stockunit}
+                    onChange={handleChangeData}
+                  />
+                </div>
 
                 {/* min stock + max stock */}
                 <div className="flex flex-col xl:flex-row flex-wrap xl:items-center gap-4">
@@ -359,7 +458,7 @@ const HandleSubmit=(e)=>{
             </div>
           </div>
           {/* ---- right part ------- */}
-          <div className="w-full xl:w-1/2 border py-5">
+          <div className="w-full xl:w-1/2 addbottom py-5">
             <div className="bg-blue-800 font-bold my-3 text-lg w-52">
               <h1 className="text-white text-center">Item Images</h1>
             </div>
@@ -373,32 +472,49 @@ const HandleSubmit=(e)=>{
                   >
                     Update Images ??
                   </label>
-                  <select id="updateImage" className="border px-2 py-1 w-32" value={formData.updateImage} onChange={handleChangeData}>
+                  <select
+                    id="updateImage"
+                    className="border px-2 py-1 w-32"
+                    value={formData.updateImage}
+                    onChange={handleChangeData}
+                  >
                     <option value="NO">NO</option>
                     <option value="YES">YES</option>
                   </select>
                 </div>
 
                 {/* HSN Code + Tax Category */}
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col md:flex-row items-center gap-4">
                   <div className="h-52 w-52">
                     <img
                       src={preview}
                       alt=""
-                      className="h-full w-full object-cover"
-
+                      className="h-full w-full max-w-52 object-cover"
                     />
                   </div>
                   <div className="flex flex-col gap-2">
                     <div className="w-42 font-medium text-sm">
-                      <button  type='button' onClick={handleButtonClick} className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
+                      <button
+                        type="button"
+                        onClick={handleButtonClick}
+                        className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
+                      >
                         Add
                       </button>
-                      <input type="file" accept='image/*' ref={inputRef} style={{display:'none'}} onChange={handleFileChange} />
-
+                      <input
+                        type="file"
+                        accept="image/*"
+                        ref={inputRef}
+                        style={{ display: "none" }}
+                        onChange={handleFileChange}
+                      />
                     </div>
                     <div className="w-42 font-medium text-sm">
-                      <button  type='button' onClick={()=>handleDeleteClick()} className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteClick()}
+                        className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
+                      >
                         Delete
                       </button>
                     </div>
@@ -424,37 +540,52 @@ const HandleSubmit=(e)=>{
           </div>
         </div>
 
-        <div className="w-full flex flex-col xl:flex-row justify-between border p-2">
+        <div className="w-full flex flex-col xl:flex-row justify-between xl:items-center border p-2">
           <div className="grid  grid-cols-1 md:grid-cols-2 xl:grid-cols-2 my-2 px-1 py-0.5">
             <div className="grid grid-cols-2 py-1 gap-3">
-              <label htmlFor="openstock" className="font-medium lg:text-lg text-lg" >
+              <label
+                htmlFor="openstock"
+                className="font-medium lg:text-lg text-lg"
+              >
                 Opening Stock
               </label>
-              <input
-                type="number"
+              <select
                 id="openstock"
                 className="border px-2 py-1 w-36"
-                value={formData.openstock} onChange={handleChangeData}
-                min="0"
-              />
+                value={formData.openstock}
+                onChange={handleChangeData}
+              >
+                <option value="NO">NO</option>
+                <option value="YES">YES</option>
+              </select>
             </div>
             <div className="grid grid-cols-2 xl:ml-3 gap-3">
-              <label htmlFor="isActive" className="font-medium lg:text-lg text-lg">
+              <label
+                htmlFor="isActive"
+                className="font-medium lg:text-lg text-lg"
+              >
                 Is Active
               </label>
-              <select id="isActive" className="border px-2 py-1 w-36" value={formData.isActive} onChange={handleChangeData}>
+              <select
+                id="isActive"
+                className="border px-2 py-1 w-36"
+                value={formData.isActive}
+                onChange={handleChangeData}
+              >
                 <option value="no">NO</option>
                 <option value="yes">YES</option>
               </select>
             </div>
           </div>
           <div className="flex flex-col xl:flex-row gap-3 mb-3 xl:mb-0">
-            {
-              deleteid ? '':<button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+            {deleteid ? (
+              ""
+            ) : (
+              <button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
                 Save
               </button>
-            }
-               
+            )}
+
             <button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
               Cancel
             </button>
@@ -463,7 +594,7 @@ const HandleSubmit=(e)=>{
                 Delete
               </button>
             ) : (
-              ''
+              ""
             )}
 
             {/*<button className="px-3 py-2 rounded border ml-1">Previous</button> */}
@@ -473,6 +604,13 @@ const HandleSubmit=(e)=>{
           </button>
         </div>
       </form>
+
+      {showOpeningBal && (
+        <OpeningBal
+          onClose={() => setShowOpeningBal(false)}
+          onSave={handleOpeningBalSave}
+        />
+      )}
     </div>
   );
 };

@@ -25,6 +25,9 @@ import ImgGallery from './pages/Items/ImgGallery'
 import Receivable from './pages/Receivable'
 import ReceivableTable from './pages/ReceivableTable'
 import RecTabReport from './components/RecTabReport'
+import ProtectedRoute from './components/ProtectedRoute'
+import Rack from './pages/Items/Rack'
+import StockUnit from './pages/Items/StockUnit'
 
 const App = () => {
   return (
@@ -32,17 +35,19 @@ const App = () => {
     <div className='xl:h-screen bg-white bg-fixed bg-no-repeat bg-cover'>
     <Routes>
       <Route path='/' element={<Login />} />
-     <Route path='/dashboard' element={<Home />} />
+     <Route path='/dashboard' element={<ProtectedRoute><Home /></ProtectedRoute>} />
 
      {/* items */}
-      <Route path='/dashboard/items' element={<Item />} /> 
-      <Route path='/dashboard/items/new' element={<AddItem />} /> 
-      <Route path='/dashboard/items/itemgroup' element={<ItemGroup />} /> 
-      <Route path='/dashboard/items/brand' element={<Brand />} /> 
-      <Route path='/dashboard/items/hsn' element={<HsnPage />} /> 
-      <Route path='/dashboard/items/fi' element={<Filteritem />} /> 
-      <Route path='/dashboard/items/bu' element={<BulkItemUpd />} /> 
-      <Route path='/dashboard/items/gallery' element={<ImgGallery />} /> 
+      <Route path='/dashboard/items' element={<ProtectedRoute><Item /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/new' element={<ProtectedRoute><AddItem /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/itemgroup' element={<ProtectedRoute><ItemGroup /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/brand' element={<ProtectedRoute><Brand /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/hsn' element={<ProtectedRoute><HsnPage /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/rack' element={<ProtectedRoute><Rack /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/stockUnit' element={<ProtectedRoute><StockUnit /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/fi' element={<ProtectedRoute><Filteritem /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/bu' element={<ProtectedRoute><BulkItemUpd /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/gallery' element={<ProtectedRoute><ImgGallery /></ProtectedRoute>} /> 
 
       <Route path='/dashboard/items/edit/:editid' element={<AddItem />} /> 
       <Route path='/dashboard/items/edit' element={<AddItem />} /> 

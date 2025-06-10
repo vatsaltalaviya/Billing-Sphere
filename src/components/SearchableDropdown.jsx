@@ -1,24 +1,23 @@
 import { useEffect, useImperativeHandle, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function SearchableDropdown({
   id,
-  options,
+  options = [],               // Default to empty array
   value,
   onChange,
   className,
   ref,
-  disabled
+  disabled,
+  addlink
 }) {
+  const inputRef = useRef();
 
-   const inputRef = useRef();
- 
-   useImperativeHandle(ref, () => ({
+  useImperativeHandle(ref, () => ({
     focusInput: () => {
       inputRef.current && inputRef.current.focus();
-    }
+    },
   }));
-
-  const dropdownOptions = options && Array.isArray(options) ? options : "";
 
   const [searchTerm, setSearchTerm] = useState(value || "");
   const [showOptions, setShowOptions] = useState(false);
@@ -26,7 +25,7 @@ export default function SearchableDropdown({
 
   useEffect(() => {
     const label = typeof value === "string" ? value : value?.name || "";
-  setSearchTerm(label);
+    setSearchTerm(label);
   }, [value]);
 
   useEffect(() => {
@@ -41,73 +40,75 @@ export default function SearchableDropdown({
     };
   }, []);
 
-  const filteredOptions = dropdownOptions?.filter((option) => {
-    // check if option is a string or an object
-    const label = typeof option === "string" ? option : option.name || "";
-    return (
-      typeof searchTerm === "string" &&
-      label.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
+  const filteredOptions = Array.isArray(options)
+    ? options.filter((option) => {
+        const label = typeof option === "string" ? option : option?.name || "";
+        return (
+          typeof searchTerm === "string" &&
+          label.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      })
+    : [];
 
   const handleSelect = (option) => {
     setShowOptions(false);
-    const label = typeof option === "string" ? option : option.name || "";
-    setSearchTerm(label); // update input value
+    const label = typeof option === "string" ? option : option?.name || "";
+    setSearchTerm(label);
     if (onChange) {
-      // const label = typeof option === "string" ? option : option.name || "";
       onChange({
         target: {
           id: id,
           value: label,
         },
-      }); // Pass only the label, not an event-like object
+      });
     }
   };
 
   return (
-    <>
-      <div ref={dropdownRef} className="w-full relative">
-        <input
-          id={id}
-          disabled={disabled}
-          type="text"
-          ref={inputRef}
-          value={searchTerm}
-          className={className}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setShowOptions(true);
-            if (onChange) {
-                onChange({
-                  target: {
-                    id: id,
-                    value: e.target.value,
-                  },
-                });
-               // Pass only the value, not an event-like object
-            }
-          }}
-          onClick={() => setShowOptions(true)}
-        />
-        {showOptions && (
-          <ul
-            className={`absolute w-full bg-white table-data z-50 max-h-40 overflow-y-auto rounded shadow`}
-          >
-            {filteredOptions.length > 0 ? (
+    <div ref={dropdownRef} className={className}>
+      <input
+        id={id}
+        disabled={disabled}
+        type="text"
+        ref={inputRef}
+        value={searchTerm}
+        className='w-full px-2 py-1 border'
+        onChange={(e) => {
+          setSearchTerm(e.target.value);
+          setShowOptions(true);
+           onChange({
+              target: {
+                id: id,
+                value: e.target.value,
+              },
+            });
+        }}
+        onClick={() => setShowOptions(true)}
+      />
+      {showOptions && (
+        <ul className="absolute w-full bg-white z-50 max-h-40 overflow-y-auto  table-data">
+          {Array.isArray(options) && options.length > 0 ? (
+            filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
                 <li
                   key={index}
                   onClick={() => handleSelect(option)}
                   className="px-2 py-2 cursor-pointer hover:bg-blue-100"
+                  value="665f7c210efbceaa1f754b3d"
                 >
-                  {typeof option === "string" ? option : option.name}
+                  {typeof option === "string" ? option : option?.name || "Unnamed"}
                 </li>
               ))
-            ) : ''}
-          </ul>
-        )}
-      </div>
-    </>
+            ) : (
+              <li className="px-2 py-2 text-gray-400">No match found <Link className="text-blue-900 underline" to={addlink}>click here to create</Link> </li>
+              
+            )
+          ) : (
+            // <li className="px-2 py-2 border w-52 text-gray-400">No options available</li>
+            ''
+          )}
+        </ul>
+      )}
+    </div>
   );
 }

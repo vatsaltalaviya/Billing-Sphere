@@ -160,6 +160,9 @@ const SalePurchase = ({
     }
   }, [triggerNew]);
 
+  // console.log(productRows);
+  // console.log(formFields);
+  
 
   return (
     <div className="w-full bg-white overflow-y-auto">

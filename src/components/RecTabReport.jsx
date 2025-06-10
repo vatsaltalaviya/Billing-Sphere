@@ -102,11 +102,11 @@ const RecTabReport = () => {
                     <tr
                       key={j}
                       className={
-                        (j % 2 === 0 ? "bg-blue-100" : "") +
+                        
                         (selectedRow &&
                         selectedRow.partyIndex === i &&
                         selectedRow.rowIndex === j
-                          ? "ring-2 ring-amber-400 "
+                          ? "bg-blue-400 "
                           : "")
                       }
                       onClick={() =>

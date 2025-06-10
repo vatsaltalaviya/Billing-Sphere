@@ -2,7 +2,7 @@ import React from "react";
 import { dropdownData } from "../assets/Dropdown";
 import { useNavigate } from "react-router-dom";
 
-const DropDowmForMobile = () => {
+const DropDowmForMobile = ({handleLogOut}) => {
   const navigate = useNavigate();
   return (
     <div className="bg-white p-4 fixed right-4 pt-20 z-50 h-screen w-full overflow-y-auto">
@@ -52,7 +52,7 @@ const DropDowmForMobile = () => {
         <button
           className=" py-1 bg-white font-semibold text-xl rounded"
           onClick={() => {
-            navigate("/");
+           handleLogOut()
           }}
         >
           Logout<i className="ri-logout-circle-r-line"></i>

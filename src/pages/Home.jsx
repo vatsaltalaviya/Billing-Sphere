@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DropdownButton from "../components/DropdownButton";
 import ButtonGroup from "../components/ButtonGroup";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,6 @@ const Home = () => {
   const [showMenu, setshowMenu] = useState(false);
   const navigate = useNavigate();
 
-
   const sanitizeLabel = (label) => label.toLowerCase().replace(/[\s./\\]/g, "");
 
   const toNavObjArray = (arr) =>
@@ -26,6 +25,13 @@ const Home = () => {
       name,
       onClick: () => navigate(`/dashboard/${sanitizeLabel(name)}`),
     }));
+
+
+  // function for logout functionality
+  const handleLogOut = () => {
+    localStorage.clear();
+     navigate("/");
+  };
 
   const TransactionObj = toNavObjArray(Transaction);
   const InventoryReportObj = toNavObjArray(InventoryReport);
@@ -41,7 +47,7 @@ const Home = () => {
         <button
           className="px-3 py-1 bg-white font-bold text-sm border rounded"
           onClick={() => {
-            navigate("/");
+            handleLogOut();
           }}
         >
           Logout<i className="ri-logout-circle-r-line"></i>
@@ -56,7 +62,11 @@ const Home = () => {
             className="text-xl px-5"
             onClick={() => setshowMenu(!showMenu)}
           >
-            <i className={`${showMenu ? 'ri-close-large-fill':'ri-menu-line '}`}></i>
+            <i
+              className={`${
+                showMenu ? "ri-close-large-fill" : "ri-menu-line "
+              }`}
+            ></i>
           </button>
         </div>
         <div
@@ -64,8 +74,7 @@ const Home = () => {
             showMenu ? "translate-x-[0%]" : " -translate-x-[200%]"
           }`}
         >
-          <DropDowmForMobile />
-          
+          <DropDowmForMobile handleLogOut={handleLogOut} />
         </div>
       </div>
 
