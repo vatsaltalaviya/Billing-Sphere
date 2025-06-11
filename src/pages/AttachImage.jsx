@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react'
 import PopUp from '../components/PopUp'
 
-const AttachImage = ({onClose}) => {
+const AttachImage = ({onClose ,onsetImage}) => {
     const inputRef = useRef(null);
   const [preview, setPreview] = useState(null);
+  const [File, setFile] = useState(null);
 
   const handleButtonClick = (e) => {
     e.preventDefault();
@@ -13,6 +14,7 @@ const AttachImage = ({onClose}) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
+      setFile(file.name)
       const imageUrl = URL.createObjectURL(file);
       setPreview(imageUrl); //  preview image
     }
@@ -21,13 +23,19 @@ const AttachImage = ({onClose}) => {
     setPreview(null)
   }
 
+
+  const handleSubmit = (e) =>{
+      e.preventDefault();
+      onsetImage(File)
+      onClose()
+  }
   return (
      <PopUp onClose={onClose}>
       <div className="md:w-[500px] border bg-white flex flex-col">
         <div className="bg-blue-600 flex justify-center text-white">
           <h1>Images</h1>
         </div>
-        <form action="" className='p-2'>
+        <form onSubmit={handleSubmit} encType='multipart/form-data' className='p-2'>
           <div className="flex flex-col px-2">
              <div className="space-y-4">
                

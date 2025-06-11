@@ -94,7 +94,7 @@ export default function SearchableDropdown({
                   key={index}
                   onClick={() => handleSelect(option)}
                   className="px-2 py-2 cursor-pointer hover:bg-blue-100"
-                  value="665f7c210efbceaa1f754b3d"
+                  data-id={option?.id}
                 >
                   {typeof option === "string" ? option : option?.name || "Unnamed"}
                 </li>

@@ -31,10 +31,118 @@ const AddItem = () => {
   const [formData, setformData] = useState(defaultForm);
   const [OpeningBalanceData, setOpeningBalanceData] = useState([]);
   const [showOpeningBal, setShowOpeningBal] = useState(false);
+
+  const [itemGroupOption, setitemGroupOption] = useState([]);
+  const [BrandOption, setBrandOption] = useState([]);
+  const [HsnOption, setHsnOption] = useState([]);
+  const [StockUnitOption, setStockUnitOption] = useState([]);
+  const [RackOption, setRackOption] = useState([]);
+  
   const token = localStorage.getItem("token");
+  const ownerId = localStorage.getItem('uid');
 
   const { editid } = useParams();
   const { deleteid } = useParams();
+
+const fetchAllItemGroup = async()=>{
+  try {
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/item-group/get/${ownerId}`,{
+      headers:{
+        Authorization:`${token}`
+      }
+    })
+    const data = res.data.data.map((item)=>({
+      id:item._id,
+      name:item.name
+    }));
+    setitemGroupOption(data);
+    
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const fetchAllBrand = async()=>{
+  try {
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/item-brand/get/${ownerId}`,{
+      headers:{
+        Authorization:`${token}`
+      }
+    })
+    const data = res.data.data.map((item)=>({
+      id:item._id,
+      name:item.name
+    }));
+    setBrandOption(data);
+    
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const fetchAllHSN = async()=>{
+  try {
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/hsnCode/fetchAllHsncode/${ownerId}`,{
+      headers:{
+        Authorization:`${token}`
+      }
+    })
+    const data = res.data.data.map((item)=>({
+      id:item._id,
+      name:item.hsn
+    }));
+    setHsnOption(data);
+    
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const fetchAllStockUnit = async()=>{
+  try {
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/measurementLimit/fetchAllmeasurement/${ownerId}`,{
+      headers:{
+        Authorization:`${token}`
+      }
+    })
+    const data = res.data.data.map((item)=>({
+      id:item._id,
+      name:item.measurement
+    }));
+    setStockUnitOption(data);
+    
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const fetchAllStorage = async()=>{
+  try {
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/store/fetchAllStore/${ownerId}`,{
+      headers:{
+        Authorization:`${token}`
+      }
+    })
+    const data = res.data.data.map((item)=>({
+      id:item._id,
+      name:item.location
+    }));
+    setRackOption(data);
+    
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+
+// fetch all api when page loads
+useEffect(()=>{
+  fetchAllItemGroup() 
+  fetchAllBrand()
+  fetchAllHSN()
+  fetchAllStockUnit()
+  fetchAllStorage()
+},[])
 
   const handleChangeData = (e) => {
     // console.log("handleChangeData called with:", e.target);
@@ -131,8 +239,6 @@ const op = ['1','2','3']
   };
 
 
-  console.log(formData)
-
   return (
     <div className="h-screen w-full  bg-white">
       <div
@@ -165,7 +271,7 @@ const op = ['1','2','3']
                   <SearchableDropdown
                     type="text"
                     id="itemGroup"
-                    options={op}
+                    options={itemGroupOption}
                     addlink='/dashboard/items/itemgroup'
                     value={formData.itemGroup}
                     onChange={handleChangeData}
@@ -186,7 +292,7 @@ const op = ['1','2','3']
                       type="text"
                       id="brand"
                       addlink='/dashboard/items/brand'
-                      options={op}
+                      options={BrandOption}
                       className="flex-1 relative"
                       value={formData.brand}
                       onChange={handleChangeData}
@@ -275,7 +381,7 @@ const op = ['1','2','3']
                       id="hsn"
                       className="flex-1 relative"
                       addlink='/dashboard/items/hsn'
-                      options={op}
+                      options={HsnOption}
                       value={formData.hsn}
                       onChange={handleChangeData}
                     />
@@ -391,7 +497,7 @@ const op = ['1','2','3']
                     <SearchableDropdown
                       type="text"
                       id="rack"
-                      options={op}
+                      options={RackOption}
                       addlink='/dashboard/items/rack'
                       className="flex-1 relative"
                       value={formData.rack}
@@ -411,7 +517,7 @@ const op = ['1','2','3']
                   <SearchableDropdown
                     type="text"
                     id="stockunit"
-                    options={op}
+                    options={StockUnitOption}
                     addlink='/dashboard/items/stockUnit'
                     className="w-52 relative"
                     value={formData.stockunit}

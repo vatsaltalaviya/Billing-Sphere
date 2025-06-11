@@ -28,6 +28,7 @@ import RecTabReport from './components/RecTabReport'
 import ProtectedRoute from './components/ProtectedRoute'
 import Rack from './pages/Items/Rack'
 import StockUnit from './pages/Items/StockUnit'
+import TaxCategory from './pages/Items/TaxCategory'
 
 const App = () => {
   return (
@@ -45,6 +46,7 @@ const App = () => {
       <Route path='/dashboard/items/hsn' element={<ProtectedRoute><HsnPage /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/rack' element={<ProtectedRoute><Rack /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/stockUnit' element={<ProtectedRoute><StockUnit /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/taxcategory' element={<ProtectedRoute><TaxCategory /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/fi' element={<ProtectedRoute><Filteritem /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/bu' element={<ProtectedRoute><BulkItemUpd /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/gallery' element={<ProtectedRoute><ImgGallery /></ProtectedRoute>} /> 

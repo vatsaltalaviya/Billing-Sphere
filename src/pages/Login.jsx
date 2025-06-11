@@ -32,7 +32,7 @@ const Login = () => {
         const token = data.token
         localStorage.setItem('token',token)
         localStorage.setItem('companies',data.data.companies[0])
-        sessionStorage.setItem('uid',data.data._id)
+        localStorage.setItem('uid',data.data._id)
         setIsloading(true)
         console.log(data);
         console.log(data.data.companies);
