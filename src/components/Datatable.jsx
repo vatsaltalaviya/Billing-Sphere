@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const Datatable = ({ data, list }) => {
-  // if ((!data || data.length === 0) && (!list || list.length === 0))
-  //   return <div>No data found</div>;
+const Datatable = ({ data, list,getitemUrl }) => {
 
-  const [selectedRow, setSelectedRow] = useState(0);
+
+  const [selectedRow, setSelectedRow] = useState(null);
   const [RowData, setRowData] = useState({});
   
   const rows = data && data.length > 0 ? data : list;
-  const columns = rows && rows.length > 0 ? Object.keys(rows[0]) : [];
+  const columns = rows && rows.length > 0 ? Object.keys(rows[0]).filter(col => col !== 'id') : [];
+  
+  
 
   const handleKeyDown = (e) => {
     if (e.key === 'ArrowDown') {
@@ -22,6 +23,11 @@ const Datatable = ({ data, list }) => {
     }
   };
 
+ useEffect(()=>{
+  if(RowData.id){
+     getitemUrl(RowData.id);
+  }
+ },[RowData.id])
   
   return (
     <div

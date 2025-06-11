@@ -7,8 +7,9 @@ import { userdataContext } from '../../context/UserContext';
 import axios from 'axios';
 
 const Item = () => {
-   const {User} = useContext(userdataContext)
+  const {User} = useContext(userdataContext)
  const [showopitemBal, setOpitemBal] = useState(false)
+ const [itemUrl, setitemUrl] = useState(null)
  const [TableData, setTableData] = useState([])
  const [IsLoading, setIsLoading] = useState(null)
  const [showMinMax, setMinMax] = useState(false)
@@ -16,7 +17,7 @@ const Item = () => {
 
  const ItemSidebarData = [
   { name: "New", onClick: () => {}, navigate:'/dashboard/items/new' },
-  { name: "Edit", onClick: () => {} ,navigate:`/dashboard/items/edit/1`},
+  { name: "Edit", onClick: () => {} ,navigate:`/dashboard/items/edit/${itemUrl}`},
   { name: "Delete", onClick: () => {} ,navigate:`/dashboard/items/delete/1`},
   { name: "Export to excel", onClick: () => {} },
   { name: "Bulk Upd", onClick: () => {} ,navigate:`/dashboard/items/bu` },
@@ -30,6 +31,9 @@ const Item = () => {
   { name: "Non/Used", onClick: () => {} }
 ];
 
+const getUrl=(url)=>{
+  setitemUrl(url)
+}
 
 const fetchData = async()=>{
  try {
@@ -54,6 +58,7 @@ useEffect(()=>{
 
 const tableData = TableData.map((items,index) =>({
   Sr: index+1,
+  id:items._id,
       "Item Name": items.itemName,
       "Code No": items.codeNo,
       Group: items.itemGroup,
@@ -63,10 +68,9 @@ const tableData = TableData.map((items,index) =>({
       Active: items.status == "Active"?"Yes":"No",
 }))
  
-
   return (
     <div className='w-full'>
-      <BasePage heading="Item Master" Sidebardata={ItemSidebarData} tableData={tableData} isLoading={IsLoading}/>
+      <BasePage heading="Item Master" Sidebardata={ItemSidebarData} tableData={tableData} isLoading={IsLoading} getitemUrl={(e)=>getUrl(e)}/>
 
       {showopitemBal && <OpItemBal onClose={()=>setOpitemBal(false)}/>}
       {showMinMax && <MinMaxQty onClose={()=>setMinMax(false)}/>}

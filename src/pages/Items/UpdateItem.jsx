@@ -4,8 +4,8 @@ import OpeningBal from "./OpeningBal";
 import axios from "axios";
 import SearchableDropdown from "../../components/SearchableDropdown";
 
-const AddItem = () => {
-  const defaultForm = {
+const UpdateItem = () => {
+     const defaultForm = {
     itemGroup: "",
     brand: "",
     codeNo: "",
@@ -46,7 +46,6 @@ const AddItem = () => {
   const companyCode = localStorage.getItem('companies');
 
   const { editid } = useParams();
-  const { deleteid } = useParams();
 
 const fetchAllItemGroup = async()=>{
   try {
@@ -155,21 +154,7 @@ const fetchAllTax = async()=>{
   }
 }
 
-const generateNumericBarcode = () => {
-  const now = new Date();
 
-  const yyyy = now.getFullYear();            // 2025
-  const mm = String(now.getMonth() + 1).padStart(2, '0');  // 06
-  const dd = String(now.getDate()).padStart(2, '0');       // 11
-  const hh = String(now.getHours()).padStart(2, '0');      // 14
-  const min = String(now.getMinutes()).padStart(2, '0');   // 38
-  const ss = String(now.getSeconds()).padStart(2, '0');    // 52
-  const ms = String(now.getMilliseconds()).padStart(3, '0'); // 123
-
-  const update = {...formData}
-  update.barcode = `${dd}${mm}${yyyy}${hh}${min}${ss}${ms}`
-  setformData(update)
-};
 
 
 // fetch all api when page loads
@@ -180,7 +165,7 @@ useEffect(()=>{
   fetchAllStockUnit()
   fetchAllStorage()
   fetchAllTax()
-  generateNumericBarcode()
+
 },[])
 
 
@@ -248,17 +233,17 @@ useEffect(()=>{
     setisLoading(true)
     
     const itemdata = {
-      itemGroup: formData.itemGroup.id, // should be the _id from your group master
-      companyCode, // set this as needed
-      itemBrand: formData.brand.id, // should be the _id from your brand master
+      itemGroup: formData.itemGroup.id,
+      companyCode, 
+      itemBrand: formData.brand.id,
       itemName: formData.itemName,
       printName: formData.printName,
       codeNo: formData.codeNo,
       barcode: formData.barcode,
-      taxCategory: formData.tax.id, // should be the _id from your tax master
-      hsnCode: formData.hsn.id, // should be the _id from your hsn master
-      storeLocation: formData.rack.id, // should be the _id from your location master
-      measurementUnit: formData.stockunit.id, // should be the _id from your unit master
+      taxCategory: formData.tax.id,
+      hsnCode: formData.hsn.id, 
+      storeLocation: formData.rack.id, 
+      measurementUnit: formData.stockunit.id,
       minimumStock: Number(formData.minStock),
       maximumStock: Number(formData.maxStock),
       retail: Number(formData.retail),
@@ -267,7 +252,7 @@ useEffect(()=>{
       status: formData.isActive,
       images: formData.images,
       openingBalance: OpeningBalanceData.map((row) => ({
-        unit: row.unit1.id, // should be the _id from your unit master
+        unit: row.unit1.id, 
         qty: Number(row.qty),
         rate: Number(row.rate),
         total: Number(row.total),
@@ -298,12 +283,15 @@ useEffect(()=>{
   };
 
   return (
-    <div className="h-screen w-full  bg-white">
+    <div>
+      <div className="h-screen w-full  bg-white">
       <div
-        className={`bg-blue-600 font-bold text-lg`}
+        className={`${
+        "bg-amber-500" 
+        } font-bold text-lg`}
       >
         <h1 className="text-center text-white">
-          Add Item
+          Edit Item
         </h1>
       </div>
       {/* ------------------------------- body ----------------------------------- */}
@@ -424,7 +412,7 @@ useEffect(()=>{
                 </div>
 
                 {/* HSN Code + Tax Category */}
-                <div className=" flex flex-col md:flex-row flex-wrap justify-between  xl:items-center gap-4">
+                <div className=" flex flex-col md:flex-row flex-wrap justify-between xl:items-center gap-4">
                   <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="hsn"
@@ -531,7 +519,7 @@ useEffect(()=>{
                       type="text"
                       id="barcode"
                       className="flex-1 border px-2 py-1"
-                      value={formData.barcode||''}
+                      value={formData.barcode}
                       onChange={handleChangeData}
                     />
                   </div>
@@ -732,12 +720,11 @@ useEffect(()=>{
             </div>
           </div>
           <div className="flex flex-col xl:flex-row gap-3 mb-3 xl:mb-0">
-            
+           
               <button className="flex items-center justify-center gap-4 px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
                  {isLoading && <span className='w-[25px]  rounded-full bb h-[25px] border-4 border-gray-200 animate-spin'></span>}
                 Save
               </button>
-            
 
             <button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
               Cancel
@@ -745,7 +732,6 @@ useEffect(()=>{
               <button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
                 Delete
               </button>
-           
 
             {/*<button className="px-3 py-2 rounded border ml-1">Previous</button> */}
           </div>
@@ -762,7 +748,8 @@ useEffect(()=>{
         />
       )}
     </div>
-  );
-};
+    </div>
+  )
+}
 
-export default AddItem;
+export default UpdateItem

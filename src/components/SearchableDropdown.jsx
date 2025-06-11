@@ -58,7 +58,7 @@ export default function SearchableDropdown({
       onChange({
         target: {
           id: id,
-          value: label,
+          value: option,
         },
       });
     }
@@ -72,7 +72,7 @@ export default function SearchableDropdown({
         type="text"
         ref={inputRef}
         value={searchTerm}
-        className='w-full px-2 py-1 border'
+        className='w-full px-2 py-1'
         onChange={(e) => {
           setSearchTerm(e.target.value);
           setShowOptions(true);
@@ -86,15 +86,14 @@ export default function SearchableDropdown({
         onClick={() => setShowOptions(true)}
       />
       {showOptions && (
-        <ul className="absolute w-full bg-white z-50 max-h-40 overflow-y-auto  table-data">
+        <ul className="absolute w-full bg-blue-100 z-50 max-h-40 overflow-y-auto  table-data">
           {Array.isArray(options) && options.length > 0 ? (
             filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
                 <li
                   key={index}
                   onClick={() => handleSelect(option)}
-                  className="px-2 py-2 cursor-pointer hover:bg-blue-100"
-                  data-id={option?.id}
+                  className="px-2 py-2 cursor-pointer hover:bg-blue-200"
                 >
                   {typeof option === "string" ? option : option?.name || "Unnamed"}
                 </li>

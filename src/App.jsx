@@ -29,6 +29,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Rack from './pages/Items/Rack'
 import StockUnit from './pages/Items/StockUnit'
 import TaxCategory from './pages/Items/TaxCategory'
+import UpdateItem from './pages/Items/UpdateItem'
 
 const App = () => {
   return (
@@ -51,8 +52,7 @@ const App = () => {
       <Route path='/dashboard/items/bu' element={<ProtectedRoute><BulkItemUpd /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/gallery' element={<ProtectedRoute><ImgGallery /></ProtectedRoute>} /> 
 
-      <Route path='/dashboard/items/edit/:editid' element={<AddItem />} /> 
-      <Route path='/dashboard/items/edit' element={<AddItem />} /> 
+      <Route path='/dashboard/items/edit/:editid' element={<ProtectedRoute><UpdateItem /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/delete/:deleteid' element={<AddItem />} /> 
       <Route path='/dashboard/items/delete' element={<AddItem />} /> 
 

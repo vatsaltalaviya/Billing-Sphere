@@ -1,13 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PopUp from '../../components/PopUp';
 import SearchableDropdown from '../../components/SearchableDropdown';
+import axios from 'axios';
 
 const OpeningBal = ({ onClose ,onSave}) => {
   const [OpeningBalance, setOpeningBalance] = useState([
     { qty: '', unit1: '', rate: '', unit2: '', total: '' }
   ]);
+    const token = localStorage.getItem("token");
+    const ownerId = localStorage.getItem('uid');
+    const [StockUnitOption, setStockUnitOption] = useState([]);
+  
+  
+  const fetchAllStockUnit = async()=>{
+  try {
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/measurementLimit/fetchAllmeasurement/${ownerId}`,{
+      headers:{
+        Authorization:`${token}`
+      }
+    })
+    const data = res.data.data.map((item)=>({
+      id:item._id,
+      name:item.measurement
+    }));
+    setStockUnitOption(data);
+    
+  } catch (error) {
+    console.error(error)
+  }
+}
 
-  const handleChange = (index, field, value) => {
+useEffect(() => {
+  fetchAllStockUnit()
+}, [])
+  
+  
+  
+    const handleChange = (index, field, value) => {
     const updated = [...OpeningBalance];
     updated[index][field] = value;
 
@@ -33,7 +62,6 @@ const OpeningBal = ({ onClose ,onSave}) => {
     onSave(Data)
     
   }
-  const unitOptions = ["Kg", "Box", "Ltr", "Piece"];
   
   return (
     <PopUp onClose={onClose}>
@@ -58,7 +86,7 @@ const OpeningBal = ({ onClose ,onSave}) => {
                 <tbody>
                   {OpeningBalance.map((row, index) => (
                     <tr key={index}>
-                      <td className="border px-2 py-1 text-center">
+                      <td className="border text-center">
                         {index + 1}
                       </td>
                       <td className="border">
@@ -71,8 +99,8 @@ const OpeningBal = ({ onClose ,onSave}) => {
                       </td>
                       <td className="border">
                         <SearchableDropdown
-                          className="px-2 py-1 w-full h-full"
-                          options={unitOptions}
+                          className="w-full h-full relative"
+                          options={StockUnitOption}
                           value={row.unit1}
                           onChange={(e) => handleChange(index, 'unit1', e.target.value)}
                         />
@@ -87,8 +115,8 @@ const OpeningBal = ({ onClose ,onSave}) => {
                       </td>
                       <td className="border">
                         <SearchableDropdown
-                          className="px-2 py-1 w-full h-full"
-                          options={unitOptions}
+                          className="relative w-full h-full"
+                          options={StockUnitOption}
                           value={row.unit2}
                           onChange={(e) => handleChange(index, 'unit2', e.target.value)}
                         />

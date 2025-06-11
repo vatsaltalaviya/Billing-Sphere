@@ -1,7 +1,7 @@
 import React from 'react'
 import Datatable from './Datatable'
 
-const MasterPart = ({tableData , isLoading }) => {
+const MasterPart = ({tableData , isLoading ,getitemUrl }) => {
   
   return (
     <div className='h-full w-full xl:px-5'>
@@ -17,7 +17,7 @@ const MasterPart = ({tableData , isLoading }) => {
         <span className='w-[70px] rounded-full bb h-[70px] border-4 border-gray-200 animate-spin'></span>
       </div>:
       <div className={`w-full flex justify-center max-h-[85vh] table-data overflow-y-auto xl:border-b`}>
-        <Datatable list={tableData}/>
+        <Datatable getitemUrl={getitemUrl} list={tableData}/>
       </div>}
      
       
