@@ -32,8 +32,8 @@ const BasePage = ({
         {subHeading ? (
           <div className="flex justify-between items-center w-full">
             <div className="flex md:hidden"></div>
-            <h1 className={`px-10 bg-yellow-900 hidden md:block`}>{subHeading}</h1>
-            <h1 className='text-center flex-1'>{heading}</h1>
+            <h1 className={`px-10 bg-yellow-900 py-0.5 hidden md:block`}>{subHeading}</h1>
+            <h1 className='text-center flex-1 py-0.5'>{heading}</h1>
             <div className="lg:flex hidden"></div>
             <button
               className="text-xl px-5 block xl:hidden"
@@ -45,7 +45,7 @@ const BasePage = ({
         ) : (
           <div className="flex justify-between xl:justify-center items-center w-full">
             <div className="flex md:hidden"></div>
-            <h1 className='text-center '>{heading}</h1>
+            <h1 className='text-center text-xl'>{heading}</h1>
             <button
               className="text-xl px-5 block xl:hidden"
               onClick={() => setshowSidebar(!showSidebar)}

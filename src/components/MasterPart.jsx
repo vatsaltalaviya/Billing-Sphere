@@ -2,7 +2,7 @@ import React from 'react'
 import Datatable from './Datatable'
 
 const MasterPart = ({tableData , isLoading ,getitemUrl }) => {
-  
+
   return (
     <div className='h-full w-full xl:px-5'>
       {/* ----------------------------- search ----------------------------------------------- */}
@@ -13,11 +13,12 @@ const MasterPart = ({tableData , isLoading ,getitemUrl }) => {
         </form>
       </div>
       {/* -------------------------------- table ------------------------------ */}
-      {isLoading ? <div className={`w-full flex justify-center items-center min-h-[60vh] max-h-[85vh] table-data overflow-y-auto`}>
+      {isLoading ? <div className={`w-full flex justify-center items-center min-h-[80vh] max-h-[85vh] table-data overflow-y-auto`}>
         <span className='w-[70px] rounded-full bb h-[70px] border-4 border-gray-200 animate-spin'></span>
       </div>:
-      <div className={`w-full flex justify-center max-h-[85vh] table-data overflow-y-auto xl:border-b`}>
-        <Datatable getitemUrl={getitemUrl} list={tableData}/>
+      <div className={`w-full flex justify-center max-h-[85vh] min-h-[80vh] table-data overflow-y-auto`}>
+        {tableData.length > 0 ? <Datatable mode="item" getitemUrl={getitemUrl} list={tableData}/>:<h1 className='text-3xl text-nowrap flex justify-center items-center'>No Item Found</h1>}
+        
       </div>}
      
       

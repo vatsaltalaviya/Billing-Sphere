@@ -85,19 +85,19 @@ useEffect(() => {
               <col className="w-16 min-w-[60px] max-w-[60px]" />
               <col className="w-20 min-w-[80px] max-w-[80px]" />
             </colgroup>
-            <thead className="bg-blue-800 text-white border">
+            <thead className="bg-blue-800  border">
               <tr>
-                <th className="border px-2 py-1">Cr/Dr</th>
-                <th className="border px-2 py-1">Ledger Name</th>
-                <th className="border px-2 py-1">Remark</th>
-                <th className="border px-2 py-1">Debit</th>
-                <th className="border px-2 py-1">Credit</th>
+                <th className="border border-black px-2 py-1 text-white">Cr/Dr</th>
+                <th className="border border-black px-2 py-1 text-white">Ledger Name</th>
+                <th className="border border-black px-2 py-1 text-white">Remark</th>
+                <th className="border border-black px-2 py-1 text-white">Debit</th>
+                <th className="border border-black px-2 py-1 text-white">Credit</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((row, idx) => (
                 <tr key={idx}>
-                  <td className="border px-2 py-1">
+                  <td className="border px-2">
                     <select
                       className="w-full h-full px-2 py-1 "
                       value={row.entryType}
@@ -111,7 +111,7 @@ useEffect(() => {
                     <SearchableDropdown
                     options={items}
                       value={row.ledger}
-                      className="w-full h-full px-2 py-1 outline-none"
+                      className="w-full h-full relative outline-none"
                       onChange={(val) => {
                         const updated = [...rows];
                         console.log(updated);

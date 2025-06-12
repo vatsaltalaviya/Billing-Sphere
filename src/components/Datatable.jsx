@@ -1,34 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Datatable = ({ data, list,getitemUrl }) => {
-
-
+const Datatable = ({ data, list, getitemUrl, mode }) => {
+  const navigate = useNavigate();
   const [selectedRow, setSelectedRow] = useState(null);
   const [RowData, setRowData] = useState({});
-  
+
   const rows = data && data.length > 0 ? data : list;
-  const columns = rows && rows.length > 0 ? Object.keys(rows[0]).filter(col => col !== 'id') : [];
-  
-  
+  const columns =
+    rows && rows.length > 0
+      ? Object.keys(rows[0]).filter((col) => col !== "id")
+      : [];
 
   const handleKeyDown = (e) => {
-    if (e.key === 'ArrowDown') {
+    if (e.key === "ArrowDown") {
       setSelectedRow((prev) => Math.min(prev + 1, rows.length - 1));
       setRowData(rows[Math.min(selectedRow + 1, rows.length - 1)]);
     }
 
-    if (e.key === 'ArrowUp') {
+    if (e.key === "ArrowUp") {
       setSelectedRow((prev) => Math.max(prev - 1, 0));
       setRowData(rows[Math.max(selectedRow - 1, 0)]);
     }
   };
 
- useEffect(()=>{
-  if(RowData.id){
-     getitemUrl(RowData.id);
-  }
- },[RowData.id])
-  
+  const handleDoubleClick = (route) => {
+    navigate(`${route}/${RowData.id}`);
+  };
+
+  useEffect(() => {
+    if (RowData.id) {
+      getitemUrl(RowData.id);
+    }
+  }, [RowData.id]);
+
   return (
     <div
       className="overflow-x-auto w-full"
@@ -42,7 +47,7 @@ const Datatable = ({ data, list,getitemUrl }) => {
               <th
                 key={i}
                 className={`border border-black px-3 py-1 ${
-                  i === 0 || i === columns.length - 1 ? 'text-center' : ''
+                  i === 0 || i === columns.length - 1 ? "text-center" : ""
                 }`}
               >
                 {col}
@@ -51,18 +56,20 @@ const Datatable = ({ data, list,getitemUrl }) => {
           </tr>
 
           {/* Search row */}
-          {data && (<tr>
-            {columns.map((col, i) => (
-              <th key={i} className="border">
-                <input
-                  type="text"
-                  id={col}
-                  placeholder="Search here"
-                  className="w-full px-2 py-1 md:text-sm xl:text-[16.5px] placeholder:font-medium"
-                />
-              </th>
-            ))}
-          </tr>)}
+          {data && (
+            <tr>
+              {columns.map((col, i) => (
+                <th key={i} className="border">
+                  <input
+                    type="text"
+                    id={col}
+                    placeholder="Search here"
+                    className="w-full px-2 py-1 md:text-sm xl:text-[16.5px] placeholder:font-medium"
+                  />
+                </th>
+              ))}
+            </tr>
+          )}
         </thead>
 
         <tbody>
@@ -73,10 +80,13 @@ const Datatable = ({ data, list,getitemUrl }) => {
                 setSelectedRow(rowIndex);
                 setRowData(row);
               }}
+              onDoubleClick={() => {
+                {mode == "item" && handleDoubleClick("/dashboard/items/edit");}
+              }}
               className={`font-medium cursor-pointer ${
                 selectedRow === rowIndex
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-white text-black'
+                  ? "bg-blue-500 text-white"
+                  : "bg-white text-black"
               }`}
             >
               {columns.map((col, colIndex) => (
@@ -84,8 +94,8 @@ const Datatable = ({ data, list,getitemUrl }) => {
                   key={colIndex}
                   className={`border border-black px-3 py-1 ${
                     colIndex === 0 || colIndex === columns.length - 1
-                      ? 'text-center'
-                      : ''
+                      ? "text-center"
+                      : ""
                   }`}
                 >
                   {row[col]}
@@ -97,7 +107,6 @@ const Datatable = ({ data, list,getitemUrl }) => {
       </table>
 
       {/* RowData preview */}
-      
     </div>
   );
 };

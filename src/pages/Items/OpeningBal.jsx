@@ -15,7 +15,8 @@ const OpeningBal = ({ onClose ,onSave,previousData}) => {
    
 
   useEffect(()=>{
-    if(previousData.length>0){
+    if(previousData){
+      if(previousData.length>0){
         const data = previousData.map((item) => ({
       qty: item.qty,
       unit1: item.unit,
@@ -26,8 +27,8 @@ const OpeningBal = ({ onClose ,onSave,previousData}) => {
     
       setOpeningBalance([...data,{ qty: '', unit1: '', rate: '', unit2: '', total: '' }])
     }
-    console.log(OpeningBalance);
-    
+    }
+
   },[previousData])
   
   const fetchAllStockUnit = async()=>{
@@ -118,6 +119,7 @@ useEffect(() => {
                       <td className="border">
                         <SearchableDropdown
                           className="w-full h-full relative"
+                          addlink="/dashboard/items/stockUnit"
                           options={StockUnitOption}
                           value={row.unit1}
                           onChange={(e) => handleChange(index, 'unit1', e.target.value)}
@@ -135,6 +137,7 @@ useEffect(() => {
                         <SearchableDropdown
                           className="relative w-full h-full"
                           options={StockUnitOption}
+                          addlink="/dashboard/items/stockUnit"
                           value={row.unit2}
                           onChange={(e) => handleChange(index, 'unit2', e.target.value)}
                         />

@@ -31,10 +31,13 @@ const UpdateItem = () => {
   const inputRef = useRef(null);
   const [preview, setPreview] = useState(null);
   const [formData, setformData] = useState(defaultForm);
- 
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+
   const [OpeningBalanceData, setOpeningBalanceData] = useState([]);
   const [showOpeningBal, setShowOpeningBal] = useState(false);
   const [isLoading, setisLoading] = useState(null);
+  const [isSaveLoading, setSaveisLoading] = useState(null);
+  const [isDeleteLoading, setDeleteisLoading] = useState(null);
   const navigate = useNavigate();
 
   const [itemGroupOption, setitemGroupOption] = useState([]);
@@ -51,7 +54,7 @@ const UpdateItem = () => {
   const { editid } = useParams();
 
   const fetchItemById = async () => {
-    setisLoading(true)
+    setisLoading(true);
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/items/get-item/${editid}`,
@@ -61,10 +64,8 @@ const UpdateItem = () => {
       );
 
       if (res.data.success) {
-        const data = res.data.data;
-        console.log(data);
-        
-    
+        const data = res.data.data;        
+
         const {
           itemGroup,
           itemBrand,
@@ -83,30 +84,32 @@ const UpdateItem = () => {
           updateImage,
           images,
           status,
+          openingStock,
           openingBalance,
-        
         } = data;
 
         const openingBalanceWithUnit = await Promise.all(
-        (openingBalance || []).map(async (item) => {
-          if (item.unit) {
-            try {
-              const unitRes = await axios.get(
-                `${import.meta.env.VITE_BASE_URL}/measurementLimit/get/${item.unit}`,
-                { headers: { Authorization: token } }
-              );
-              return {
-                ...item,
-                unit: unitRes.data?.data?.measurement || "", // attach unit name
-              };
-            } catch {
+          (openingBalance || []).map(async (item) => {
+            if (item.unit) {
+              try {
+                const unitRes = await axios.get(
+                  `${import.meta.env.VITE_BASE_URL}/measurementLimit/get/${
+                    item.unit
+                  }`,
+                  { headers: { Authorization: token } }
+                );
+                return {
+                  ...item,
+                  unit: unitRes.data?.data?.measurement || "", // attach unit name
+                };
+              } catch {
+                return { ...item, unit: "" };
+              }
+            } else {
               return { ...item, unit: "" };
             }
-          } else {
-            return { ...item, unit: "" };
-          }
-        })
-      );
+          })
+        );
 
         // Prepare fetch promises
         const promises = [
@@ -118,7 +121,6 @@ const UpdateItem = () => {
                 { headers: { Authorization: token } }
               )
             : Promise.resolve({ data: { data: { name: "" } } }),
-            
 
           itemBrand
             ? axios.get(
@@ -161,16 +163,25 @@ const UpdateItem = () => {
               )
             : Promise.resolve({ data: { data: { measurement: "" } } }),
 
-            barcode
-          ? axios.get(
-              `${import.meta.env.VITE_BASE_URL}/barcode-print/get-barcode/${barcode}`,
-              { headers: { Authorization: token } }
-            )
-          : Promise.resolve({ data: { data: { barcode: "" } } }),
+          barcode
+            ? axios.get(
+                `${
+                  import.meta.env.VITE_BASE_URL
+                }/barcode-print/get-barcode/${barcode}`,
+                { headers: { Authorization: token } }
+              )
+            : Promise.resolve({ data: { data: { barcode: "" } } }),
         ];
 
-        const [itemGroupRes, brandRes, hsnRes, taxRes, rackRes, stockRes,barcodeRes] =
-          await Promise.all(promises);
+        const [
+          itemGroupRes,
+          brandRes,
+          hsnRes,
+          taxRes,
+          rackRes,
+          stockRes,
+          barcodeRes,
+        ] = await Promise.all(promises);
 
         const updatedForm = {
           itemGroup: itemGroupRes.data?.data?.name || "",
@@ -178,7 +189,7 @@ const UpdateItem = () => {
           codeNo,
           itemName,
           printName,
-          remarks:'',
+          remarks: "",
           hsn: hsnRes.data?.data?.hsn || "",
           tax: taxRes.data?.data?.rate || "",
           retail,
@@ -186,24 +197,22 @@ const UpdateItem = () => {
           barcode: barcodeRes.data?.data?.barcode || "",
           rack: rackRes.data?.data?.location || "",
           stockunit: stockRes.data?.data?.measurement || "",
-          minStock:minimumStock,
-          maxStock:maximumStock,
+          minStock: minimumStock,
+          maxStock: maximumStock,
           updateImage,
           images,
-          openstock:'',
-          isActive:status,
-          openingBalance:openingBalanceWithUnit,
+          openstock: openingStock,
+          isActive: status,
+          openingBalance: openingBalanceWithUnit,
         };
 
         setformData(updatedForm);
-        setisLoading(false)
+        setisLoading(false);
       }
     } catch (error) {
       console.error("Error fetching item:", error);
     }
   };
-
-  console.log(formData , isLoading);
 
   const fetchAllItemGroup = async () => {
     try {
@@ -339,8 +348,14 @@ const UpdateItem = () => {
     }
   }, [editid]);
 
+  const getId = (value, options) => {
+    if (!value) return undefined;
+    if (typeof value === "object" && value.id) return value.id;
+    const found = options.find((opt) => opt.name === value);
+    return found ? found.id : undefined;
+  };
+
   const handleChangeData = (e) => {
-    // console.log("handleChangeData called with:", e.target);
     const { id, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
 
@@ -349,7 +364,7 @@ const UpdateItem = () => {
         ...prev,
         [id]: newValue,
       };
-      // console.log(updatedForm); // Move console.log inside the setState callback
+     
       return updatedForm;
     });
   };
@@ -386,10 +401,44 @@ const UpdateItem = () => {
 
       update.images.push(fileurl);
       setformData(update);
+      setPreview(fileurl);
     }
   };
-  const handleDeleteClick = (e) => {
-    setPreview(null);
+
+  //============================= img display part =============================
+
+  //Show current image
+  const currentImg =
+    formData.images && formData.images.length > 0
+      ? formData.images[currentImgIndex]
+      : null;
+
+  // Next image
+  const handleNextImg = () => {
+    if (!formData.images || formData.images.length === 0) return;
+    setCurrentImgIndex((prev) =>
+      prev < formData.images.length - 1 ? prev + 1 : 0
+    );
+  };
+
+  // Previous image
+  const handlePrevImg = () => {
+    if (!formData.images || formData.images.length === 0) return;
+    setCurrentImgIndex((prev) =>
+      prev > 0 ? prev - 1 : formData.images.length - 1
+    );
+  };
+
+  // Delete current image
+  const handleDeleteClick = () => {
+    if (!formData.images || formData.images.length === 0) return;
+    const newImages = formData.images.filter(
+      (_, idx) => idx !== currentImgIndex
+    );
+    setformData({ ...formData, images: newImages });
+    setCurrentImgIndex((prev) =>
+      prev >= newImages.length ? newImages.length - 1 : prev
+    );
   };
 
   useEffect(() => {
@@ -398,523 +447,575 @@ const UpdateItem = () => {
     }
   }, [formData.openstock]);
 
+  const cleanOpeningBalance = (arr) =>
+  Array.isArray(arr)
+    ? arr
+        .filter(row => row.qty || row.unit1 || row.rate || row.total)
+        .map(row => ({
+          qty: Number(row.qty),
+          unit: getId(row.unit1, StockUnitOption), // always send the id
+          rate: Number(row.rate),
+          total: Number(row.total),
+        }))
+    : [];
+
   const HandleSubmit = async (e) => {
     e.preventDefault();
 
+     if (formData.openstock === "YES" && (!OpeningBalanceData || OpeningBalanceData.length === 0)) {
+    setShowOpeningBal(true);
+    setSaveisLoading(false);
+    return; // Stop submit until opening balance is saved
+  }
+
+    setSaveisLoading(true)
+    
+    const hasValidOpeningBalance =
+      Array.isArray(OpeningBalanceData) &&
+      OpeningBalanceData.some(
+        (row) => row.qty || row.unit1 || row.rate || row.total
+      );
     const itemdata = {
-      itemGroup: formData.itemGroup.id,
+      itemGroup: getId(formData.itemGroup, itemGroupOption),
       companyCode,
-      itemBrand: formData.brand.id,
+      itemBrand: getId(formData.brand, BrandOption),
       itemName: formData.itemName,
       printName: formData.printName,
       codeNo: formData.codeNo,
       barcode: formData.barcode,
-      taxCategory: formData.tax.id,
-      hsnCode: formData.hsn.id,
-      storeLocation: formData.rack.id,
-      measurementUnit: formData.stockunit.id,
+      taxCategory: getId(formData.tax, TaxOption),
+      hsnCode: getId(formData.hsn, HsnOption),
+      storeLocation: getId(formData.rack, RackOption),
+      measurementUnit: getId(formData.stockunit, StockUnitOption),
       minimumStock: Number(formData.minStock),
       maximumStock: Number(formData.maxStock),
       retail: Number(formData.retail),
       mrp: Number(formData.mrp),
-      openingStock: OpeningBalanceData.openstock,
+      openingStock: formData.openstock,
       status: formData.isActive,
       images: formData.images,
-      openingBalance: OpeningBalanceData.map((row) => ({
-        unit: row.unit1.id,
-        qty: Number(row.qty),
-        rate: Number(row.rate),
-        total: Number(row.total),
-      })),
+      openingBalance: hasValidOpeningBalance
+    ? cleanOpeningBalance(OpeningBalanceData)
+    : cleanOpeningBalance(formData.openingBalance),
     };
-    // try {
-    //   const response = await axios.post(
-    //     `${import.meta.env.VITE_BASE_URL}/items/create-item`,
-    //     itemdata,
-    //     {
-    //       headers: {
-    //         Authorization: `${token}`,
-    //       },
-    //     }
-    //   );
-    //   const data = response.data;
-    //   console.log(data);
-    //   if (data.success) {
-    //     setisLoading(false);
-    //     navigate("/dashboard/items");
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // }
-    // console.log(itemdata);
+   
 
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_BASE_URL}/items/update-item/${editid}`,
+        itemdata,
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
+      const data = response.data;
+      
+      
+      if (data.success) {
+        setSaveisLoading(false);
+        navigate("/dashboard/items");
+      }
+    } catch (error) {
+      console.error(error);
+    }
     setformData(defaultForm);
   };
-console.log(formData.openingBalance);
+
+  const handleDelete= async(e)=>{
+    e.preventDefault();
+    setDeleteisLoading(true)
+    try {
+      const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/items/delete-item/${editid}`,{headers:{Authorization:`${token}`}})
+      const data = res.data;
+      if(data.success){
+        setDeleteisLoading(false)
+        navigate("/dashboard/items")
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <div className="flex h-[100vh]  items-center justify-center">
-      {isLoading ? <span className='w-[100px] rounded-full bb h-[100px] border-4 border-gray-200 animate-spin'></span>:
-      <div className="h-screen w-full  bg-white">
-        <div className={`${"bg-amber-500"} font-bold text-lg`}>
-          <h1 className="text-center text-white">Edit Item</h1>
-        </div>
-        {/* ------------------------------- body ----------------------------------- */}
-        <form className="p-2 " onSubmit={HandleSubmit}>
-          <div className="flex flex-col xl:flex-row">
-            {/* ----------------- left part --------------- */}
-            <div className="w-full xl:w-1/2 addtop py-5">
-              <div className="bg-blue-800 font-bold my-3 text-lg w-52">
-                <h1 className="text-center text-white">Basic Details</h1>
-              </div>
-              <div className="py-5 px-4">
-                <div className="space-y-4">
-                  {/* Item Group */}
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-                    <label
-                      htmlFor="itemGroup"
-                      className="lg:w-32 lg:text-lg text-lg font-medium"
-                    >
-                      Item Group
-                    </label>
-                    <SearchableDropdown
-                      type="text"
-                      id="itemGroup"
-                      options={itemGroupOption}
-                      addlink="/dashboard/items/itemgroup"
-                      value={formData.itemGroup}
-                      onChange={handleChangeData}
-                      className="w-full border flex-1 relative"
-                    />
-                  </div>
-
-                  {/* Brand + Code No */}
-                  <div className="flex flex-col md:flex-row flex-wrap  xl:items-center gap-4">
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="brand"
-                        className="lg:w-36 text-lg lg:text-lg font-medium"
-                      >
-                        Brand
-                      </label>
-                      <SearchableDropdown
-                        type="text"
-                        id="brand"
-                        addlink="/dashboard/items/brand"
-                        options={BrandOption}
-                        className="flex-1 border relative"
-                        value={formData.brand}
-                        onChange={handleChangeData}
-                      />
-                    </div>
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="codeNo"
-                        className="lg:w-36 text-lg lg:text-lg font-medium"
-                      >
-                        Code No
-                      </label>
-                      <input
-                        type="number"
-                        id="codeNo"
-                        className="flex-1 lg:w-48 border px-2 py-1"
-                        value={formData.codeNo}
-                        onChange={handleChangeData}
-                        min="0"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Item Name */}
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-                    <label
-                      htmlFor="itemName"
-                      className="lg:w-32 lg:text-lg text-lg font-medium"
-                    >
-                      Item Name
-                    </label>
-                    <input
-                      type="text"
-                      id="itemName"
-                      className="flex-1 border px-2 py-1"
-                      value={formData.itemName}
-                      onChange={handleChangeData}
-                    />
-                  </div>
-
-                  {/* Print Name */}
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-                    <label
-                      htmlFor="printName"
-                      className="lg:w-32 lg:text-lg text-lg font-medium"
-                    >
-                      Print Name
-                    </label>
-                    <input
-                      type="text"
-                      id="printName"
-                      className="flex-1 border px-2 py-1"
-                      value={formData.printName}
-                      onChange={handleChangeData}
-                    />
-                  </div>
-
-                  {/* Remarks */}
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-                    <label
-                      htmlFor="remarks"
-                      className="lg:w-32 lg:text-lg text-lg font-medium"
-                    >
-                      Remarks
-                    </label>
-                    <input
-                      type="text"
-                      id="remarks"
-                      className="flex-1 border px-2 py-1"
-                      value={formData.remarks || ""}
-                      onChange={handleChangeData}
-                    />
-                  </div>
-
-                  {/* HSN Code + Tax Category */}
-                  <div className=" flex flex-col md:flex-row flex-wrap xl:justify-between xl:items-center gap-4">
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="hsn"
-                        className="lg:w-36 text-lg lg:text-lg font-medium"
-                      >
-                        HSN Code
-                      </label>
-                      <SearchableDropdown
-                        type="text"
-                        id="hsn"
-                        className="flex-1 lg:w-42 border relative"
-                        addlink="/dashboard/items/hsn"
-                        options={HsnOption}
-                        value={formData.hsn}
-                        onChange={handleChangeData}
-                      />
-                    </div>
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="tax"
-                        className="lg:w-36 text-lg lg:text-lg font-medium"
-                      >
-                        Tax Category
-                      </label>
-                      <SearchableDropdown
-                        type="text"
-                        id="tax"
-                        className="flex-1 border relative"
-                        addlink="/dashboard/items/taxCategory"
-                        options={TaxOption}
-                        value={formData.tax}
-                        onChange={handleChangeData}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* ---- right part ------- */}
-            <div className="w-full xl:w-1/2 addtop py-5">
-              <div className="bg-blue-800 font-bold my-3 text-lg w-52">
-                <h1 className="text-white text-center">Price Details</h1>
-              </div>
-              <div className="space-x-4">
-                <div className="py-5 px-4">
-                  <div className="flex flex-col xl:flex-row flex-wrap xl:items-center gap-4">
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="retail"
-                        className="lg:w-32 lg:text-lg text-lg font-medium"
-                      >
-                        Retail
-                      </label>
-                      <input
-                        type="number"
-                        id="retail"
-                        className="flex-1 border px-2 py-1"
-                        value={formData.retail}
-                        onChange={handleChangeData}
-                        min="0"
-                      />
-                    </div>
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="mrp"
-                        className="lg:w-32 lg:text-lg text-lg font-medium"
-                      >
-                        MRP
-                      </label>
-                      <input
-                        type="number"
-                        id="mrp"
-                        className="flex-1 border px-2 py-1"
-                        value={formData.mrp}
-                        onChange={handleChangeData}
-                        min="0"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+      {isLoading ? (
+        <span className="w-[100px] rounded-full bb h-[100px] border-4 border-gray-200 animate-spin"></span>
+      ) : (
+        <div className="h-screen w-full  bg-white">
+          <div className={`${"bg-amber-500"} font-bold text-lg`}>
+            <h1 className="text-center text-white">Edit Item</h1>
           </div>
-
-          <div className="flex flex-col xl:flex-row ">
-            {/* ----------------- left part --------------- */}
-            <div className="w-full xl:w-1/2 addbottom py-5">
-              <div className="bg-blue-800 font-bold my-3 text-lg w-52">
-                <h1 className="text-center text-white">Stock Option</h1>
-              </div>
-
-              <div className="py-5 px-4">
-                <div className="space-y-4">
-                  {/* Barcode + rack/bin */}
-                  <div className="flex flex-col xl:flex-row flex-wrap xl:items-center gap-4">
-                    <div className="flex flex-col lg:flex-row lg:items-center">
+          {/* ------------------------------- body ----------------------------------- */}
+          <form className="p-2 " onSubmit={HandleSubmit}>
+            <div className="flex flex-col xl:flex-row">
+              {/* ----------------- left part --------------- */}
+              <div className="w-full xl:w-1/2 addtop py-5">
+                <div className="bg-blue-800 font-bold my-3 text-lg w-52">
+                  <h1 className="text-center text-white">Basic Details</h1>
+                </div>
+                <div className="py-5 px-4">
+                  <div className="space-y-4">
+                    {/* Item Group */}
+                    <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                       <label
-                        htmlFor="barcode"
+                        htmlFor="itemGroup"
                         className="lg:w-32 lg:text-lg text-lg font-medium"
                       >
-                        Barcode SR
-                      </label>
-                      <input
-                        type="text"
-                        id="barcode"
-                        className="flex-1 border px-2 py-1"
-                        value={formData.barcode}
-                        onChange={handleChangeData}
-                      />
-                    </div>
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="rack"
-                        className="lg:w-32 lg:text-lg text-lg font-medium"
-                      >
-                        Rack/Bin
+                        Item Group
                       </label>
                       <SearchableDropdown
                         type="text"
-                        id="rack"
-                        options={RackOption}
-                        addlink="/dashboard/items/rack"
-                        className="flex-1 border relative"
-                        value={formData.rack}
+                        id="itemGroup"
+                        options={itemGroupOption}
+                        addlink="/dashboard/items/itemgroup"
+                        value={formData.itemGroup}
                         onChange={handleChangeData}
+                        className="w-full border flex-1 relative"
                       />
                     </div>
-                  </div>
 
-                  {/* stock unit */}
-                  <div className="flex flex-col lg:flex-row lg:items-center">
-                    <label
-                      htmlFor="stockunit"
-                      className="lg:w-32 lg:text-lg text-lg font-medium"
-                    >
-                      Stock Unit
-                    </label>
-                    <SearchableDropdown
-                      type="text"
-                      id="stockunit"
-                      options={StockUnitOption}
-                      addlink="/dashboard/items/stockUnit"
-                      className="w-52 border relative"
-                      value={formData.stockunit}
-                      onChange={handleChangeData}
-                    />
-                  </div>
-
-                  {/* min stock + max stock */}
-                  <div className="flex flex-col xl:flex-row flex-wrap xl:items-center gap-4">
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="minStock"
-                        className="lg:w-32 lg:text-lg text-lg font-medium"
-                      >
-                        Minimun Stock
-                      </label>
-                      <input
-                        type="number"
-                        id="minStock"
-                        className="flex-1 border px-2 py-1"
-                        value={formData.minStock}
-                        onChange={handleChangeData}
-                        min="0"
-                      />
-                    </div>
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="maxStock"
-                        className="lg:w-32 lg:text-lg text-lg font-medium"
-                      >
-                        Maximum Stock
-                      </label>
-                      <input
-                        type="number"
-                        id="maxStock"
-                        className="flex-1 border px-2 py-1"
-                        value={formData.maxStock}
-                        onChange={handleChangeData}
-                        min="0"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* ---- right part ------- */}
-            <div className="w-full xl:w-1/2 addbottom py-5">
-              <div className="bg-blue-800 font-bold my-3 text-lg w-52">
-                <h1 className="text-white text-center">Item Images</h1>
-              </div>
-              <div className="py-5 px-4">
-                <div className="space-y-4">
-                  {/* update images  */}
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-                    <label
-                      htmlFor="remarkstockunit"
-                      className="lg:w-32 lg:text-lg text-lg font-medium"
-                    >
-                      Update Images ??
-                    </label>
-                    <select
-                      id="updateImage"
-                      className="border px-2 py-1 w-32"
-                      value={formData.updateImage}
-                      onChange={handleChangeData}
-                    >
-                      <option value="NO">NO</option>
-                      <option value="YES">YES</option>
-                    </select>
-                  </div>
-
-                  {/* HSN Code + Tax Category */}
-                  <div className="flex flex-col md:flex-row items-center gap-4">
-                    <div className="h-52 w-52">
-                      <img
-                        src={!preview?formData.images[0]:preview}
-                        alt=""
-                        className="h-full w-full max-w-52 object-cover"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <div className="w-42 font-medium text-sm">
-                        <button
-                          type="button"
-                          onClick={handleButtonClick}
-                          className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
+                    {/* Brand + Code No */}
+                    <div className="flex flex-col md:flex-row flex-wrap  xl:items-center gap-4">
+                      <div className="flex flex-col lg:flex-row lg:items-center">
+                        <label
+                          htmlFor="brand"
+                          className="lg:w-36 text-lg lg:text-lg font-medium"
                         >
-                          Add
-                        </button>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          ref={inputRef}
-                          style={{ display: "none" }}
-                          onChange={handleFileChange}
+                          Brand
+                        </label>
+                        <SearchableDropdown
+                          type="text"
+                          id="brand"
+                          addlink="/dashboard/items/brand"
+                          options={BrandOption}
+                          className="flex-1 border relative"
+                          value={formData.brand}
+                          onChange={handleChangeData}
                         />
                       </div>
-                      <div className="w-42 font-medium text-sm">
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteClick()}
-                          className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
+                      <div className="flex flex-col lg:flex-row lg:items-center">
+                        <label
+                          htmlFor="codeNo"
+                          className="lg:w-36 text-lg lg:text-lg font-medium"
                         >
-                          Delete
-                        </button>
+                          Code No
+                        </label>
+                        <input
+                          type="number"
+                          id="codeNo"
+                          className="flex-1 lg:w-48 border px-2 py-1"
+                          value={formData.codeNo}
+                          onChange={handleChangeData}
+                          min="0"
+                        />
                       </div>
-                      <div className="w-42 font-medium text-sm">
-                        <button className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
-                          Next
-                        </button>
+                    </div>
+
+                    {/* Item Name */}
+                    <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+                      <label
+                        htmlFor="itemName"
+                        className="lg:w-32 lg:text-lg text-lg font-medium"
+                      >
+                        Item Name
+                      </label>
+                      <input
+                        type="text"
+                        id="itemName"
+                        className="flex-1 border px-2 py-1"
+                        value={formData.itemName}
+                        onChange={handleChangeData}
+                      />
+                    </div>
+
+                    {/* Print Name */}
+                    <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+                      <label
+                        htmlFor="printName"
+                        className="lg:w-32 lg:text-lg text-lg font-medium"
+                      >
+                        Print Name
+                      </label>
+                      <input
+                        type="text"
+                        id="printName"
+                        className="flex-1 border px-2 py-1"
+                        value={formData.printName}
+                        onChange={handleChangeData}
+                      />
+                    </div>
+
+                    {/* Remarks */}
+                    <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+                      <label
+                        htmlFor="remarks"
+                        className="lg:w-32 lg:text-lg text-lg font-medium"
+                      >
+                        Remarks
+                      </label>
+                      <input
+                        type="text"
+                        id="remarks"
+                        className="flex-1 border px-2 py-1"
+                        value={formData.remarks || ""}
+                        onChange={handleChangeData}
+                      />
+                    </div>
+
+                    {/* HSN Code + Tax Category */}
+                    <div className=" flex flex-col md:flex-row flex-wrap xl:justify-between xl:items-center gap-4">
+                      <div className="flex flex-col lg:flex-row lg:items-center">
+                        <label
+                          htmlFor="hsn"
+                          className="lg:w-36 text-lg lg:text-lg font-medium"
+                        >
+                          HSN Code
+                        </label>
+                        <SearchableDropdown
+                          type="text"
+                          id="hsn"
+                          className="flex-1 lg:w-42 border relative"
+                          addlink="/dashboard/items/hsn"
+                          options={HsnOption}
+                          value={formData.hsn}
+                          onChange={handleChangeData}
+                        />
                       </div>
-                      <div className="w-42 font-medium text-sm">
-                        <button className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
-                          Previous
-                        </button>
+                      <div className="flex flex-col lg:flex-row lg:items-center">
+                        <label
+                          htmlFor="tax"
+                          className="lg:w-36 text-lg lg:text-lg font-medium"
+                        >
+                          Tax Category
+                        </label>
+                        <SearchableDropdown
+                          type="text"
+                          id="tax"
+                          className="flex-1 border relative"
+                          addlink="/dashboard/items/taxCategory"
+                          options={TaxOption}
+                          value={formData.tax}
+                          onChange={handleChangeData}
+                        />
                       </div>
-                      <div className="w-42 font-medium text-sm">
-                        <button className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
-                          Zoom
-                        </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* ---- right part ------- */}
+              <div className="w-full xl:w-1/2 addtop py-5">
+                <div className="bg-blue-800 font-bold my-3 text-lg w-52">
+                  <h1 className="text-white text-center">Price Details</h1>
+                </div>
+                <div className="space-x-4">
+                  <div className="py-5 px-4">
+                    <div className="flex flex-col xl:flex-row flex-wrap xl:items-center gap-4">
+                      <div className="flex flex-col lg:flex-row lg:items-center">
+                        <label
+                          htmlFor="retail"
+                          className="lg:w-32 lg:text-lg text-lg font-medium"
+                        >
+                          Retail
+                        </label>
+                        <input
+                          type="number"
+                          id="retail"
+                          className="flex-1 border px-2 py-1"
+                          value={formData.retail}
+                          onChange={handleChangeData}
+                          min="0"
+                        />
+                      </div>
+                      <div className="flex flex-col lg:flex-row lg:items-center">
+                        <label
+                          htmlFor="mrp"
+                          className="lg:w-32 lg:text-lg text-lg font-medium"
+                        >
+                          MRP
+                        </label>
+                        <input
+                          type="number"
+                          id="mrp"
+                          className="flex-1 border px-2 py-1"
+                          value={formData.mrp}
+                          onChange={handleChangeData}
+                          min="0"
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="w-full flex flex-col xl:flex-row justify-between xl:items-center border p-2">
-            <div className="grid  grid-cols-1 md:grid-cols-2 xl:grid-cols-2 my-2 px-1 py-0.5">
-              <div className="grid grid-cols-2 py-1 gap-3">
-                <label
-                  htmlFor="openstock"
-                  className="font-medium lg:text-lg text-lg"
-                >
-                  Opening Stock
-                </label>
-                <select
-                  id="openstock"
-                  className="border px-2 py-1 w-36"
-                  value={formData.openstock}
-                  onChange={handleChangeData}
-                >
-                  <option value="NO">NO</option>
-                  <option value="YES">YES</option>
-                </select>
+            <div className="flex flex-col xl:flex-row ">
+              {/* ----------------- left part --------------- */}
+              <div className="w-full xl:w-1/2 addbottom py-5">
+                <div className="bg-blue-800 font-bold my-3 text-lg w-52">
+                  <h1 className="text-center text-white">Stock Option</h1>
+                </div>
+
+                <div className="py-5 px-4">
+                  <div className="space-y-4">
+                    {/* Barcode + rack/bin */}
+                    <div className="flex flex-col xl:flex-row flex-wrap xl:items-center gap-4">
+                      <div className="flex flex-col lg:flex-row lg:items-center">
+                        <label
+                          htmlFor="barcode"
+                          className="lg:w-32 lg:text-lg text-lg font-medium"
+                        >
+                          Barcode SR
+                        </label>
+                        <input
+                          type="text"
+                          id="barcode"
+                          className="flex-1 border px-2 py-1"
+                          value={formData.barcode}
+                          onChange={handleChangeData}
+                        />
+                      </div>
+                      <div className="flex flex-col lg:flex-row lg:items-center">
+                        <label
+                          htmlFor="rack"
+                          className="lg:w-32 lg:text-lg text-lg font-medium"
+                        >
+                          Rack/Bin
+                        </label>
+                        <SearchableDropdown
+                          type="text"
+                          id="rack"
+                          options={RackOption}
+                          addlink="/dashboard/items/rack"
+                          className="flex-1 border relative"
+                          value={formData.rack}
+                          onChange={handleChangeData}
+                        />
+                      </div>
+                    </div>
+
+                    {/* stock unit */}
+                    <div className="flex flex-col lg:flex-row lg:items-center">
+                      <label
+                        htmlFor="stockunit"
+                        className="lg:w-32 lg:text-lg text-lg font-medium"
+                      >
+                        Stock Unit
+                      </label>
+                      <SearchableDropdown
+                        type="text"
+                        id="stockunit"
+                        options={StockUnitOption}
+                        addlink="/dashboard/items/stockUnit"
+                        className="w-52 border relative"
+                        value={formData.stockunit}
+                        onChange={handleChangeData}
+                      />
+                    </div>
+
+                    {/* min stock + max stock */}
+                    <div className="flex flex-col xl:flex-row flex-wrap xl:items-center gap-4">
+                      <div className="flex flex-col lg:flex-row lg:items-center">
+                        <label
+                          htmlFor="minStock"
+                          className="lg:w-32 lg:text-lg text-lg font-medium"
+                        >
+                          Minimun Stock
+                        </label>
+                        <input
+                          type="number"
+                          id="minStock"
+                          className="flex-1 border px-2 py-1"
+                          value={formData.minStock}
+                          onChange={handleChangeData}
+                          min="0"
+                        />
+                      </div>
+                      <div className="flex flex-col lg:flex-row lg:items-center">
+                        <label
+                          htmlFor="maxStock"
+                          className="lg:w-32 lg:text-lg text-lg font-medium"
+                        >
+                          Maximum Stock
+                        </label>
+                        <input
+                          type="number"
+                          id="maxStock"
+                          className="flex-1 border px-2 py-1"
+                          value={formData.maxStock}
+                          onChange={handleChangeData}
+                          min="0"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="grid grid-cols-2 xl:ml-3 gap-3">
-                <label
-                  htmlFor="isActive"
-                  className="font-medium lg:text-lg text-lg"
-                >
-                  Is Active
-                </label>
-                <select
-                  id="isActive"
-                  className="border px-2 py-1 w-36"
-                  value={formData.isActive}
-                  onChange={handleChangeData}
-                >
-                  <option value="No">NO</option>
-                  <option value="Yes">YES</option>
-                </select>
+              {/* ---- right part ------- */}
+              <div className="w-full xl:w-1/2 addbottom py-5">
+                <div className="bg-blue-800 font-bold my-3 text-lg w-52">
+                  <h1 className="text-white text-center">Item Images</h1>
+                </div>
+                <div className="py-5 px-4">
+                  <div className="space-y-4">
+                    {/* update images  */}
+                    <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+                      <label
+                        htmlFor="remarkstockunit"
+                        className="lg:w-32 lg:text-lg text-lg font-medium"
+                      >
+                        Update Images ??
+                      </label>
+                      <select
+                        id="updateImage"
+                        className="border px-2 py-1 w-32"
+                        value={formData.updateImage}
+                        onChange={handleChangeData}
+                      >
+                        <option value="NO">NO</option>
+                        <option value="YES">YES</option>
+                      </select>
+                    </div>
+
+                    {/* HSN Code + Tax Category */}
+                    <div className="flex flex-col md:flex-row items-center gap-4">
+                      <div className="h-52 w-52">
+                        <img
+                          src={currentImg}
+                          alt=""
+                          className="h-full w-full max-w-52 object-cover"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <div className="w-42 font-medium text-sm">
+                          <button
+                            type="button"
+                            onClick={handleButtonClick}
+                            className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
+                          >
+                            Add
+                          </button>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            ref={inputRef}
+                            style={{ display: "none" }}
+                            onChange={handleFileChange}
+                          />
+                        </div>
+                        <div className="w-42 font-medium text-sm">
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteClick()}
+                            className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                        <div className="w-42 font-medium text-sm">
+                          <button
+                            onClick={handleNextImg}
+                            type="button"
+                            className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
+                          >
+                            Next
+                          </button>
+                        </div>
+                        <div className="w-42 font-medium text-sm">
+                          <button
+                            onClick={handlePrevImg}
+                            type="button"
+                            className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
+                          >
+                            Previous
+                          </button>
+                        </div>
+                        <div className="w-42 font-medium text-sm">
+                          <button type="button" className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
+                            Zoom
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="flex flex-col xl:flex-row gap-3 mb-3 xl:mb-0">
-              <button className="flex items-center justify-center gap-4 px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
-                {isLoading && (
-                  <span className="w-[25px]  rounded-full bb h-[25px] border-4 border-gray-200 animate-spin"></span>
-                )}
-                Save
-              </button>
 
-              <button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
-                Cancel
-              </button>
-              <button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
-                Delete
-              </button>
+            <div className="w-full flex flex-col xl:flex-row justify-between xl:items-center border p-2">
+              <div className="grid  grid-cols-1 md:grid-cols-2 xl:grid-cols-2 my-2 px-1 py-0.5">
+                <div className="grid grid-cols-2 py-1 gap-3">
+                  <label
+                    htmlFor="openstock"
+                    className="font-medium lg:text-lg text-lg"
+                  >
+                    Opening Stock
+                  </label>
+                  <select
+                    id="openstock"
+                    className="border px-2 py-1 w-36"
+                    value={formData.openstock}
+                    onChange={handleChangeData}
+                  >
+                    <option value="NO">NO</option>
+                    <option value="YES">YES</option>
+                  </select>
+                </div>
+                <div className="grid grid-cols-2 xl:ml-3 gap-3">
+                  <label
+                    htmlFor="isActive"
+                    className="font-medium lg:text-lg text-lg"
+                  >
+                    Is Active
+                  </label>
+                  <select
+                    id="isActive"
+                    className="border px-2 py-1 w-36"
+                    value={formData.isActive}
+                    onChange={handleChangeData}
+                  >
+                    <option value="No">NO</option>
+                    <option value="Yes">YES</option>
+                  </select>
+                </div>
+              </div>
+              <div className="flex flex-col xl:flex-row gap-3 mb-3 xl:mb-0">
+                <button className="flex items-center justify-center gap-4 px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+                  {isSaveLoading && (
+                    <span className="w-[25px]  rounded-full bb h-[25px] border-4 border-gray-200 animate-spin"></span>
+                  )}
+                  Save
+                </button>
 
-              {/*<button className="px-3 py-2 rounded border ml-1">Previous</button> */}
+                <button type="reset" onClick={()=>navigate('/dashboard/items')} className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+                  Cancel
+                </button>
+                <button onClick={handleDelete} className="px-3 flex items-center justify-center py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+                  {isDeleteLoading && (
+                    <span className="w-[25px]  rounded-full bb h-[25px] border-4 border-gray-200 animate-spin"></span>
+                  )}
+                  Delete
+                </button>
+
+                {/*<button className="px-3 py-2 rounded border ml-1">Previous</button> */}
+              </div>
+              <button className="px-3 py-2 h-10 mt-3 xl:mt-0 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+                Copy
+              </button>
             </div>
-            <button className="px-3 py-2 h-10 mt-3 xl:mt-0 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
-              Copy
-            </button>
-          </div>
-        </form>
+          </form>
 
-        {showOpeningBal && (
-          <OpeningBal previousData={formData.openingBalance} unit={formData.stockunit}
-            onClose={() => setShowOpeningBal(false)}
-            onSave={handleOpeningBalSave}
-          />
-        )}
-      </div>
-      }
+          {showOpeningBal && (
+            <OpeningBal
+              previousData={formData.openingBalance}
+              unit={formData.stockunit}
+              onClose={() => setShowOpeningBal(false)}
+              onSave={handleOpeningBalSave}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 };

@@ -217,7 +217,7 @@ const SalePurchase = ({
               options={party}
               id="party"
               name="party"
-              className="flex-1 min-w-full lg:w-[795px] lg:ml-4 border px-2 py-2"
+              className="flex-1 relative lg:w-[825px] border"
               value={formFields.party}
               onChange={handleFieldChange}
             />
@@ -323,7 +323,7 @@ const SalePurchase = ({
                     ref={(el) => (dropdownRefs.current[idx] = el)}
                     value={row.item}
                     options={items}
-                    className="w-full h-full px-2"
+                    className="w-full relative h-full"
                     onChange={(val) => {
                       const updated = [...productRows];
                       updated[idx].item = val.target.value;
@@ -538,6 +538,7 @@ const SalePurchase = ({
                     <td className="border p-0 col-span-3">
                       <SearchableDropdown
                         value={row.sundry}
+                        className='relative w-full flex-1'
                         options={Sundry}
                         onChange={(val) => {
                           const updated = [...sundryRows];

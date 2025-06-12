@@ -31,6 +31,7 @@ const AddItem = () => {
   const [preview, setPreview] = useState(null);
   const [formData, setformData] = useState(defaultForm);
   const [OpeningBalanceData, setOpeningBalanceData] = useState([]);
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [showOpeningBal, setShowOpeningBal] = useState(false);
   const [isLoading, setisLoading] = useState(null);
   const navigate = useNavigate();
@@ -46,8 +47,6 @@ const AddItem = () => {
   const ownerId = localStorage.getItem('uid');
   const companyCode = localStorage.getItem('companies');
 
-  const { editid } = useParams();
-  const { deleteid } = useParams();
 
 const fetchAllItemGroup = async()=>{
   try {
@@ -188,7 +187,6 @@ useEffect(()=>{
 
 
   const handleChangeData = (e) => {
-    // console.log("handleChangeData called with:", e.target);
     const { id, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
 
@@ -197,7 +195,6 @@ useEffect(()=>{
         ...prev,
         [id]: newValue,
       };
-      // console.log(updatedForm); // Move console.log inside the setState callback
       return updatedForm;
     });
   };
@@ -233,9 +230,14 @@ useEffect(()=>{
       setformData(update)
     }
   };
-  const handleDeleteClick = (e) => {
-    setPreview(null);
-  };
+ const handleDeleteClick = () => {
+  if (!formData.images || formData.images.length === 0) return;
+  const newImages = formData.images.filter((_, idx) => idx !== currentImgIndex);
+  setformData({ ...formData, images: newImages });
+  setCurrentImgIndex((prev) =>
+    prev >= newImages.length ? newImages.length - 1 : prev
+  );
+};
 
   useEffect(() => {
     if (formData.openstock == "YES") {
@@ -243,6 +245,28 @@ useEffect(()=>{
     }
   }, [formData.openstock])
   
+   //Show current image
+const currentImg = formData.images && formData.images.length > 0
+  ? formData.images[currentImgIndex]
+  : null;
+
+// Next image
+const handleNextImg = () => {
+  if (!formData.images || formData.images.length === 0) return;
+  setCurrentImgIndex((prev) =>
+    prev < formData.images.length - 1 ? prev + 1 : 0
+  );
+};
+
+// Previous image
+const handlePrevImg = () => {
+  if (!formData.images || formData.images.length === 0) return;
+  setCurrentImgIndex((prev) =>
+    prev > 0 ? prev - 1 : formData.images.length - 1
+  );
+  
+  
+};
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
@@ -263,7 +287,7 @@ useEffect(()=>{
       maximumStock: Number(formData.maxStock),
       retail: Number(formData.retail),
       mrp: Number(formData.mrp),
-      openingStock: OpeningBalanceData.openstock,
+      openingStock: formData.openstock,
       status: formData.isActive,
       images: formData.images,
       openingBalance: OpeningBalanceData.map((row) => ({
@@ -284,7 +308,6 @@ useEffect(()=>{
         }
       );
       const data = response.data;
-      console.log(data);
       if (data.success) {
         setisLoading(false);
         navigate('/dashboard/items');
@@ -662,26 +685,34 @@ useEffect(()=>{
                       />
                     </div>
                     <div className="w-42 font-medium text-sm">
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteClick()}
-                        className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
-                      >
-                        Delete
-                      </button>
-                    </div>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteClick()}
+                            className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                        <div className="w-42 font-medium text-sm">
+                          <button
+                            onClick={handleNextImg}
+                            type="button"
+                            className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
+                          >
+                            Next
+                          </button>
+                        </div>
+                        <div className="w-42 font-medium text-sm">
+                          <button
+                            onClick={handlePrevImg}
+                            type="button"
+                            className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
+                          >
+                            Previous
+                          </button>
+                        </div>
                     <div className="w-42 font-medium text-sm">
-                      <button className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
-                        Next
-                      </button>
-                    </div>
-                    <div className="w-42 font-medium text-sm">
-                      <button className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
-                        Previous
-                      </button>
-                    </div>
-                    <div className="w-42 font-medium text-sm">
-                      <button className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
+                      <button type="button" className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
                         Zoom
                       </button>
                     </div>
@@ -737,15 +768,10 @@ useEffect(()=>{
               </button>
             
 
-            <button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+            <button type="reset" onClick={()=>navigate('/dashboard/items')} className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
               Cancel
             </button>
-              <button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
-                Delete
-              </button>
-           
-
-            {/*<button className="px-3 py-2 rounded border ml-1">Previous</button> */}
+            
           </div>
           <button className="px-3 py-2 h-10 mt-3 xl:mt-0 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
             Copy
