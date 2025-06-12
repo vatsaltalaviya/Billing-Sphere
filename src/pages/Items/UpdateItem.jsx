@@ -100,10 +100,10 @@ const UpdateItem = () => {
                 unit: unitRes.data?.data?.measurement || "", // attach unit name
               };
             } catch {
-              return { ...item, unitName: "" };
+              return { ...item, unit: "" };
             }
           } else {
-            return { ...item, unitName: "" };
+            return { ...item, unit: "" };
           }
         })
       );
@@ -400,7 +400,6 @@ const UpdateItem = () => {
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
-    setisLoading(true);
 
     const itemdata = {
       itemGroup: formData.itemGroup.id,

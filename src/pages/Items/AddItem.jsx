@@ -246,7 +246,6 @@ useEffect(()=>{
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
-    setisLoading(true)
     
     const itemdata = {
       itemGroup: formData.itemGroup.id, // should be the _id from your group master
