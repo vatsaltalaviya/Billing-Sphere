@@ -26,6 +26,7 @@ const AddItem = () => {
     openstock: "NO",
     isActive: "NO", // Only use lowercase 'isActive'
   };
+  
   const inputRef = useRef(null);
   const [preview, setPreview] = useState(null);
   const [formData, setformData] = useState(defaultForm);
@@ -291,9 +292,7 @@ useEffect(()=>{
       }
     } catch (error) {
       console.error(error);
-    }
-    console.log(itemdata);
-    
+    }    
     setformData(defaultForm)
   };
 
@@ -424,7 +423,7 @@ useEffect(()=>{
                 </div>
 
                 {/* HSN Code + Tax Category */}
-                <div className=" flex flex-col md:flex-row flex-wrap justify-between  xl:items-center gap-4">
+                <div className=" flex flex-col md:flex-row flex-wrap xl:justify-between  xl:items-center gap-4">
                   <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="hsn"

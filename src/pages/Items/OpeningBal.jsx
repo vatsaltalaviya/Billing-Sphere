@@ -3,14 +3,32 @@ import PopUp from '../../components/PopUp';
 import SearchableDropdown from '../../components/SearchableDropdown';
 import axios from 'axios';
 
-const OpeningBal = ({ onClose ,onSave}) => {
+const OpeningBal = ({ onClose ,onSave,previousData}) => {
+
   const [OpeningBalance, setOpeningBalance] = useState([
     { qty: '', unit1: '', rate: '', unit2: '', total: '' }
   ]);
     const token = localStorage.getItem("token");
     const ownerId = localStorage.getItem('uid');
     const [StockUnitOption, setStockUnitOption] = useState([]);
-  
+
+   
+
+  useEffect(()=>{
+    if(previousData.length>0){
+        const data = previousData.map((item) => ({
+      qty: item.qty,
+      unit1: item.unit,
+      rate: item.rate,
+      unit2: item.unit,
+      total: item.total,
+    }));
+    
+      setOpeningBalance([...data,{ qty: '', unit1: '', rate: '', unit2: '', total: '' }])
+    }
+    console.log(OpeningBalance);
+    
+  },[previousData])
   
   const fetchAllStockUnit = async()=>{
   try {
