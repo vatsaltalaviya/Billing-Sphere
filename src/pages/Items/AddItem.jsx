@@ -3,6 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import OpeningBal from "./OpeningBal";
 import axios from "axios";
 import SearchableDropdown from "../../components/SearchableDropdown";
+import { useDispatch, useSelector } from "react-redux";
+import { createItem, fetchDropdowns, fetchItems } from "../../feature/itemSlice";
+import { BeatLoader } from "react-spinners";
 
 const AddItem = () => {
   const defaultForm = {
@@ -22,11 +25,11 @@ const AddItem = () => {
     minStock: "",
     maxStock: "",
     updateImage: "NO",
-    images:[],
+    images: [],
     openstock: "NO",
     isActive: "NO", // Only use lowercase 'isActive'
   };
-  
+
   const inputRef = useRef(null);
   const [preview, setPreview] = useState(null);
   const [formData, setformData] = useState(defaultForm);
@@ -42,148 +45,46 @@ const AddItem = () => {
   const [StockUnitOption, setStockUnitOption] = useState([]);
   const [RackOption, setRackOption] = useState([]);
   const [TaxOption, setTaxOption] = useState([]);
-  
-  const token = localStorage.getItem("token");
-  const ownerId = localStorage.getItem('uid');
-  const companyCode = localStorage.getItem('companies');
 
+  const companyCode = localStorage.getItem("companies");
 
-const fetchAllItemGroup = async()=>{
-  try {
-    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/item-group/get/${ownerId}`,{
-      headers:{
-        Authorization:`${token}`
-      }
-    })
-    const data = res.data.data.map((item)=>({
-      id:item._id,
-      name:item.name
-    }));
-    setitemGroupOption(data);
-    
-  } catch (error) {
-    console.error(error)
-  }
-}
+  const dispatch = useDispatch();
+  const { dropdowns, loading } = useSelector((state) => state.items);
 
-const fetchAllBrand = async()=>{
-  try {
-    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/item-brand/get/${ownerId}`,{
-      headers:{
-        Authorization:`${token}`
-      }
-    })
-    const data = res.data.data.map((item)=>({
-      id:item._id,
-      name:item.name
-    }));
-    setBrandOption(data);
-    
-  } catch (error) {
-    console.error(error)
-  }
-}
+  // ✅ Sync Redux dropdowns to local state
+ 
+  const generateNumericBarcode = () => {
+    const now = new Date();
 
-const fetchAllHSN = async()=>{
-  try {
-    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/hsnCode/fetchAllHsncode/${ownerId}`,{
-      headers:{
-        Authorization:`${token}`
-      }
-    })
-    const data = res.data.data.map((item)=>({
-      id:item._id,
-      name:item.hsn
-    }));
-    setHsnOption(data);
-    
-  } catch (error) {
-    console.error(error)
-  }
-}
+    const yyyy = now.getFullYear(); // 2025
+    const mm = String(now.getMonth() + 1).padStart(2, "0"); // 06
+    const dd = String(now.getDate()).padStart(2, "0"); // 11
+    const hh = String(now.getHours()).padStart(2, "0"); // 14
+    const min = String(now.getMinutes()).padStart(2, "0"); // 38
+    const ss = String(now.getSeconds()).padStart(2, "0"); // 52
+    const ms = String(now.getMilliseconds()).padStart(3, "0"); // 123
 
-const fetchAllStockUnit = async()=>{
-  try {
-    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/measurementLimit/fetchAllmeasurement/${ownerId}`,{
-      headers:{
-        Authorization:`${token}`
-      }
-    })
-    const data = res.data.data.map((item)=>({
-      id:item._id,
-      name:item.measurement
-    }));
-    setStockUnitOption(data);
-    
-  } catch (error) {
-    console.error(error)
-  }
-}
+    const update = { ...formData };
+    update.barcode = `${dd}${mm}${yyyy}${hh}${min}${ss}${ms}`;
+    setformData(update);
+  };
 
-const fetchAllStorage = async()=>{
-  try {
-    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/store/fetchAllStore/${ownerId}`,{
-      headers:{
-        Authorization:`${token}`
-      }
-    })
-    const data = res.data.data.map((item)=>({
-      id:item._id,
-      name:item.location
-    }));
-    setRackOption(data);
-    
-  } catch (error) {
-    console.error(error)
-  }
-}
-const fetchAllTax = async()=>{
-  try {
-    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/tax/fetchAllTax/${ownerId}`,{
-      headers:{
-        Authorization:`${token}`
-      }
-    })
-    const data = res.data.data.map((item)=>({
-      id:item._id,
-      name:item.rate
-    }));
-    setTaxOption(data);
-    
-  } catch (error) {
-    console.error(error)
-  }
-}
+  useEffect(() => {
+    generateNumericBarcode();
+  }, []);
 
-const generateNumericBarcode = () => {
-  const now = new Date();
+   useEffect(() => {
+    setitemGroupOption(dropdowns.itemGroups || []);
+    setBrandOption(dropdowns.brands || []);
+    setHsnOption(dropdowns.hsns || []);
+    setStockUnitOption(dropdowns.units || []);
+    setRackOption(dropdowns.stores || []);
+    setTaxOption(dropdowns.taxes || []);
+  }, [dropdowns]);
 
-  const yyyy = now.getFullYear();            // 2025
-  const mm = String(now.getMonth() + 1).padStart(2, '0');  // 06
-  const dd = String(now.getDate()).padStart(2, '0');       // 11
-  const hh = String(now.getHours()).padStart(2, '0');      // 14
-  const min = String(now.getMinutes()).padStart(2, '0');   // 38
-  const ss = String(now.getSeconds()).padStart(2, '0');    // 52
-  const ms = String(now.getMilliseconds()).padStart(3, '0'); // 123
-
-  const update = {...formData}
-  update.barcode = `${dd}${mm}${yyyy}${hh}${min}${ss}${ms}`
-  setformData(update)
-};
-
-
-// fetch all api when page loads
-useEffect(()=>{
-  fetchAllItemGroup() 
-  fetchAllBrand()
-  fetchAllHSN()
-  fetchAllStockUnit()
-  fetchAllStorage()
-  fetchAllTax()
-  generateNumericBarcode()
-},[])
-
-
+  useEffect(() => {
+    dispatch(fetchDropdowns());
+  }, [dispatch]);
 
 
   const handleChangeData = (e) => {
@@ -210,67 +111,72 @@ useEffect(()=>{
     inputRef.current.click(); //  opens file explorer
   };
 
-  const handleFileChange = async(e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
       const imageUrl = URL.createObjectURL(file);
       setPreview(imageUrl); //  preview image
     }
     if (file && file.type.startsWith("image/")) {
-      const update = {...formData};
+      const update = { ...formData };
       const fileData = new FormData();
-      fileData.append("file",file)
-      fileData.append("upload_preset","AccountsPro")
-      fileData.append("cloud_name","dbpleky0i")
+      fileData.append("file", file);
+      fileData.append("upload_preset", "AccountsPro");
+      fileData.append("cloud_name", "dbpleky0i");
 
-      const res = await axios.post('https://api.cloudinary.com/v1_1/dbpleky0i/image/upload',fileData);
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/dbpleky0i/image/upload",
+        fileData
+      );
       const fileurl = res.data.url;
-      
-      update.images.push(fileurl)
-      setformData(update)
+
+      update.images.push(fileurl);
+      setformData(update);
     }
   };
- const handleDeleteClick = () => {
-  if (!formData.images || formData.images.length === 0) return;
-  const newImages = formData.images.filter((_, idx) => idx !== currentImgIndex);
-  setformData({ ...formData, images: newImages });
-  setCurrentImgIndex((prev) =>
-    prev >= newImages.length ? newImages.length - 1 : prev
-  );
-};
+
+  const handleDeleteClick = () => {
+    if (!formData.images || formData.images.length === 0) return;
+    const newImages = formData.images.filter(
+      (_, idx) => idx !== currentImgIndex
+    );
+    setformData({ ...formData, images: newImages });
+    setCurrentImgIndex((prev) =>
+      prev >= newImages.length ? newImages.length - 1 : prev
+    );
+  };
 
   useEffect(() => {
     if (formData.openstock == "YES") {
       setShowOpeningBal(true);
     }
-  }, [formData.openstock])
-  
-   //Show current image
-const currentImg = formData.images && formData.images.length > 0
-  ? formData.images[currentImgIndex]
-  : null;
+  }, [formData.openstock]);
 
-// Next image
-const handleNextImg = () => {
-  if (!formData.images || formData.images.length === 0) return;
-  setCurrentImgIndex((prev) =>
-    prev < formData.images.length - 1 ? prev + 1 : 0
-  );
-};
+  //Show current image
+  const currentImg =
+    formData.images && formData.images.length > 0
+      ? formData.images[currentImgIndex]
+      : null;
 
-// Previous image
-const handlePrevImg = () => {
-  if (!formData.images || formData.images.length === 0) return;
-  setCurrentImgIndex((prev) =>
-    prev > 0 ? prev - 1 : formData.images.length - 1
-  );
-  
-  
-};
+  // Next image
+  const handleNextImg = () => {
+    if (!formData.images || formData.images.length === 0) return;
+    setCurrentImgIndex((prev) =>
+      prev < formData.images.length - 1 ? prev + 1 : 0
+    );
+  };
+
+  // Previous image
+  const handlePrevImg = () => {
+    if (!formData.images || formData.images.length === 0) return;
+    setCurrentImgIndex((prev) =>
+      prev > 0 ? prev - 1 : formData.images.length - 1
+    );
+  };
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const itemdata = {
       itemGroup: formData.itemGroup.id, // should be the _id from your group master
       companyCode, // set this as needed
@@ -292,40 +198,20 @@ const handlePrevImg = () => {
       images: formData.images,
       openingBalance: OpeningBalanceData.map((row) => ({
         unit: row.unit1.id, // should be the _id from your unit master
-        qty: Number(row.qty),
+        qty: Number(row.qty), 
         rate: Number(row.rate),
         total: Number(row.total),
       })),
     };
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/items/create-item`,
-        itemdata,
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
-      const data = response.data;
-      if (data.success) {
-        setisLoading(false);
-        navigate('/dashboard/items');
-      }
-    } catch (error) {
-      console.error(error);
-    }    
-    setformData(defaultForm)
+    dispatch(createItem(itemdata)).unwrap().then(()=> navigate('/dashboard/items'))
+   
+    setformData(defaultForm);
   };
 
   return (
     <div className="h-screen w-full  bg-white">
-      <div
-        className={`bg-blue-600 font-bold text-lg`}
-      >
-        <h1 className="text-center text-white">
-          Add Item
-        </h1>
+      <div className={`bg-blue-600 font-bold text-lg`}>
+        <h1 className="text-center text-white">Add Item</h1>
       </div>
       {/* ------------------------------- body ----------------------------------- */}
       <form className="p-2 " onSubmit={HandleSubmit}>
@@ -349,7 +235,7 @@ const handlePrevImg = () => {
                     type="text"
                     id="itemGroup"
                     options={itemGroupOption}
-                    addlink='/dashboard/items/itemgroup'
+                    addlink="/dashboard/items/itemgroup"
                     value={formData.itemGroup}
                     onChange={handleChangeData}
                     className="w-full border flex-1 relative"
@@ -368,7 +254,7 @@ const handlePrevImg = () => {
                     <SearchableDropdown
                       type="text"
                       id="brand"
-                      addlink='/dashboard/items/brand'
+                      addlink="/dashboard/items/brand"
                       options={BrandOption}
                       className="flex-1 border relative"
                       value={formData.brand}
@@ -457,7 +343,7 @@ const handlePrevImg = () => {
                       type="text"
                       id="hsn"
                       className="flex-1 lg:w-42 border relative"
-                      addlink='/dashboard/items/hsn'
+                      addlink="/dashboard/items/hsn"
                       options={HsnOption}
                       value={formData.hsn}
                       onChange={handleChangeData}
@@ -474,7 +360,7 @@ const handlePrevImg = () => {
                       type="text"
                       id="tax"
                       className="flex-1 border relative"
-                      addlink='/dashboard/items/taxCategory'
+                      addlink="/dashboard/items/taxCategory"
                       options={TaxOption}
                       value={formData.tax}
                       onChange={handleChangeData}
@@ -552,7 +438,7 @@ const handlePrevImg = () => {
                       type="text"
                       id="barcode"
                       className="flex-1 border px-2 py-1"
-                      value={formData.barcode||''}
+                      value={formData.barcode || ""}
                       onChange={handleChangeData}
                     />
                   </div>
@@ -567,7 +453,7 @@ const handlePrevImg = () => {
                       type="text"
                       id="rack"
                       options={RackOption}
-                      addlink='/dashboard/items/rack'
+                      addlink="/dashboard/items/rack"
                       className="flex-1 border relative"
                       value={formData.rack}
                       onChange={handleChangeData}
@@ -587,7 +473,7 @@ const handlePrevImg = () => {
                     type="text"
                     id="stockunit"
                     options={StockUnitOption}
-                    addlink='/dashboard/items/stockUnit'
+                    addlink="/dashboard/items/stockUnit"
                     className="w-52 border relative"
                     value={formData.stockunit}
                     onChange={handleChangeData}
@@ -662,7 +548,7 @@ const handlePrevImg = () => {
                 <div className="flex flex-col md:flex-row items-center gap-4">
                   <div className="h-52 w-52">
                     <img
-                      src={preview}
+                      src={currentImg ? currentImg : preview}
                       alt=""
                       className="h-full w-full max-w-52 object-cover"
                     />
@@ -685,34 +571,37 @@ const handlePrevImg = () => {
                       />
                     </div>
                     <div className="w-42 font-medium text-sm">
-                          <button
-                            type="button"
-                            onClick={() => handleDeleteClick()}
-                            className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                        <div className="w-42 font-medium text-sm">
-                          <button
-                            onClick={handleNextImg}
-                            type="button"
-                            className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
-                          >
-                            Next
-                          </button>
-                        </div>
-                        <div className="w-42 font-medium text-sm">
-                          <button
-                            onClick={handlePrevImg}
-                            type="button"
-                            className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
-                          >
-                            Previous
-                          </button>
-                        </div>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteClick()}
+                        className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
+                      >
+                        Delete
+                      </button>
+                    </div>
                     <div className="w-42 font-medium text-sm">
-                      <button type="button" className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
+                      <button
+                        onClick={handleNextImg}
+                        type="button"
+                        className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
+                      >
+                        Next
+                      </button>
+                    </div>
+                    <div className="w-42 font-medium text-sm">
+                      <button
+                        onClick={handlePrevImg}
+                        type="button"
+                        className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
+                      >
+                        Previous
+                      </button>
+                    </div>
+                    <div className="w-42 font-medium text-sm">
+                      <button
+                        type="button"
+                        className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
+                      >
                         Zoom
                       </button>
                     </div>
@@ -761,17 +650,20 @@ const handlePrevImg = () => {
             </div>
           </div>
           <div className="flex flex-col xl:flex-row gap-3 mb-3 xl:mb-0">
-            
-              <button className="flex items-center justify-center gap-4 px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
-                 {isLoading && <span className='w-[25px]  rounded-full bb h-[25px] border-4 border-gray-200 animate-spin'></span>}
-                Save
-              </button>
-            
-
-            <button type="reset" onClick={()=>navigate('/dashboard/items')} className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+            <button className="flex items-center justify-center gap-4 px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+              {loading && (
+                 <BeatLoader size={5}  color='#fff'/>
+              )}
+              Save
+            </button>
+              
+            <button
+              type="reset"
+              onClick={() => navigate("/dashboard/items")}
+              className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500"
+            >
               Cancel
             </button>
-            
           </div>
           <button className="px-3 py-2 h-10 mt-3 xl:mt-0 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
             Copy
@@ -783,6 +675,7 @@ const handlePrevImg = () => {
         <OpeningBal
           onClose={() => setShowOpeningBal(false)}
           onSave={handleOpeningBalSave}
+          unitdata={StockUnitOption}
         />
       )}
     </div>

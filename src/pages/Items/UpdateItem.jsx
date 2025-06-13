@@ -3,6 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import OpeningBal from "./OpeningBal";
 import axios from "axios";
 import SearchableDropdown from "../../components/SearchableDropdown";
+import { ScaleLoader } from "react-spinners";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDropdowns } from "../../feature/itemSlice";
 
 const UpdateItem = () => {
   const defaultForm = {
@@ -31,6 +34,8 @@ const UpdateItem = () => {
   const inputRef = useRef(null);
   const [preview, setPreview] = useState(null);
   const [formData, setformData] = useState(defaultForm);
+  const [barcodedata, setbarcode] = useState("");
+  const [AllData, setAllData] = useState({});
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
   const [OpeningBalanceData, setOpeningBalanceData] = useState([]);
@@ -48,10 +53,19 @@ const UpdateItem = () => {
   const [TaxOption, setTaxOption] = useState([]);
 
   const token = localStorage.getItem("token");
-  const ownerId = localStorage.getItem("uid");
   const companyCode = localStorage.getItem("companies");
 
   const { editid } = useParams();
+  const dispatch = useDispatch();
+  const { dropdowns } = useSelector((state) => state.items);
+  useEffect(() => {
+    setitemGroupOption(dropdowns.itemGroups || []);
+    setBrandOption(dropdowns.brands || []);
+    setHsnOption(dropdowns.hsns || []);
+    setStockUnitOption(dropdowns.units || []);
+    setRackOption(dropdowns.stores || []);
+    setTaxOption(dropdowns.taxes || []);
+  }, [dropdowns]);
 
   const fetchItemById = async () => {
     setisLoading(true);
@@ -64,105 +78,11 @@ const UpdateItem = () => {
       );
 
       if (res.data.success) {
-        const data = res.data.data;        
+        const data = res.data.data;
+        setAllData(data);
 
-        const {
-          itemGroup,
-          itemBrand,
-          hsnCode,
-          taxCategory,
-          storeLocation,
-          measurementUnit,
-          codeNo,
-          itemName,
-          printName,
-          retail,
-          mrp,
-          barcode,
-          minimumStock,
-          maximumStock,
-          updateImage,
-          images,
-          status,
-          openingStock,
-          openingBalance,
-        } = data;
-
-        const openingBalanceWithUnit = await Promise.all(
-          (openingBalance || []).map(async (item) => {
-            if (item.unit) {
-              try {
-                const unitRes = await axios.get(
-                  `${import.meta.env.VITE_BASE_URL}/measurementLimit/get/${
-                    item.unit
-                  }`,
-                  { headers: { Authorization: token } }
-                );
-                return {
-                  ...item,
-                  unit: unitRes.data?.data?.measurement || "", // attach unit name
-                };
-              } catch {
-                return { ...item, unit: "" };
-              }
-            } else {
-              return { ...item, unit: "" };
-            }
-          })
-        );
-
-        // Prepare fetch promises
-        const promises = [
-          itemGroup
-            ? axios.get(
-                `${
-                  import.meta.env.VITE_BASE_URL
-                }/item-group/getById/${itemGroup}`,
-                { headers: { Authorization: token } }
-              )
-            : Promise.resolve({ data: { data: { name: "" } } }),
-
-          itemBrand
-            ? axios.get(
-                `${
-                  import.meta.env.VITE_BASE_URL
-                }/item-brand/getById/${itemBrand}`,
-                { headers: { Authorization: token } }
-              )
-            : Promise.resolve({ data: { data: { name: "" } } }),
-
-          hsnCode
-            ? axios.get(
-                `${import.meta.env.VITE_BASE_URL}/hsnCode/get/${hsnCode}`,
-                { headers: { Authorization: token } }
-              )
-            : Promise.resolve({ data: { data: { hsn: "" } } }),
-
-          taxCategory
-            ? axios.get(
-                `${
-                  import.meta.env.VITE_BASE_URL
-                }/tax/fetchTaxById/${taxCategory}`,
-                { headers: { Authorization: token } }
-              )
-            : Promise.resolve({ data: { data: { rate: "" } } }),
-
-          storeLocation
-            ? axios.get(
-                `${import.meta.env.VITE_BASE_URL}/store/${storeLocation}`,
-                { headers: { Authorization: token } }
-              )
-            : Promise.resolve({ data: { data: { location: "" } } }),
-
-          measurementUnit
-            ? axios.get(
-                `${
-                  import.meta.env.VITE_BASE_URL
-                }/measurementLimit/get/${measurementUnit}`,
-                { headers: { Authorization: token } }
-              )
-            : Promise.resolve({ data: { data: { measurement: "" } } }),
-
+        const { barcode } = data;
+        const [barcodeRes] = await Promise.all([
           barcode
             ? axios.get(
                 `${
@@ -171,42 +91,8 @@ const UpdateItem = () => {
                 { headers: { Authorization: token } }
               )
             : Promise.resolve({ data: { data: { barcode: "" } } }),
-        ];
-
-        const [
-          itemGroupRes,
-          brandRes,
-          hsnRes,
-          taxRes,
-          rackRes,
-          stockRes,
-          barcodeRes,
-        ] = await Promise.all(promises);
-
-        const updatedForm = {
-          itemGroup: itemGroupRes.data?.data?.name || "",
-          brand: brandRes.data?.data?.name || "",
-          codeNo,
-          itemName,
-          printName,
-          remarks: "",
-          hsn: hsnRes.data?.data?.hsn || "",
-          tax: taxRes.data?.data?.rate || "",
-          retail,
-          mrp,
-          barcode: barcodeRes.data?.data?.barcode || "",
-          rack: rackRes.data?.data?.location || "",
-          stockunit: stockRes.data?.data?.measurement || "",
-          minStock: minimumStock,
-          maxStock: maximumStock,
-          updateImage,
-          images,
-          openstock: openingStock,
-          isActive: status,
-          openingBalance: openingBalanceWithUnit,
-        };
-
-        setformData(updatedForm);
+        ]);
+        setbarcode(barcodeRes.data?.data?.barcode);
         setisLoading(false);
       }
     } catch (error) {
@@ -214,137 +100,85 @@ const UpdateItem = () => {
     }
   };
 
-  const fetchAllItemGroup = async () => {
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/item-group/get/${ownerId}`,
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
-      const data = res.data.data.map((item) => ({
-        id: item._id,
-        name: item.name,
-      }));
-      setitemGroupOption(data);
-    } catch (error) {
-      console.error(error);
-    }
+  const itemGroupobj = itemGroupOption.find((i) => i.id == AllData.itemGroup);
+  const brandobj = BrandOption.find((i) => i.id == AllData.itemBrand);
+  const hsnobj = HsnOption.find((i) => i.id == AllData.hsnCode);
+  const taxobj = TaxOption.find((i) => i.id == AllData.taxCategory);
+  const stockUnitobj = StockUnitOption.find(
+    (i) => i.id == AllData.measurementUnit
+  );
+  const rackObj = RackOption.find((i) => i.id == AllData.storeLocation);
+  const openingBalanceobj = AllData.openingBalance?.map((i) => {
+    const unitData = StockUnitOption?.find((u) => u.id == i.unit);
+    return { ...i, unit: unitData?.name };
+  });
+
+  const handledata = () => {
+    console.log(barcodedata);
+
+    const updatedForm = {
+      itemGroup: itemGroupobj?.name || "",
+      brand: brandobj?.name || "",
+      codeNo: AllData.codeNo,
+      itemName: AllData.itemName,
+      printName: AllData.printName,
+      remarks: "",
+      hsn: hsnobj?.name || "",
+      tax: taxobj?.name || "",
+      retail: AllData.retail,
+      mrp: AllData.mrp,
+      barcode: barcodedata || AllData.barcode || "",
+      rack: rackObj?.name || "",
+      stockunit: stockUnitobj?.name || "",
+      minStock: AllData.minimumStock,
+      maxStock: AllData.maximumStock,
+      updateImage: AllData.updateImage,
+      images: AllData.images,
+      openstock: AllData.openingStock,
+      isActive: AllData.status,
+      openingBalance: openingBalanceobj?.map((i) => ({
+        qty: i.qty,
+        unit1: i.unit,
+        rate: i.rate,
+        unit2: i.unit,
+        total: i.total,
+      })),
+    };
+
+    setformData(updatedForm);
   };
 
-  const fetchAllBrand = async () => {
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/item-brand/get/${ownerId}`,
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
-      const data = res.data.data.map((item) => ({
-        id: item._id,
-        name: item.name,
-      }));
-      setBrandOption(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  useEffect(() => {
+    dispatch(fetchDropdowns());
+  }, [dispatch]);
 
-  const fetchAllHSN = async () => {
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/hsnCode/fetchAllHsncode/${ownerId}`,
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
-      const data = res.data.data.map((item) => ({
-        id: item._id,
-        name: item.hsn,
-      }));
-      setHsnOption(data);
-    } catch (error) {
-      console.error(error);
+  useEffect(() => {
+    if (
+      AllData &&
+      itemGroupOption.length &&
+      BrandOption.length &&
+      HsnOption.length &&
+      TaxOption.length &&
+      StockUnitOption.length &&
+      RackOption.length
+    ) {
+      handledata();
     }
-  };
-
-  const fetchAllStockUnit = async () => {
-    try {
-      const res = await axios.get(
-        `${
-          import.meta.env.VITE_BASE_URL
-        }/measurementLimit/fetchAllmeasurement/${ownerId}`,
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
-      const data = res.data.data.map((item) => ({
-        id: item._id,
-        name: item.measurement,
-      }));
-      setStockUnitOption(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const fetchAllStorage = async () => {
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/store/fetchAllStore/${ownerId}`,
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
-      const data = res.data.data.map((item) => ({
-        id: item._id,
-        name: item.location,
-      }));
-      setRackOption(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const fetchAllTax = async () => {
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/tax/fetchAllTax/${ownerId}`,
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
-      const data = res.data.data.map((item) => ({
-        id: item._id,
-        name: item.rate,
-      }));
-      setTaxOption(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  }, [
+    AllData,
+    itemGroupOption,
+    BrandOption,
+    HsnOption,
+    TaxOption,
+    StockUnitOption,
+    RackOption,
+    barcodedata, // <-- add this
+  ]);
 
   useEffect(() => {
     if (!didInitRef.current && editid) {
       didInitRef.current = true;
       fetchItemById();
-      fetchAllItemGroup();
-      fetchAllBrand();
-      fetchAllHSN();
-      fetchAllStockUnit();
-      fetchAllStorage();
-      fetchAllTax();
     }
   }, [editid]);
 
@@ -364,7 +198,7 @@ const UpdateItem = () => {
         ...prev,
         [id]: newValue,
       };
-     
+
       return updatedForm;
     });
   };
@@ -448,28 +282,31 @@ const UpdateItem = () => {
   }, [formData.openstock]);
 
   const cleanOpeningBalance = (arr) =>
-  Array.isArray(arr)
-    ? arr
-        .filter(row => row.qty || row.unit1 || row.rate || row.total)
-        .map(row => ({
-          qty: Number(row.qty),
-          unit: getId(row.unit1, StockUnitOption), // always send the id
-          rate: Number(row.rate),
-          total: Number(row.total),
-        }))
-    : [];
+    Array.isArray(arr)
+      ? arr
+          .filter((row) => row.qty || row.unit1 || row.rate || row.total)
+          .map((row) => ({
+            qty: Number(row.qty),
+            unit: getId(row.unit1, StockUnitOption), // always send the id
+            rate: Number(row.rate),
+            total: Number(row.total),
+          }))
+      : [];
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
 
-     if (formData.openstock === "YES" && (!OpeningBalanceData || OpeningBalanceData.length === 0)) {
-    setShowOpeningBal(true);
-    setSaveisLoading(false);
-    return; // Stop submit until opening balance is saved
-  }
+    if (
+      formData.openstock === "YES" &&
+      (!OpeningBalanceData || OpeningBalanceData.length === 0)
+    ) {
+      setShowOpeningBal(true);
+      setSaveisLoading(false);
+      return; // Stop submit until opening balance is saved
+    }
 
-    setSaveisLoading(true)
-    
+    setSaveisLoading(true);
+
     const hasValidOpeningBalance =
       Array.isArray(OpeningBalanceData) &&
       OpeningBalanceData.some(
@@ -495,10 +332,9 @@ const UpdateItem = () => {
       status: formData.isActive,
       images: formData.images,
       openingBalance: hasValidOpeningBalance
-    ? cleanOpeningBalance(OpeningBalanceData)
-    : cleanOpeningBalance(formData.openingBalance),
+        ? cleanOpeningBalance(OpeningBalanceData)
+        : cleanOpeningBalance(formData.openingBalance),
     };
-   
 
     try {
       const response = await axios.put(
@@ -511,8 +347,7 @@ const UpdateItem = () => {
         }
       );
       const data = response.data;
-      
-      
+
       if (data.success) {
         setSaveisLoading(false);
         navigate("/dashboard/items");
@@ -523,25 +358,28 @@ const UpdateItem = () => {
     setformData(defaultForm);
   };
 
-  const handleDelete= async(e)=>{
+  const handleDelete = async (e) => {
     e.preventDefault();
-    setDeleteisLoading(true)
+    setDeleteisLoading(true);
     try {
-      const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/items/delete-item/${editid}`,{headers:{Authorization:`${token}`}})
+      const res = await axios.delete(
+        `${import.meta.env.VITE_BASE_URL}/items/delete-item/${editid}`,
+        { headers: { Authorization: `${token}` } }
+      );
       const data = res.data;
-      if(data.success){
-        setDeleteisLoading(false)
-        navigate("/dashboard/items")
+      if (data.success) {
+        setDeleteisLoading(false);
+        navigate("/dashboard/items");
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   return (
     <div className="flex h-[100vh]  items-center justify-center">
       {isLoading ? (
-        <span className="w-[100px] rounded-full bb h-[100px] border-4 border-gray-200 animate-spin"></span>
+        <ScaleLoader height="30px" color="blue" />
       ) : (
         <div className="h-screen w-full  bg-white">
           <div className={`${"bg-amber-500"} font-bold text-lg`}>
@@ -932,7 +770,10 @@ const UpdateItem = () => {
                           </button>
                         </div>
                         <div className="w-42 font-medium text-sm">
-                          <button type="button" className="w-full py-0.5 rounded border border-amber-500 bg-amber-300">
+                          <button
+                            type="button"
+                            className="w-full py-0.5 rounded border border-amber-500 bg-amber-300"
+                          >
                             Zoom
                           </button>
                         </div>
@@ -988,10 +829,17 @@ const UpdateItem = () => {
                   Save
                 </button>
 
-                <button type="reset" onClick={()=>navigate('/dashboard/items')} className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+                <button
+                  type="reset"
+                  onClick={() => navigate("/dashboard/items")}
+                  className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500"
+                >
                   Cancel
                 </button>
-                <button onClick={handleDelete} className="px-3 flex items-center justify-center py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+                <button
+                  onClick={handleDelete}
+                  className="px-3 flex items-center justify-center py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500"
+                >
                   {isDeleteLoading && (
                     <span className="w-[25px]  rounded-full bb h-[25px] border-4 border-gray-200 animate-spin"></span>
                   )}
@@ -1012,6 +860,7 @@ const UpdateItem = () => {
               unit={formData.stockunit}
               onClose={() => setShowOpeningBal(false)}
               onSave={handleOpeningBalSave}
+              unitdata={StockUnitOption}
             />
           )}
         </div>

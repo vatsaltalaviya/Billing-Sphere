@@ -3,57 +3,32 @@ import PopUp from '../../components/PopUp';
 import SearchableDropdown from '../../components/SearchableDropdown';
 import axios from 'axios';
 
-const OpeningBal = ({ onClose ,onSave,previousData}) => {
+const OpeningBal = ({ onClose ,onSave,previousData,unitdata}) => {
 
   const [OpeningBalance, setOpeningBalance] = useState([
     { qty: '', unit1: '', rate: '', unit2: '', total: '' }
   ]);
-    const token = localStorage.getItem("token");
-    const ownerId = localStorage.getItem('uid');
-    const [StockUnitOption, setStockUnitOption] = useState([]);
+       
 
-   
+  useEffect(() => {
+  if (previousData && unitdata) {
+    if (previousData.length > 0) {
+      const data = previousData.map((item) => {
+        const unitName = unitdata.find(u => u._id === item.unit)?.name || '';
+        return {
+          qty: item.qty,
+          unit1: unitName,
+          rate: item.rate,
+          unit2: unitName,
+          total: item.total
+        };
+      });
 
-  useEffect(()=>{
-    if(previousData){
-      if(previousData.length>0){
-        const data = previousData.map((item) => ({
-      qty: item.qty,
-      unit1: item.unit,
-      rate: item.rate,
-      unit2: item.unit,
-      total: item.total,
-    }));
-    
-      setOpeningBalance([...data,{ qty: '', unit1: '', rate: '', unit2: '', total: '' }])
+      setOpeningBalance([...data, { qty: '', unit1: '', rate: '', unit2: '', total: '' }]);
     }
-    }
-
-  },[previousData])
-  
-  const fetchAllStockUnit = async()=>{
-  try {
-    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/measurementLimit/fetchAllmeasurement/${ownerId}`,{
-      headers:{
-        Authorization:`${token}`
-      }
-    })
-    const data = res.data.data.map((item)=>({
-      id:item._id,
-      name:item.measurement
-    }));
-    setStockUnitOption(data);
-    
-  } catch (error) {
-    console.error(error)
   }
-}
+}, [previousData, unitdata]);
 
-useEffect(() => {
-  fetchAllStockUnit()
-}, [])
-  
-  
   
     const handleChange = (index, field, value) => {
     const updated = [...OpeningBalance];
@@ -120,7 +95,7 @@ useEffect(() => {
                         <SearchableDropdown
                           className="w-full h-full relative"
                           addlink="/dashboard/items/stockUnit"
-                          options={StockUnitOption}
+                          options={unitdata}
                           value={row.unit1}
                           onChange={(e) => handleChange(index, 'unit1', e.target.value)}
                         />
@@ -136,7 +111,7 @@ useEffect(() => {
                       <td className="border">
                         <SearchableDropdown
                           className="relative w-full h-full"
-                          options={StockUnitOption}
+                          options={unitdata}
                           addlink="/dashboard/items/stockUnit"
                           value={row.unit2}
                           onChange={(e) => handleChange(index, 'unit2', e.target.value)}

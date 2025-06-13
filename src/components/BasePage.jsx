@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ButtonGroup from './ButtonGroup'
 import MasterPart from './MasterPart'
 import SalePurchase from './SalePurchase'
@@ -6,14 +6,14 @@ import ReceptPayment from './ReceptPayment'
 import ReceivablePayable from './ReceivablePayable'
 import ReceivableTable from '../pages/ReceivableTable'
 import RecTabReport from './RecTabReport'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchItems } from '../feature/itemSlice'
 
 const BasePage = ({
   Sidebardata,
   heading,
-  tableData,
   mode,
   getitemUrl,
-  isLoading,
   subHeading,
   selectedProductRow,
   onDropdownRef,
@@ -22,6 +22,13 @@ const BasePage = ({
   triggerPrevious,
   focusDateTrigger
 }) => {
+
+  const dispatch = useDispatch()
+  const {items } = useSelector((state)=>state.items)
+
+  useEffect(() => {
+    dispatch(fetchItems())
+  }, []);
 
   const [showSidebar, setshowSidebar] = useState(false)
 
@@ -58,7 +65,7 @@ const BasePage = ({
       <div className='flex justify-end'>
         {/* ------------------ displaying main content according their mode or table data -------------------------------- */}
        <div className='w-full h-screen overflow-y-auto p-5 sm:p-2 table-data'>
-            {tableData && <MasterPart getitemUrl={getitemUrl} isLoading={isLoading} tableData={tableData}/>}            
+            {items && <MasterPart getitemUrl={getitemUrl} />}            
             {(mode === "Sales" || mode === "Purchase") && (
               <SalePurchase 
                 mode={mode}

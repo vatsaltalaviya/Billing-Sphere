@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { BeatLoader } from 'react-spinners';
 
 
 const Login = () => {
@@ -34,8 +35,6 @@ const Login = () => {
         localStorage.setItem('companies',data.data.companies[0])
         localStorage.setItem('uid',data.data._id)
         setIsloading(true)
-        console.log(data);
-        console.log(data.data.companies);
         navigate('/dashboard')
         
       }
@@ -72,7 +71,7 @@ const Login = () => {
               <p className='font-semibold text-red-700 text-xl'>Invalid Email or Password </p>
             </div>)}
             <div className='flex flex-col md:flex-row items-center mt-10 md:mt-3 gap-3'>
-              <button  className='border flex gap-4 items-center justify-center text-lg font-medium px-4 bg-amber-300 w-full hover:bg-amber-500 rounded py-2'> {IsLoading &&  <span className='w-[25px] rounded-full bb h-[25px] border-4 border-gray-200 animate-spin'></span>}Login</button>
+              <button  className='border flex gap-4 items-center justify-center text-lg font-medium px-4 bg-amber-300 w-full hover:bg-amber-500 rounded py-2'> {IsLoading &&  <BeatLoader size={5}  color='#fff'/>}Login</button>
               <button type='reset' className='border text-lg font-medium px-4 bg-amber-300 block w-full hover:bg-amber-500 rounded py-2'>Cancel</button>
             </div>
           </div>

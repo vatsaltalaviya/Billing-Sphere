@@ -1,15 +1,13 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import BasePage from '../../components/BasePage'
 import FilterLedger from './FilterLedger';
 import BulkUpd from './BulkUpd';
 import LabelPrn from './LabelPrn';
 import EnvelopPrn from './EnvelopPrn';
 import OpBalance from './OpBalance';
-import { userdataContext } from '../../context/UserContext';
 import axios from 'axios';
 
 const Ledger = () => {
-  const {User} = useContext(userdataContext)
   const [filterLedger, setFilterLedger] = useState(false)
   const [showBulkData, setshowBulkData] = useState(false)
   const [showLabelPrn, setshowLabelPrn] = useState(false)
