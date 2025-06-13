@@ -1,13 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import BasePage from "../../components/BasePage";
 import OpItemBal from "./OpItemBal";
 import MinMaxQty from "./MinMaxQty";
 import CopyItem from "./CopyItem";
-import { userdataContext } from "../../context/UserContext";
 import axios from "axios";
 
 const Item = () => {
-  const { User } = useContext(userdataContext);
+  
   const [showopitemBal, setOpitemBal] = useState(false);
   const [itemUrl, setitemUrl] = useState(null);
   const [TableData, setTableData] = useState([]);
