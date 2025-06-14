@@ -53,6 +53,13 @@ const AddLedger = () => {
     Adhar: "", // Aadhar NO
   };
 
+  const today = new Date();
+const day = String(today.getDate()).padStart(2, "0");
+const month = String(today.getMonth() + 1).padStart(2, "0");
+const year = today.getFullYear();
+
+const formattedDate = `${day}/${month}/${year}`;
+
   const [formData, setformData] = useState(defaultForm);
   const { editid } = useParams();
   const { deleteid } = useParams();
@@ -209,7 +216,7 @@ const AddLedger = () => {
                     htmlFor="opBalance"
                     className="w-32 md:w-44 test-sm md:text-lg font-medium"
                   >
-                    Op. Balance (01/04/2025)
+                    Op. Balance ({formattedDate})
                   </label>
                   <div className="flex flex-col lg:flex-row lg:flex-wrap gap-2">
                     <input

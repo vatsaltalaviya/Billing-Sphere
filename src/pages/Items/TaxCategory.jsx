@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BeatLoader } from "react-spinners";
 
 const TaxCategory = () => {
   const token = localStorage.getItem("token");
@@ -193,7 +194,7 @@ const TaxCategory = () => {
 
           <div className="flex md:flex-row gap-2 xl:ml-5 py-4 xl:py-10 items-center ">
             <button className="flex items-center gap-2 justify-center px-5 h-10 font-medium bg-amber-300 border border-amber-600 hover:bg-amber-500">
-               {isLoading && <span className='w-[25px] rounded-full bb h-[25px] border-4 border-gray-200 animate-spin'></span>} save
+              {isLoading&&<BeatLoader size={5}  color='#fff'/>} save
             </button>
             <button
               onClick={() => navigate("/dashboard/items/new")}

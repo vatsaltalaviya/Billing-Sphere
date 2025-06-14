@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import AttachImage from "../AttachImage";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BeatLoader } from "react-spinners";
 
 const ItemGroup = () => {
   const [ItemGroupName, setItemGroupName] = useState("");
   const [desc, setdesc] = useState("");
+  const [isLoading, setisLoading] = useState(null);
   // const [images, setimages] = useState('')
   // const [showimages, setshowImages] = useState(false)
 
@@ -17,6 +19,7 @@ const ItemGroup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setisLoading(true)
 
     const itemGroupData = {
       name: ItemGroupName,
@@ -39,6 +42,7 @@ const ItemGroup = () => {
       const data = res.data;
       if (data.success) {
         navigate("/dashboard/items/new");
+        setisLoading(false)
       }
     } catch (error) {
       console.error(error);
@@ -74,7 +78,8 @@ const ItemGroup = () => {
             {/* <button onClick={()=>setshowImages(true)} type="button" className=" px-5 h-10 font-medium bg-amber-300 border border-amber-600 hover:bg-amber-500">
                 Images
               </button> */}
-            <button className=" px-5 h-10 font-medium bg-amber-300 border border-amber-600 hover:bg-amber-500">
+            <button className="flex items-center gap-2 justify-center px-5 h-10 font-medium bg-amber-300 border border-amber-600 hover:bg-amber-500">
+              {isLoading&&<BeatLoader size={5}  color='#fff'/>}
               Save
             </button>
             <button
