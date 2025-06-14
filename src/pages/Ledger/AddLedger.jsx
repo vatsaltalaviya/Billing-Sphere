@@ -7,6 +7,8 @@ import { indianStates } from "../../assets/IndianStates";
 const AddLedger = () => {
   const navigate = useNavigate();
 
+  const ledgergroupArr = ["Bank Accounts" ,"Bank OD A/C" ,"Branch/Division","Customers","Loans (Liability)" ,"Sundry Debtors","Sundry Credit","Unsecured Loan","VENDOR"]
+
   // Default form state for AddLedger
   const defaultForm = {
     // Basic Details
@@ -16,9 +18,9 @@ const AddLedger = () => {
     LedgerGroup: "", // Ledger Group
     opBalance: "", // Opening Balance (01/04/2025)
     opBalanceType: "CR", // CR/DR for Opening Balance
-    billwise:'no',
-    creditDays:'',
-    creditLimit:'',
+    billwise: "no",
+    creditDays: "",
+    creditLimit: "",
     remarks: "", // Remarks
     alertOn: false, // Alert on checkbox
     isActive: "NO", // Is Active
@@ -51,11 +53,9 @@ const AddLedger = () => {
     Adhar: "", // Aadhar NO
   };
 
-
   const [formData, setformData] = useState(defaultForm);
   const { editid } = useParams();
   const { deleteid } = useParams();
-
 
   const handleChangeData = (e) => {
     const { id, value, type, checked } = e.target;
@@ -67,21 +67,17 @@ const AddLedger = () => {
         [id]: newValue,
       };
       console.log(updatedForm); // Move console.log inside the setState callback
-      
+
       return updatedForm;
     });
   };
 
-     const SelectedLedgerGroup = ledgergroup.find(
-        (group) => group.name === formData.LedgerGroup
-      )
-  console.log(SelectedLedgerGroup);
-
+ const isLedgerGroupMatched = ledgergroupArr.includes(formData.LedgerGroup.name);
   return (
     <div className="h-screen w-full bg-white">
       <div
         className={`${
-          editid ? "bg-amber-500" : deleteid ?"bg-red-500": "bg-blue-800"
+          editid ? "bg-amber-500" : deleteid ? "bg-red-500" : "bg-blue-800"
         } font-bold text-xl`}
       >
         <h1 className="text-center text-white">
@@ -157,35 +153,38 @@ const AddLedger = () => {
                   >
                     Ledger Group
                   </label>
-                  
-                  <SearchableDropdown className="flex-1 border px-2 py-1 xl:ml-9" id="LedgerGroup" options={ledgergroup}  value={formData.LedgerGroup}
-                    onChange={handleChangeData}/>
+
+                  <SearchableDropdown
+                    className="flex-1 border relative"
+                    id="LedgerGroup"
+                    options={ledgergroup}
+                    value={formData.LedgerGroup}
+                    onChange={handleChangeData}
+                  />
                 </div>
 
-
-
                 <div className="flex flex-col md:flex-row flex-wrap xl:items-center xl:justify-between gap-1 lg:gap-4 mt-3">
-                    <div className="flex flex-col lg:flex-row lg:items-center ">
-                      <label
-                        htmlFor="billwise"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                        Billwise Accounting
-                      </label>
-                      <select
-                        id="billwise"
-                        className="flex-1 md:w-32 border px-2 py-1"
-                        value={formData.billwise}
-                        onChange={handleChangeData}
-                        min="0"
-                      >
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                      </select>
-                    </div>
-                    
-                    {formData.billwise == 'yes' &&(
-                      <div className="flex flex-col lg:flex-row lg:items-center">
+                  <div className="flex flex-col lg:flex-row lg:items-center ">
+                    <label
+                      htmlFor="billwise"
+                      className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                    >
+                      Billwise Accounting
+                    </label>
+                    <select
+                      id="billwise"
+                      className="flex-1 md:w-32 border px-2 py-1"
+                      value={formData.billwise}
+                      onChange={handleChangeData}
+                      min="0"
+                    >
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </div>
+
+                  {formData.billwise == "yes" && (
+                    <div className="flex flex-col lg:flex-row lg:items-center">
                       <label
                         htmlFor="creditDays"
                         className="w-36 md:w-48 test-sm md:text-lg font-medium"
@@ -201,8 +200,8 @@ const AddLedger = () => {
                         min="0"
                       />
                     </div>
-                    )}
-                  </div>
+                  )}
+                </div>
 
                 {/* OP Balance */}
                 <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 my-10">
@@ -235,21 +234,21 @@ const AddLedger = () => {
                 </div>
 
                 <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="creditLimit"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                        Credit Limit
-                      </label>
-                      <input
-                        type="number"
-                        id="creditLimit"
-                        className="w-32 md:w-36 border px-2 py-1"
-                        value={formData.creditLimit}
-                        onChange={handleChangeData}
-                        min="0"
-                      />
-                    </div>
+                  <label
+                    htmlFor="creditLimit"
+                    className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                  >
+                    Credit Limit
+                  </label>
+                  <input
+                    type="number"
+                    id="creditLimit"
+                    className="w-32 md:w-36 border px-2 py-1"
+                    value={formData.creditLimit}
+                    onChange={handleChangeData}
+                    min="0"
+                  />
+                </div>
 
                 {/* Remarks */}
                 <div className="flex flex-col lg:flex-row lg:flex-wrap lg:items-center gap-1 lg:gap-4 mt-24">
@@ -302,426 +301,426 @@ const AddLedger = () => {
           </div>
           {/* ---- right part ------- */}
           <div className="w-full xl:w-1/2 border py-5">
-            {SelectedLedgerGroup && SelectedLedgerGroup.mailingDetails &&(
+            {isLedgerGroupMatched && (
               <>
-              <div>
-              <div className="bg-blue-800 font-bold my-3 text-xl w-52">
-                <h1 className="text-white text-center">Mailing Details</h1>
-              </div>
-              <div className="space-y-4">
-                <div className="py-5 px-4">
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
-                    <label
-                      htmlFor="ledgercode"
-                      className="w-32 md:w-44 test-sm md:text-lg font-medium"
-                    >
-                      Ledger code
-                    </label>
-                    <input
-                      type="number"
-                      id="ledgercode"
-                      className="flex-1 border px-2 py-1"
-                      value={formData.ledgercode}
-                      onChange={handleChangeData}
-                      min="0"
-                    />
+                <div>
+                  <div className="bg-blue-800 font-bold my-3 text-xl w-52">
+                    <h1 className="text-white text-center">Mailing Details</h1>
                   </div>
+                  <div className="space-y-4">
+                    <div className="py-5 px-4">
+                      <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
+                        <label
+                          htmlFor="ledgercode"
+                          className="w-32 md:w-44 test-sm md:text-lg font-medium"
+                        >
+                          Ledger code
+                        </label>
+                        <input
+                          type="number"
+                          id="ledgercode"
+                          className="flex-1 border px-2 py-1"
+                          value={formData.ledgercode}
+                          onChange={handleChangeData}
+                          min="0"
+                        />
+                      </div>
 
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
-                    <label
-                      htmlFor="MailingName"
-                      className="w-32 md:w-44 test-sm md:text-lg font-medium"
-                    >
-                      Mailing Name
-                    </label>
-                    <input
-                      type="text"
-                      id="MailingName"
-                      className="flex-1 border px-2 py-1"
-                      value={formData.MailingName}
-                      onChange={handleChangeData}
-                    />
-                  </div>
+                      <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
+                        <label
+                          htmlFor="MailingName"
+                          className="w-32 md:w-44 test-sm md:text-lg font-medium"
+                        >
+                          Mailing Name
+                        </label>
+                        <input
+                          type="text"
+                          id="MailingName"
+                          className="flex-1 border px-2 py-1"
+                          value={formData.MailingName}
+                          onChange={handleChangeData}
+                        />
+                      </div>
 
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
-                    <label
-                      htmlFor="address"
-                      className="w-32 md:w-44 test-sm md:text-lg font-medium"
-                    >
-                      Address
-                    </label>
-                    <input
-                      type="text"
-                      id="address"
-                      className="flex-1 border px-2 py-1"
-                      value={formData.address}
-                      onChange={handleChangeData}
-                    />
-                  </div>
+                      <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
+                        <label
+                          htmlFor="address"
+                          className="w-32 md:w-44 test-sm md:text-lg font-medium"
+                        >
+                          Address
+                        </label>
+                        <input
+                          type="text"
+                          id="address"
+                          className="flex-1 border px-2 py-1"
+                          value={formData.address}
+                          onChange={handleChangeData}
+                        />
+                      </div>
 
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
-                    <label
-                      htmlFor="city"
-                      className="w-32 md:w-44 test-sm md:text-lg font-medium"
-                    >
-                      City/Place
-                    </label>
-                    <input
-                      type="text"
-                      id="city"
-                      className="flex-1 border px-2 py-1"
-                      value={formData.city}
-                      onChange={handleChangeData}
-                    />
-                  </div>
-                  <div className="flex flex-col md:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4 ">
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="state"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                        State
-                      </label>
-                      <select
-                        id="state"
-                        className="w-36 md:w-52 md:flex-1 border px-2 py-1"
-                        value={formData.state}
-                        onChange={handleChangeData}
-                      >
-                        <option value="">Select State</option>
-                        {indianStates.map((state) => (
-                          <option key={state} value={state}>
-                            {state}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
+                      <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
+                        <label
+                          htmlFor="city"
+                          className="w-32 md:w-44 test-sm md:text-lg font-medium"
+                        >
+                          City/Place
+                        </label>
+                        <input
+                          type="text"
+                          id="city"
+                          className="flex-1 border px-2 py-1"
+                          value={formData.city}
+                          onChange={handleChangeData}
+                        />
+                      </div>
+                      <div className="flex flex-col md:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4 ">
+                        <div className="flex flex-col lg:flex-row lg:items-center">
+                          <label
+                            htmlFor="state"
+                            className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                          >
+                            State
+                          </label>
+                          <select
+                            id="state"
+                            className="w-36 md:w-52 md:flex-1 border px-2 py-1"
+                            value={formData.state}
+                            onChange={handleChangeData}
+                          >
+                            <option value="">Select State</option>
+                            {indianStates.map((state) => (
+                              <option key={state} value={state}>
+                                {state}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
 
-                  <div className="flex flex-col md:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-3">
-                    <div className="flex flex-col lg:flex-row lg:items-center ">
-                      <label
-                        htmlFor="Pincode"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                        Pincode
-                      </label>
-                      <input
-                        type="number"
-                        id="Pincode"
-                        className="flex-1 md:w-32 border px-2 py-1"
-                        value={formData.Pincode}
-                        onChange={handleChangeData}
-                        min="0"
-                      />
+                      <div className="flex flex-col md:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-3">
+                        <div className="flex flex-col lg:flex-row lg:items-center ">
+                          <label
+                            htmlFor="Pincode"
+                            className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                          >
+                            Pincode
+                          </label>
+                          <input
+                            type="number"
+                            id="Pincode"
+                            className="flex-1 md:w-32 border px-2 py-1"
+                            value={formData.Pincode}
+                            onChange={handleChangeData}
+                            min="0"
+                          />
+                        </div>
+                        <div className="flex flex-col lg:flex-row lg:items-center">
+                          <label
+                            htmlFor="teleno"
+                            className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                          >
+                            Tele. No.
+                          </label>
+                          <input
+                            type="number"
+                            id="teleno"
+                            className="flex-1 md:w-36 border px-2 py-1"
+                            value={formData.teleno}
+                            onChange={handleChangeData}
+                            min="0"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
+                        <label
+                          htmlFor="fax"
+                          className="w-32 md:w-44 test-sm md:text-lg font-medium"
+                        >
+                          Fax No
+                        </label>
+                        <input
+                          type="number"
+                          id="fax"
+                          className="flex-1 border px-2 py-1"
+                          value={formData.fax}
+                          onChange={handleChangeData}
+                          min="0"
+                        />
+                      </div>
+                      <div className="flex flex-col md:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4">
+                        <div className="flex flex-col lg:flex-row lg:items-center">
+                          <label
+                            htmlFor="mobile"
+                            className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                          >
+                            Mobile No
+                          </label>
+                          <input
+                            type="number"
+                            id="mobile"
+                            className="flex-1 border px-2 py-1"
+                            value={formData.mobile}
+                            onChange={handleChangeData}
+                            min="0"
+                          />
+                        </div>
+                        <div className="flex flex-col lg:flex-row lg:items-center">
+                          <label
+                            htmlFor="sms"
+                            className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                          >
+                            SMS Msg.
+                          </label>
+                          <select
+                            type="number"
+                            id="sms"
+                            value={formData.sms}
+                            onChange={handleChangeData}
+                            className="flex-1 border px-2 py-1"
+                            min="0"
+                          >
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
+                        <label
+                          htmlFor="email"
+                          className="w-32 md:w-44 test-sm md:text-lg font-medium"
+                        >
+                          Email Address
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          value={formData.email}
+                          onChange={handleChangeData}
+                          className="flex-1 border px-2 py-1"
+                        />
+                      </div>
+                      <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
+                        <label
+                          htmlFor="contactPerson"
+                          className="w-32 md:w-44 test-sm md:text-lg font-medium"
+                        >
+                          Contact Person
+                        </label>
+                        <input
+                          type="text"
+                          id="contactPerson"
+                          className="flex-1 border px-2 py-1"
+                          value={formData.contactPerson}
+                          onChange={handleChangeData}
+                        />
+                      </div>
+                      <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
+                        <label
+                          htmlFor="bank"
+                          className="w-32 md:w-44 test-sm md:text-lg font-medium"
+                        >
+                          Bank A/C Detail
+                        </label>
+                        <input
+                          type="number"
+                          id="bank"
+                          className="flex-1 border px-2 py-1"
+                          value={formData.bank}
+                          onChange={handleChangeData}
+                          min="0"
+                        />
+                      </div>
                     </div>
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="teleno"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                        Tele. No.
-                      </label>
-                      <input
-                        type="number"
-                        id="teleno"
-                        className="flex-1 md:w-36 border px-2 py-1"
-                        value={formData.teleno}
-                        onChange={handleChangeData}
-                        min="0"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
-                    <label
-                      htmlFor="fax"
-                      className="w-32 md:w-44 test-sm md:text-lg font-medium"
-                    >
-                      Fax No
-                    </label>
-                    <input
-                      type="number"
-                      id="fax"
-                      className="flex-1 border px-2 py-1"
-                      value={formData.fax}
-                      onChange={handleChangeData}
-                      min="0"
-                    />
-                  </div>
-                  <div className="flex flex-col md:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4">
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="mobile"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                        Mobile No
-                      </label>
-                      <input
-                        type="number"
-                        id="mobile"
-                        className="flex-1 border px-2 py-1"
-                        value={formData.mobile}
-                        onChange={handleChangeData}
-                        min="0"
-                      />
-                    </div>
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="sms"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                        SMS Msg.
-                      </label>
-                      <select
-                        type="number"
-                        id="sms"
-                        value={formData.sms}
-                        onChange={handleChangeData}
-                        className="flex-1 border px-2 py-1"
-                        min="0"
-                      >
-                        <option value="No">No</option>
-                        <option value="Yes">Yes</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
-                    <label
-                      htmlFor="email"
-                      className="w-32 md:w-44 test-sm md:text-lg font-medium"
-                    >
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      value={formData.email}
-                      onChange={handleChangeData}
-                      className="flex-1 border px-2 py-1"
-                    />
-                  </div>
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
-                    <label
-                      htmlFor="contactPerson"
-                      className="w-32 md:w-44 test-sm md:text-lg font-medium"
-                    >
-                      Contact Person
-                    </label>
-                    <input
-                      type="text"
-                      id="contactPerson"
-                      className="flex-1 border px-2 py-1"
-                      value={formData.contactPerson}
-                      onChange={handleChangeData}
-                    />
-                  </div>
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
-                    <label
-                      htmlFor="bank"
-                      className="w-32 md:w-44 test-sm md:text-lg font-medium"
-                    >
-                      Bank A/C Detail
-                    </label>
-                    <input
-                      type="number"
-                      id="bank"
-                      className="flex-1 border px-2 py-1"
-                      value={formData.bank}
-                      onChange={handleChangeData}
-                      min="0"
-                    />
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <div className="space-y-4">
-              <div className="bg-blue-800 font-bold my-3 text-xl w-52">
-                <h1 className="text-white text-center">Tax Information</h1>
-              </div>
-              <div className="space-y-4">
-                <div className="py-5 px-4">
-                  <div className="flex flex-col lg:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4">
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="panNO"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                        Pan No
-                      </label>
-                      <input
-                        type="text"
-                        id="panNO"
-                        className="flex-1 border px-2 py-1"
-                        value={formData.panNO}
-                        onChange={handleChangeData}
-                      />
-                    </div>
-                    <div className="flex flex-1"></div>
+                <div className="space-y-4">
+                  <div className="bg-blue-800 font-bold my-3 text-xl w-52">
+                    <h1 className="text-white text-center">Tax Information</h1>
                   </div>
-                  <div className="flex flex-col lg:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4">
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="gst"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                        GSTIN No
-                      </label>
-                      <input
-                        type="text"
-                        id="gst"
-                        className="flex-1 lg:w-44 border px-2 py-1"
-                        value={formData.gst}
-                        onChange={handleChangeData}
-                      />
+                  <div className="space-y-4">
+                    <div className="py-5 px-4">
+                      <div className="flex flex-col lg:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4">
+                        <div className="flex flex-col lg:flex-row lg:items-center">
+                          <label
+                            htmlFor="panNO"
+                            className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                          >
+                            Pan No
+                          </label>
+                          <input
+                            type="text"
+                            id="panNO"
+                            className="flex-1 border px-2 py-1"
+                            value={formData.panNO}
+                            onChange={handleChangeData}
+                          />
+                        </div>
+                        <div className="flex flex-1"></div>
+                      </div>
+                      <div className="flex flex-col lg:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4">
+                        <div className="flex flex-col lg:flex-row lg:items-center">
+                          <label
+                            htmlFor="gst"
+                            className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                          >
+                            GSTIN No
+                          </label>
+                          <input
+                            type="text"
+                            id="gst"
+                            className="flex-1 lg:w-44 border px-2 py-1"
+                            value={formData.gst}
+                            onChange={handleChangeData}
+                          />
+                        </div>
+                        <div className="flex flex-col lg:flex-row lg:items-center">
+                          <label
+                            htmlFor="gstDate"
+                            className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                          >
+                            GST Dated
+                          </label>
+                          <input
+                            type="date"
+                            id="gstDate"
+                            className="flex-1 lg:w-32 border px-2 py-1"
+                            value={formData.gstDate}
+                            onChange={handleChangeData}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex flex-col lg:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4">
+                        <div className="flex flex-col lg:flex-row lg:items-center">
+                          <label
+                            htmlFor="regtype"
+                            className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                          >
+                            Registration Type
+                          </label>
+                          <select
+                            id="regtype"
+                            className="xl:w-[178px] flex-1 border px-2 py-1"
+                            value={formData.regtype}
+                            onChange={handleChangeData}
+                          >
+                            <option value="">Select Registration</option>
+                            <option value="Composition">Composition</option>
+                            <option value="Customer">Customer</option>
+                            <option value="Regular">Regular</option>
+                            <option value="Unknown">Unknown</option>
+                            <option value="UnRegister">UnRegister</option>
+                          </select>
+                        </div>
+                        <div className="flex flex-col lg:flex-row lg:items-center">
+                          <label
+                            htmlFor="type"
+                            className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                          >
+                            Type
+                          </label>
+                          <select
+                            id="type"
+                            className="flex-1 lg:w-32 border px-2 py-1"
+                            value={formData.type}
+                            onChange={handleChangeData}
+                          >
+                            <option value="">Select Type</option>
+                            <option value="Deemed Export">Deemed Export</option>
+                            <option value="Deemed Export(Sec48)">
+                              Deemed Export(Sec48)
+                            </option>
+                            <option value="Regular">Regular</option>
+                            <option value="SEZ">SEZ</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="flex flex-col lg:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4">
+                        <div className="flex flex-col lg:flex-row lg:items-center">
+                          <label
+                            htmlFor="cst"
+                            className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                          >
+                            CST
+                          </label>
+                          <input
+                            type="text"
+                            id="cst"
+                            className="flex-1 lg:w-44 border px-2 py-1"
+                            value={formData.cst}
+                            onChange={handleChangeData}
+                          />
+                        </div>
+                        <div className="flex flex-col lg:flex-row lg:items-center">
+                          <label
+                            htmlFor="cstDate"
+                            className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                          >
+                            CST Dated
+                          </label>
+                          <input
+                            type="date"
+                            id="cstDate"
+                            className="flex-1 lg:w-32 border px-2 py-1"
+                            value={formData.cstDate}
+                            onChange={handleChangeData}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex flex-col lg:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4">
+                        <div className="flex flex-col lg:flex-row lg:items-center">
+                          <label
+                            htmlFor="LST"
+                            className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                          >
+                            LST
+                          </label>
+                          <input
+                            type="text"
+                            id="LST"
+                            className="flex-1 lg:w-44 border px-2 py-1"
+                            value={formData.LST}
+                            onChange={handleChangeData}
+                          />
+                        </div>
+                        <div className="flex flex-col lg:flex-row lg:items-center">
+                          <label
+                            htmlFor="lstDate"
+                            className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                          >
+                            LST Dated
+                          </label>
+                          <input
+                            type="date"
+                            id="lstDate"
+                            className="flex-1 lg:w-32 border px-2 py-1"
+                            value={formData.lstDate}
+                            onChange={handleChangeData}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex flex-col lg:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4">
+                        <div className="flex flex-col lg:flex-row lg:items-center">
+                          <label
+                            htmlFor="Adhar"
+                            className="w-36 md:w-48 test-sm md:text-lg font-medium"
+                          >
+                            Aadhar NO
+                          </label>
+                          <input
+                            type="number"
+                            id="Adhar"
+                            className="flex-1 border px-2 py-1"
+                            value={formData.Adhar}
+                            onChange={handleChangeData}
+                            min="0"
+                          />
+                        </div>
+                        <div className="flex flex-1"></div>
+                      </div>
                     </div>
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="gstDate"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                       GST Dated
-                      </label>
-                      <input
-                        type="date"
-                        id="gstDate"
-                        className="flex-1 lg:w-32 border px-2 py-1"
-                        value={formData.gstDate}
-                        onChange={handleChangeData}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex flex-col lg:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4">
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="regtype"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                        Registration Type
-                      </label>
-                      <select
-                        id="regtype"
-                        className="xl:w-[178px] flex-1 border px-2 py-1"
-                        value={formData.regtype}
-                        onChange={handleChangeData}
-                      >
-                        <option value="">Select Registration</option>
-                        <option value="Composition">Composition</option>
-                        <option value="Customer">Customer</option>
-                        <option value="Regular">Regular</option>
-                        <option value="Unknown">Unknown</option>
-                        <option value="UnRegister">UnRegister</option>
-                      </select>
-                    </div>
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="type"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                        Type
-                      </label>
-                      <select
-                        id="type"
-                        className="flex-1 lg:w-32 border px-2 py-1"
-                        value={formData.type}
-                        onChange={handleChangeData}
-                      >
-                        <option value="">Select Type</option>
-                        <option value="Deemed Export">Deemed Export</option>
-                        <option value="Deemed Export(Sec48)">
-                          Deemed Export(Sec48)
-                        </option>
-                        <option value="Regular">Regular</option>
-                        <option value="SEZ">SEZ</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="flex flex-col lg:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4">
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="cst"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                        CST
-                      </label>
-                      <input
-                        type="text"
-                        id="cst"
-                        className="flex-1 lg:w-44 border px-2 py-1"
-                        value={formData.cst}
-                        onChange={handleChangeData}
-                      />
-                    </div>
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="cstDate"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                        CST Dated
-                      </label>
-                      <input
-                        type="date"
-                        id="cstDate"
-                        className="flex-1 lg:w-32 border px-2 py-1"
-                        value={formData.cstDate}
-                        onChange={handleChangeData}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex flex-col lg:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4">
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="LST"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                        LST
-                      </label>
-                      <input
-                        type="text"
-                        id="LST"
-                        className="flex-1 lg:w-44 border px-2 py-1"
-                        value={formData.LST}
-                        onChange={handleChangeData}
-                      />
-                    </div>
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="lstDate"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                       LST Dated
-                      </label>
-                      <input
-                        type="date"
-                        id="lstDate"
-                        className="flex-1 lg:w-32 border px-2 py-1"
-                        value={formData.lstDate}
-                        onChange={handleChangeData}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex flex-col lg:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4">
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <label
-                        htmlFor="Adhar"
-                        className="w-36 md:w-48 test-sm md:text-lg font-medium"
-                      >
-                        Aadhar NO
-                      </label>
-                      <input
-                        type="number"
-                        id="Adhar"
-                        className="flex-1 border px-2 py-1"
-                        value={formData.Adhar}
-                        onChange={handleChangeData}
-                        min="0"
-                      />
-                    </div>
-                    <div className="flex flex-1"></div>
                   </div>
                 </div>
-              </div>
-            </div>
               </>
             )}
           </div>
@@ -738,7 +737,10 @@ const AddLedger = () => {
               </button>
             )}
 
-            <button onClick={()=>navigate('/dashboard/ledger')} className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+            <button
+              onClick={() => navigate("/dashboard/ledger")}
+              className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500"
+            >
               Cancel
             </button>
             {editid || deleteid ? (

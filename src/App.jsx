@@ -53,8 +53,7 @@ const App = () => {
       <Route path='/dashboard/items/gallery' element={<ProtectedRoute><ImgGallery /></ProtectedRoute>} /> 
 
       <Route path='/dashboard/items/edit/:editid' element={<ProtectedRoute><UpdateItem /></ProtectedRoute>} /> 
-      <Route path='/dashboard/items/delete/:deleteid' element={<AddItem />} /> 
-      <Route path='/dashboard/items/delete' element={<AddItem />} /> 
+      <Route path='/dashboard/items/delete/:deleteid' element={<ProtectedRoute><UpdateItem /></ProtectedRoute>} /> 
 
 
       <Route path='/dashboard/receivable' element={<Receivable />} /> 

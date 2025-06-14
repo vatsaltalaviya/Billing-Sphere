@@ -3,7 +3,7 @@ import axios from "axios";
 const companyId = localStorage.getItem('companies')
 const token = localStorage.getItem('token')
 
-// 👉 Async thunk to fetch items and groupMap
+
 export const fetchItems = createAsyncThunk("fetchItems", async (_, thunkAPI) => {
 
     try {
@@ -92,148 +92,58 @@ export const createItem = createAsyncThunk("createItem", async (itemData, thunkA
     }
 });
 
-export const fetchItemById = createAsyncThunk(
-    "fetchItemById",
-    async (editId, thunkAPI) => {
-        const token = localStorage.getItem("token");
-        try {
-            const res = await axios.get(
-                `${import.meta.env.VITE_BASE_URL}/items/get-item/${editId}`,
-                {
-                    headers: { Authorization: token },
-                }
-            );
-
-            if (!res.data.success) {
-                return thunkAPI.rejectWithValue("Item fetch failed");
-            }
-
-            const data = res.data.data;
-
-            const {
-                itemGroup,
-                itemBrand,
-                hsnCode,
-                taxCategory,
-                storeLocation,
-                measurementUnit,
-                codeNo,
-                itemName,
-                printName,
-                retail,
-                mrp,
-                barcode,
-                minimumStock,
-                maximumStock,
-                updateImage,
-                images,
-                status,
-                openingStock,
-                openingBalance,
-            } = data;
-
-            // Get readable unit name for opening balance
-            const openingBalanceWithUnit = await Promise.all(
-                (openingBalance || []).map(async (item) => {
-                    try {
-                        const unitRes = await axios.get(
-                            `${import.meta.env.VITE_BASE_URL}/measurementLimit/get/${item.unit}`,
-                            { headers: { Authorization: token } }
-                        );
-                        return {
-                            ...item,
-                            unit: unitRes.data?.data?.measurement || "",
-                        };
-                    } catch {
-                        return { ...item, unit: "" };
-                    }
-                })
-            );
-
-            // Fetch readable labels
-            const [itemGroupRes, brandRes, hsnRes, taxRes, rackRes, stockRes, barcodeRes] =
-                await Promise.all([
-                    itemGroup
-                        ? axios.get(
-                            `${import.meta.env.VITE_BASE_URL}/item-group/getById/${itemGroup}`,
-                            { headers: { Authorization: token } }
-                        )
-                        : Promise.resolve({ data: { data: { name: "" } } }),
-
-                    itemBrand
-                        ? axios.get(
-                            `${import.meta.env.VITE_BASE_URL}/item-brand/getById/${itemBrand}`,
-                            { headers: { Authorization: token } }
-                        )
-                        : Promise.resolve({ data: { data: { name: "" } } }),
-
-                    hsnCode
-                        ? axios.get(
-                            `${import.meta.env.VITE_BASE_URL}/hsnCode/get/${hsnCode}`,
-                            { headers: { Authorization: token } }
-                        )
-                        : Promise.resolve({ data: { data: { hsn: "" } } }),
-
-                    taxCategory
-                        ? axios.get(
-                            `${import.meta.env.VITE_BASE_URL}/tax/fetchTaxById/${taxCategory}`,
-                            { headers: { Authorization: token } }
-                        )
-                        : Promise.resolve({ data: { data: { rate: "" } } }),
-
-                    storeLocation
-                        ? axios.get(
-                            `${import.meta.env.VITE_BASE_URL}/store/${storeLocation}`,
-                            { headers: { Authorization: token } }
-                        )
-                        : Promise.resolve({ data: { data: { location: "" } } }),
-
-                    measurementUnit
-                        ? axios.get(
-                            `${import.meta.env.VITE_BASE_URL}/measurementLimit/get/${measurementUnit}`,
-                            { headers: { Authorization: token } }
-                        )
-                        : Promise.resolve({ data: { data: { measurement: "" } } }),
-
-                    barcode
-                        ? axios.get(
-                            `${import.meta.env.VITE_BASE_URL}/barcode-print/get-barcode/${barcode}`,
-                            { headers: { Authorization: token } }
-                        )
-                        : Promise.resolve({ data: { data: { barcode: "" } } }),
-                ]);
-
-            // Construct the formData object
-            const formData = {
-                itemGroup: { id: itemGroup, name: itemGroupRes.data?.data?.name || "" },
-                brand: { id: itemBrand, name: brandRes.data?.data?.name || "" },
-                codeNo,
-                itemName,
-                printName,
-                remarks: "",
-                hsn: { id: hsnCode, name: hsnRes.data?.data?.hsn || "" },
-                tax: { id: taxCategory, name: taxRes.data?.data?.rate || "" },
-                retail,
-                mrp,
-                barcode: barcodeRes.data?.data?.barcode || "",
-                rack: { id: storeLocation, name: rackRes.data?.data?.location || "" },
-                stockunit: { id: measurementUnit, name: stockRes.data?.data?.measurement || "" },
-                minStock: minimumStock,
-                maxStock: maximumStock,
-                updateImage,
-                images,
-                openstock: openingStock,
-                isActive: status,
-                openingBalance: openingBalanceWithUnit,
-            };
-
-            return formData;
-        } catch (err) {
-            console.error(err);
-            return thunkAPI.rejectWithValue(err.message);
+export const updateItem = createAsyncThunk(
+  'updateItem',
+  async ({ itemData, editId }, { rejectWithValue }) => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.put(
+        `${import.meta.env.VITE_BASE_URL}/items/update-item/${editId}`,
+        itemData,
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
         }
+      );
+      const data =  res.data;
+      if(data.success){
+        return data.data;
+      }
+      else{
+        return thunkAPI.rejectWithValue(data.message || "Item Updation failed");
+      }
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
     }
+  }
 );
+
+
+export const deleteItem = createAsyncThunk(
+  'deleteItem',
+  async ({ editId }, { rejectWithValue }) => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.delete(
+        `${import.meta.env.VITE_BASE_URL}/items/delete-item/${editId}`,
+        { headers: { Authorization: `${token}` } }
+      );
+      const data = res.data;
+      if(data.success){
+        return data.data;
+      }
+      else{
+        return thunkAPI.rejectWithValue(data.message || "Item Deletion failed");
+      }
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+
+
 
 
 
@@ -253,6 +163,18 @@ const itemSlice = createSlice({
         loading: false,
         error: null,
         itemBeingEdited: null,
+        itemDelete: false,
+
+        ShowDeleteAlert:false,
+        clickYes:false
+    },
+    reducers:{
+        deleteAlert : (state ,action)=>{
+         state.ShowDeleteAlert = action.payload
+        },
+        PositiveRes : (state ,action)=>{
+         state.clickYes = action.payload
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -278,26 +200,40 @@ const itemSlice = createSlice({
             })
             .addCase(createItem.fulfilled, (state, action) => {
                 state.loading = false;
-                console.log(action.payload);
 
             })
             .addCase(createItem.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || "Something went wrong";
             })
-            .addCase(fetchItemById.pending, (state) => {
+            .addCase(updateItem.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(fetchItemById.fulfilled, (state, action) => {
+            .addCase(updateItem.fulfilled, (state, action) => {
                 state.loading = false;
-                state.itemBeingEdited = action.payload;
+
             })
-            .addCase(fetchItemById.rejected, (state, action) => {
+            .addCase(updateItem.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload || "Failed to fetch item";
-            });
+                state.error = action.payload || "Something went wrong";
+            })
+            .addCase(deleteItem.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.itemDelete = false
+            })
+            .addCase(deleteItem.fulfilled, (state, action) => {
+                state.loading = false;
+                state.itemDelete= true;
+            })
+            .addCase(deleteItem.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Something went wrong";
+            })
+           
     },
 });
 
 export default itemSlice.reducer;
+export const {deleteAlert ,PositiveRes} =  itemSlice.actions

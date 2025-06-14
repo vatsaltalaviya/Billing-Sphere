@@ -9,9 +9,9 @@ const DropDowmForMobile = ({handleLogOut}) => {
       {dropdownData.map((dropdown, idx) => (
         <details
           key={idx}
-          className="w-full list-none font-medium text-lg px-2"
+          className="list-none bg-gray-100 cursor-pointer font-medium text-lg"
         >
-          <summary className="py-4 w-full font-semibold text-xl px-2 ">
+          <summary className="py-4 w-full bg-white font-semibold text-xl px-4 ">
             {dropdown.name}
           </summary>
           <ul className="list-none pl-5 m-0">
@@ -22,14 +22,14 @@ const DropDowmForMobile = ({handleLogOut}) => {
                     key={index}
                     className="w-full list-none font-medium text-lgs"
                   >
-                    <summary className="py-1 px-5 hover:bg-gray-100 cursor-pointer">
+                    <summary className="py-1 px-5 hover:bg-gray-200 cursor-pointer">
                       {option.name} <span className="pl-2">▸</span>
                     </summary>
                     <ul className="list-none pl-5 m-0">
                       {option.submenu.map((subOption, subIndex) => (
                         <li
                           key={subIndex}
-                          className="py-1 px-5 hover:bg-gray-100 cursor-pointer"
+                          className="py-1 px-5 hover:bg-gray-200 cursor-pointer"
                         >
                           {subOption.name}
                         </li>
@@ -39,7 +39,7 @@ const DropDowmForMobile = ({handleLogOut}) => {
                 ) : (
                   <li
                     key={index}
-                    className="py-1 px-5 hover:bg-gray-100 cursor-pointer"
+                    className="py-1 px-5 hover:bg-gray-200 cursor-pointer"
                   >
                     {option.name}
                   </li>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const Datatable = ({ data, list, getitemUrl, mode }) => {
   const navigate = useNavigate();
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedRow, setSelectedRow] = useState(0);
   const [RowData, setRowData] = useState({});
 
   const rows = data && data.length > 0 ? data : list;
@@ -33,6 +33,12 @@ const Datatable = ({ data, list, getitemUrl, mode }) => {
       getitemUrl(RowData.id);
     }
   }, [RowData.id]);
+  
+  useEffect(() => {
+  if (rows && rows.length > 0 && selectedRow === 0) {
+    setRowData(rows[0]);
+  }
+}, [selectedRow, rows]);
 
   return (
     <div
@@ -76,6 +82,7 @@ const Datatable = ({ data, list, getitemUrl, mode }) => {
           {rows.map((row, rowIndex) => (
             <tr
               key={rowIndex}
+            
               onClick={() => {
                 setSelectedRow(rowIndex);
                 setRowData(row);

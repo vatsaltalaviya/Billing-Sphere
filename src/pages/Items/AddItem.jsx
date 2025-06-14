@@ -135,6 +135,8 @@ const AddItem = () => {
     }
   };
 
+  
+
   const handleDeleteClick = () => {
     if (!formData.images || formData.images.length === 0) return;
     const newImages = formData.images.filter(
@@ -192,6 +194,7 @@ const AddItem = () => {
       minimumStock: Number(formData.minStock),
       maximumStock: Number(formData.maxStock),
       retail: Number(formData.retail),
+      monthlySalesQty:"0",
       mrp: Number(formData.mrp),
       openingStock: formData.openstock,
       status: formData.isActive,
@@ -204,8 +207,6 @@ const AddItem = () => {
       })),
     };
     dispatch(createItem(itemdata)).unwrap().then(()=> navigate('/dashboard/items'))
-   
-    setformData(defaultForm);
   };
 
   return (

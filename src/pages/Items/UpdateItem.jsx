@@ -3,9 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import OpeningBal from "./OpeningBal";
 import axios from "axios";
 import SearchableDropdown from "../../components/SearchableDropdown";
-import { ScaleLoader } from "react-spinners";
+import { BeatLoader, ScaleLoader } from "react-spinners";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDropdowns } from "../../feature/itemSlice";
+import {
+  deleteItem,
+  fetchDropdowns,
+  updateItem,
+} from "../../feature/itemSlice";
 
 const UpdateItem = () => {
   const defaultForm = {
@@ -45,30 +49,37 @@ const UpdateItem = () => {
   const [isDeleteLoading, setDeleteisLoading] = useState(null);
   const navigate = useNavigate();
 
-  const [itemGroupOption, setitemGroupOption] = useState([]);
-  const [BrandOption, setBrandOption] = useState([]);
-  const [HsnOption, setHsnOption] = useState([]);
-  const [StockUnitOption, setStockUnitOption] = useState([]);
-  const [RackOption, setRackOption] = useState([]);
-  const [TaxOption, setTaxOption] = useState([]);
+  const [FieldOption, setFieldOption] = useState({
+    itemGroupOption: [],
+    BrandOption: [],
+    HsnOption: [],
+    StockUnitOption: [],
+    RackOption: [],
+    TaxOption: [],
+  });
 
   const token = localStorage.getItem("token");
   const companyCode = localStorage.getItem("companies");
 
   const { editid } = useParams();
+
   const dispatch = useDispatch();
   const { dropdowns } = useSelector((state) => state.items);
+
   useEffect(() => {
-    setitemGroupOption(dropdowns.itemGroups || []);
-    setBrandOption(dropdowns.brands || []);
-    setHsnOption(dropdowns.hsns || []);
-    setStockUnitOption(dropdowns.units || []);
-    setRackOption(dropdowns.stores || []);
-    setTaxOption(dropdowns.taxes || []);
+    setFieldOption({
+      itemGroupOption: dropdowns.itemGroups || [],
+      BrandOption: dropdowns.brands || [],
+      HsnOption: dropdowns.hsns || [],
+      StockUnitOption: dropdowns.units || [],
+      RackOption: dropdowns.stores || [],
+      TaxOption: dropdowns.taxes || [],
+    });
   }, [dropdowns]);
 
   const fetchItemById = async () => {
     setisLoading(true);
+
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/items/get-item/${editid}`,
@@ -100,22 +111,27 @@ const UpdateItem = () => {
     }
   };
 
-  const itemGroupobj = itemGroupOption.find((i) => i.id == AllData.itemGroup);
-  const brandobj = BrandOption.find((i) => i.id == AllData.itemBrand);
-  const hsnobj = HsnOption.find((i) => i.id == AllData.hsnCode);
-  const taxobj = TaxOption.find((i) => i.id == AllData.taxCategory);
-  const stockUnitobj = StockUnitOption.find(
+  const itemGroupobj = FieldOption.itemGroupOption.find(
+    (i) => i.id == AllData.itemGroup
+  );
+  const brandobj = FieldOption.BrandOption.find(
+    (i) => i.id == AllData.itemBrand
+  );
+  const hsnobj = FieldOption.HsnOption.find((i) => i.id == AllData.hsnCode);
+  const taxobj = FieldOption.TaxOption.find((i) => i.id == AllData.taxCategory);
+  const stockUnitobj = FieldOption.StockUnitOption.find(
     (i) => i.id == AllData.measurementUnit
   );
-  const rackObj = RackOption.find((i) => i.id == AllData.storeLocation);
+  const rackObj = FieldOption.RackOption.find(
+    (i) => i.id == AllData.storeLocation
+  );
+
   const openingBalanceobj = AllData.openingBalance?.map((i) => {
-    const unitData = StockUnitOption?.find((u) => u.id == i.unit);
+    const unitData = FieldOption.StockUnitOption.find((u) => u.id == i.unit);
     return { ...i, unit: unitData?.name };
   });
 
   const handledata = () => {
-    console.log(barcodedata);
-
     const updatedForm = {
       itemGroup: itemGroupobj?.name || "",
       brand: brandobj?.name || "",
@@ -155,25 +171,16 @@ const UpdateItem = () => {
   useEffect(() => {
     if (
       AllData &&
-      itemGroupOption.length &&
-      BrandOption.length &&
-      HsnOption.length &&
-      TaxOption.length &&
-      StockUnitOption.length &&
-      RackOption.length
+      FieldOption.itemGroupOption.length &&
+      FieldOption.BrandOption.length &&
+      FieldOption.HsnOption.length &&
+      FieldOption.TaxOption.length &&
+      FieldOption.StockUnitOption.length &&
+      FieldOption.RackOption.length
     ) {
       handledata();
     }
-  }, [
-    AllData,
-    itemGroupOption,
-    BrandOption,
-    HsnOption,
-    TaxOption,
-    StockUnitOption,
-    RackOption,
-    barcodedata, // <-- add this
-  ]);
+  }, [AllData, FieldOption, barcodedata]);
 
   useEffect(() => {
     if (!didInitRef.current && editid) {
@@ -214,6 +221,8 @@ const UpdateItem = () => {
     inputRef.current.click(); //  opens file explorer
   };
 
+  
+  //============================= img display part =============================
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -238,9 +247,7 @@ const UpdateItem = () => {
       setPreview(fileurl);
     }
   };
-
-  //============================= img display part =============================
-
+  
   //Show current image
   const currentImg =
     formData.images && formData.images.length > 0
@@ -275,12 +282,6 @@ const UpdateItem = () => {
     );
   };
 
-  useEffect(() => {
-    if (formData.openstock == "YES") {
-      setShowOpeningBal(true);
-    }
-  }, [formData.openstock]);
-
   const cleanOpeningBalance = (arr) =>
     Array.isArray(arr)
       ? arr
@@ -313,17 +314,17 @@ const UpdateItem = () => {
         (row) => row.qty || row.unit1 || row.rate || row.total
       );
     const itemdata = {
-      itemGroup: getId(formData.itemGroup, itemGroupOption),
+      itemGroup: getId(formData.itemGroup, FieldOption.itemGroupOption),
       companyCode,
-      itemBrand: getId(formData.brand, BrandOption),
+      itemBrand: getId(formData.brand, FieldOption.BrandOption),
       itemName: formData.itemName,
       printName: formData.printName,
       codeNo: formData.codeNo,
       barcode: formData.barcode,
-      taxCategory: getId(formData.tax, TaxOption),
-      hsnCode: getId(formData.hsn, HsnOption),
-      storeLocation: getId(formData.rack, RackOption),
-      measurementUnit: getId(formData.stockunit, StockUnitOption),
+      taxCategory: getId(formData.tax, FieldOption.TaxOption),
+      hsnCode: getId(formData.hsn, FieldOption.HsnOption),
+      storeLocation: getId(formData.rack, FieldOption.RackOption),
+      measurementUnit: getId(formData.stockunit, FieldOption.StockUnitOption),
       minimumStock: Number(formData.minStock),
       maximumStock: Number(formData.maxStock),
       retail: Number(formData.retail),
@@ -335,45 +336,22 @@ const UpdateItem = () => {
         ? cleanOpeningBalance(OpeningBalanceData)
         : cleanOpeningBalance(formData.openingBalance),
     };
-
-    try {
-      const response = await axios.put(
-        `${import.meta.env.VITE_BASE_URL}/items/update-item/${editid}`,
-        itemdata,
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
-      const data = response.data;
-
-      if (data.success) {
-        setSaveisLoading(false);
+    dispatch(updateItem({ itemData: itemdata, editId: editid }))
+      .unwrap()
+      .then(() => {
         navigate("/dashboard/items");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    setformData(defaultForm);
+      });
+    // setformData(defaultForm);
   };
 
   const handleDelete = async (e) => {
     e.preventDefault();
     setDeleteisLoading(true);
-    try {
-      const res = await axios.delete(
-        `${import.meta.env.VITE_BASE_URL}/items/delete-item/${editid}`,
-        { headers: { Authorization: `${token}` } }
-      );
-      const data = res.data;
-      if (data.success) {
-        setDeleteisLoading(false);
+    dispatch(deleteItem({ editId: editid }))
+      .unwrap()
+      .then(() => {
         navigate("/dashboard/items");
-      }
-    } catch (error) {
-      console.error(error);
-    }
+      });
   };
 
   return (
@@ -383,7 +361,7 @@ const UpdateItem = () => {
       ) : (
         <div className="h-screen w-full  bg-white">
           <div className={`${"bg-amber-500"} font-bold text-lg`}>
-            <h1 className="text-center text-white">Edit Item</h1>
+            <h1 className="text-center text-white">{"Edit Item"}</h1>
           </div>
           {/* ------------------------------- body ----------------------------------- */}
           <form className="p-2 " onSubmit={HandleSubmit}>
@@ -406,7 +384,7 @@ const UpdateItem = () => {
                       <SearchableDropdown
                         type="text"
                         id="itemGroup"
-                        options={itemGroupOption}
+                        options={dropdowns.itemGroups}
                         addlink="/dashboard/items/itemgroup"
                         value={formData.itemGroup}
                         onChange={handleChangeData}
@@ -427,7 +405,7 @@ const UpdateItem = () => {
                           type="text"
                           id="brand"
                           addlink="/dashboard/items/brand"
-                          options={BrandOption}
+                          options={dropdowns.brands}
                           className="flex-1 border relative"
                           value={formData.brand}
                           onChange={handleChangeData}
@@ -516,7 +494,7 @@ const UpdateItem = () => {
                           id="hsn"
                           className="flex-1 lg:w-42 border relative"
                           addlink="/dashboard/items/hsn"
-                          options={HsnOption}
+                          options={dropdowns.hsns}
                           value={formData.hsn}
                           onChange={handleChangeData}
                         />
@@ -533,7 +511,7 @@ const UpdateItem = () => {
                           id="tax"
                           className="flex-1 border relative"
                           addlink="/dashboard/items/taxCategory"
-                          options={TaxOption}
+                          options={dropdowns.taxes}
                           value={formData.tax}
                           onChange={handleChangeData}
                         />
@@ -624,7 +602,7 @@ const UpdateItem = () => {
                         <SearchableDropdown
                           type="text"
                           id="rack"
-                          options={RackOption}
+                          options={dropdowns.stores}
                           addlink="/dashboard/items/rack"
                           className="flex-1 border relative"
                           value={formData.rack}
@@ -644,7 +622,7 @@ const UpdateItem = () => {
                       <SearchableDropdown
                         type="text"
                         id="stockunit"
-                        options={StockUnitOption}
+                        options={dropdowns.units}
                         addlink="/dashboard/items/stockUnit"
                         className="w-52 border relative"
                         value={formData.stockunit}
@@ -823,9 +801,7 @@ const UpdateItem = () => {
               </div>
               <div className="flex flex-col xl:flex-row gap-3 mb-3 xl:mb-0">
                 <button className="flex items-center justify-center gap-4 px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
-                  {isSaveLoading && (
-                    <span className="w-[25px]  rounded-full bb h-[25px] border-4 border-gray-200 animate-spin"></span>
-                  )}
+                  {isSaveLoading && <BeatLoader size={5} color="#fff" />}
                   Save
                 </button>
 
@@ -840,9 +816,7 @@ const UpdateItem = () => {
                   onClick={handleDelete}
                   className="px-3 flex items-center justify-center py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500"
                 >
-                  {isDeleteLoading && (
-                    <span className="w-[25px]  rounded-full bb h-[25px] border-4 border-gray-200 animate-spin"></span>
-                  )}
+                  {isDeleteLoading && <BeatLoader size={5} color="#fff" />}
                   Delete
                 </button>
 
@@ -860,7 +834,7 @@ const UpdateItem = () => {
               unit={formData.stockunit}
               onClose={() => setShowOpeningBal(false)}
               onSave={handleOpeningBalSave}
-              unitdata={StockUnitOption}
+              unitdata={dropdowns.units}
             />
           )}
         </div>

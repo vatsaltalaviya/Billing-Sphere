@@ -11,6 +11,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setemail] = useState("")
   const [Password, setPassword] = useState("")
+  const [PasswordShow, setPasswordShow] = useState(false)
   const [IsLoading, setIsloading] = useState(null)
   // const [User, setUser] = useState(null)
   const [invalid, setInvalid] = useState(null)
@@ -45,7 +46,7 @@ const Login = () => {
       console.error(error)
     }
   }
-
+  
   
   return (
     <div className="flex md:items-center h-screen md:justify-center relative">
@@ -64,7 +65,10 @@ const Login = () => {
             </div>
             <div className='flex flex-col md:flex-row xl:items-center mt-1'>
               <label htmlFor="password" className='w-32 text-lg md:text-xl font-semibold'>Password </label>
-              <input className='border rounded p-2 text-xl flex-1' type="password" name="password" id="password" value={Password} onChange={(e)=>setPassword(e.target.value)}/>
+              <div className='relative flex-1'>
+                <input className='border rounded p-2 text-xl w-full' type={PasswordShow?"text":"password"} name="password" id="password" value={Password} onChange={(e)=>setPassword(e.target.value)} /><i onClick={()=>setPasswordShow((p)=>!p)
+                } className={`${PasswordShow?"ri-eye-line":"ri-eye-off-line"} absolute right-2.5 top-3 text-lg cursor-pointer transform -translate-y[50%]`}/>
+              </div>
             </div>
             {invalid &&
             (<div className='flex flex-col md:flex-row xl:items-center mt-1'>

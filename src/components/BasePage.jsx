@@ -24,7 +24,6 @@ const BasePage = ({
 }) => {
 
   const dispatch = useDispatch()
-  const {items } = useSelector((state)=>state.items)
 
   useEffect(() => {
     dispatch(fetchItems())
@@ -65,7 +64,7 @@ const BasePage = ({
       <div className='flex justify-end'>
         {/* ------------------ displaying main content according their mode or table data -------------------------------- */}
        <div className='w-full h-screen overflow-y-auto p-5 sm:p-2 table-data'>
-            {items && <MasterPart getitemUrl={getitemUrl} />}            
+            {(mode==="items") && <MasterPart getitemUrl={getitemUrl} />}            
             {(mode === "Sales" || mode === "Purchase") && (
               <SalePurchase 
                 mode={mode}
