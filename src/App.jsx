@@ -30,6 +30,7 @@ import Rack from './pages/Items/Rack'
 import StockUnit from './pages/Items/StockUnit'
 import TaxCategory from './pages/Items/TaxCategory'
 import UpdateItem from './pages/Items/UpdateItem'
+import UpDateLedger from './pages/Ledger/UpDateLedger'
 
 const App = () => {
   return (
@@ -61,12 +62,10 @@ const App = () => {
       {/* <Route path='/dashboard/receivable/ra' element={<RecTabReport />} />  */}
 
       {/* ledger */}
-      <Route path='/dashboard/ledger' element={<Ledger />} /> 
-      <Route path='/dashboard/ledger/new' element={<AddLedger />} /> 
-      <Route path='/dashboard/ledger/edit/:editid' element={<AddLedger />} /> 
-      <Route path='/dashboard/ledger/edit' element={<AddLedger />} /> 
-      <Route path='/dashboard/ledger/delete/:deleteid' element={<AddLedger />} /> 
-      <Route path='/dashboard/ledger/delete' element={<AddLedger />} /> 
+      <Route path='/dashboard/ledger' element={<ProtectedRoute><Ledger /></ProtectedRoute>} /> 
+      <Route path='/dashboard/ledger/new' element={<ProtectedRoute><AddLedger /></ProtectedRoute>} /> 
+      <Route path='/dashboard/ledger/edit/:editid' element={<ProtectedRoute><UpDateLedger /></ProtectedRoute>} /> 
+      <Route path='/dashboard/ledger/delete/:deleteid' element={<AddLedger />} />  
       
       {/* sales */}
       <Route path='/dashboard/sales' element={<Sales />} /> 

@@ -424,6 +424,7 @@ const UpdateItem = () => {
                         <input
                           type="number"
                           id="codeNo"
+                          autoComplete="off"
                           className="flex-1 lg:w-48 border px-2 py-1"
                           value={formData.codeNo}
                           onChange={handleChangeData}
@@ -443,6 +444,7 @@ const UpdateItem = () => {
                       <input
                         type="text"
                         id="itemName"
+                        autoComplete="off"
                         className="flex-1 border px-2 py-1"
                         value={formData.itemName}
                         onChange={handleChangeData}
@@ -460,6 +462,7 @@ const UpdateItem = () => {
                       <input
                         type="text"
                         id="printName"
+                        autoComplete="off"
                         className="flex-1 border px-2 py-1"
                         value={formData.printName}
                         onChange={handleChangeData}
@@ -477,6 +480,7 @@ const UpdateItem = () => {
                       <input
                         type="text"
                         id="remarks"
+                        autoComplete="off"
                         className="flex-1 border px-2 py-1"
                         value={formData.remarks || ""}
                         onChange={handleChangeData}
@@ -541,6 +545,7 @@ const UpdateItem = () => {
                         <input
                           type="number"
                           id="retail"
+                          autoComplete="off"
                           className="flex-1 border px-2 py-1"
                           value={formData.retail}
                           onChange={handleChangeData}
@@ -557,6 +562,7 @@ const UpdateItem = () => {
                         <input
                           type="number"
                           id="mrp"
+                          autoComplete="off"
                           className="flex-1 border px-2 py-1"
                           value={formData.mrp}
                           onChange={handleChangeData}
@@ -590,6 +596,7 @@ const UpdateItem = () => {
                         <input
                           type="text"
                           id="barcode"
+                          autoComplete="off"
                           className="flex-1 border px-2 py-1"
                           value={formData.barcode}
                           onChange={handleChangeData}
@@ -645,6 +652,7 @@ const UpdateItem = () => {
                         <input
                           type="number"
                           id="minStock"
+                          autoComplete="off"
                           className="flex-1 border px-2 py-1"
                           value={formData.minStock}
                           onChange={handleChangeData}
@@ -660,6 +668,7 @@ const UpdateItem = () => {
                         </label>
                         <input
                           type="number"
+                          autoComplete="off"
                           id="maxStock"
                           className="flex-1 border px-2 py-1"
                           value={formData.maxStock}

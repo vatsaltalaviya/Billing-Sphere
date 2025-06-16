@@ -72,6 +72,7 @@ export default function SearchableDropdown({
         type="text"
         ref={inputRef}
         value={searchTerm}
+        autoComplete="off"
         className='w-full px-2 py-1'
         onChange={(e) => {
           setSearchTerm(e.target.value);

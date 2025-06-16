@@ -15,6 +15,7 @@ const BasePage = ({
   mode,
   getitemUrl,
   subHeading,
+  tableData,
   selectedProductRow,
   onDropdownRef,
   onRowsChange,
@@ -64,7 +65,9 @@ const BasePage = ({
       <div className='flex justify-end'>
         {/* ------------------ displaying main content according their mode or table data -------------------------------- */}
        <div className='w-full h-screen overflow-y-auto p-5 sm:p-2 table-data'>
-            {(mode==="items") && <MasterPart getitemUrl={getitemUrl} />}            
+            {(mode==="item") && <MasterPart mode={mode} getitemUrl={getitemUrl} tableData={tableData}/>}            
+            {(mode==="ledgers") && <MasterPart mode={mode} getitemUrl={getitemUrl} tableData={tableData}/>}            
+            
             {(mode === "Sales" || mode === "Purchase") && (
               <SalePurchase 
                 mode={mode}

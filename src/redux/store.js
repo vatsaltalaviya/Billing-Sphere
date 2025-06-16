@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import itemReducer from '../feature/itemSlice'
+import ledgerSliceReducer from '../feature/ledgerSlice'
 
 export const store = configureStore({
   reducer: {
     items: itemReducer,
+    ledgers:ledgerSliceReducer
   },
    middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -11,7 +11,6 @@ const Datatable = ({ data, list, getitemUrl, mode }) => {
     rows && rows.length > 0
       ? Object.keys(rows[0]).filter((col) => col !== "id")
       : [];
-
   const handleKeyDown = (e) => {
     if (e.key === "ArrowDown") {
       setSelectedRow((prev) => Math.min(prev + 1, rows.length - 1));
@@ -89,6 +88,7 @@ const Datatable = ({ data, list, getitemUrl, mode }) => {
               }}
               onDoubleClick={() => {
                 {mode == "item" && handleDoubleClick("/dashboard/items/edit");}
+                {mode == "ledgers" && handleDoubleClick("/dashboard/ledger/edit");}
               }}
               className={`font-medium cursor-pointer ${
                 selectedRow === rowIndex

@@ -17,8 +17,10 @@ const Item = () => {
   const [showCopyItem, setshowCopyItem] = useState(false);
   // const [showDeleteAlert, setDeleteAlert] = useState(false);
   // const [clickYes, setClickYes] = useState(false);
-
-
+  
+  
+  const {items ,groupMap , itemDelete} = useSelector((state)=>state.items)
+  
   const dispatch = useDispatch()
   const navigate = useNavigate();
 
@@ -71,6 +73,25 @@ const Item = () => {
   const getUrl = (url) => {
     setitemUrl(url);
   };
+  useEffect(()=>{
+     dispatch(fetchItems())
+    },[])
+  
+    useEffect(()=>{
+     dispatch(fetchItems())
+    },[itemDelete])
+  
+    const tableData = items.map((item, index) => ({
+      Sr: index + 1,
+      id: item._id,
+      "Item Name": item.itemName,
+      "Code No": item.codeNo,
+      Group: groupMap[item.itemGroup] || "Loading...", // ✅ safe access
+      Retail: item.retail,
+      MRP: item.mrp,
+      "Cl.Stk": item.maximumStock,
+      Active: item.status,
+    }));
    const handleDelete = async () => {
       dispatch(deleteItem({editId:itemUrl})).unwrap().then(()=>{navigate('/dashboard/items')})
       dispatch(PositiveRes(false))
@@ -88,8 +109,9 @@ const Item = () => {
       <BasePage
         heading="Item Master"
         Sidebardata={ItemSidebarData}
-        mode="items"
+        mode="item"
         getitemUrl={(e) => getUrl(e)}
+        tableData={tableData}
       />
 
       {showopitemBal && <OpItemBal onClose={() => setOpitemBal(false)} />}
