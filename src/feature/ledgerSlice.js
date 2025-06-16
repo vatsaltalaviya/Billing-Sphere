@@ -95,7 +95,8 @@ const ledgerSlice = createSlice({
         ledgerGroup: [],
         groupMap: {},
         loading: false,
-        error: null
+        error: null,
+    
     },
     extraReducers: (builder) => {
         builder

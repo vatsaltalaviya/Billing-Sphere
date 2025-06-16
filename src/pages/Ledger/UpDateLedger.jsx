@@ -1006,10 +1006,6 @@ const UpDateLedger = () => {
                 >
                   Cancel
                 </button>
-
-                <button className="px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
-                  Delete
-                </button>
               </div>
               <button className="px-3 py-2 h-10 mt-3 xl:mt-0 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
                 Copy

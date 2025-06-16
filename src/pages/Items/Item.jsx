@@ -15,8 +15,7 @@ const Item = () => {
   const [itemUrl, setitemUrl] = useState(null);
   const [showMinMax, setMinMax] = useState(false);
   const [showCopyItem, setshowCopyItem] = useState(false);
-  // const [showDeleteAlert, setDeleteAlert] = useState(false);
-  // const [clickYes, setClickYes] = useState(false);
+  
   
   
   const {items ,groupMap , itemDelete} = useSelector((state)=>state.items)
