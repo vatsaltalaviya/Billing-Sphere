@@ -176,7 +176,7 @@ const SalePurchase = ({
               type="text"
               id="no"
               name="no"
-              className="flex-1 border px-2 py-2"
+              className="flex-1 border px-2 py-0.5"
               value={formFields.no}
               onChange={handleFieldChange}
             />
@@ -189,7 +189,7 @@ const SalePurchase = ({
               type="date"
               id="date"
               name="date"
-              className="flex-1 border px-2 py-2"
+              className="flex-1 border px-2 py-0.5"
               value={formFields.date}
               onChange={handleFieldChange}
             />
@@ -202,7 +202,7 @@ const SalePurchase = ({
               options={saletype}
               id="type"
               name="type"
-              className="flex-1 lg:w-36 border px-2 py-2"
+              className="flex-1 lg:w-36 relative border"
               value={formFields.type}
               onChange={handleFieldChange}
             />
@@ -229,7 +229,7 @@ const SalePurchase = ({
             <select
               id="place"
               name="place"
-              className="w-full md:w-52 md:flex-1 border px-2 py-2"
+              className="w-full md:w-52 md:flex-1 border px-2 py-0.5"
               value={formFields.place || ""}
               onChange={handleFieldChange}
             >
@@ -252,7 +252,7 @@ const SalePurchase = ({
                 type="number"
                 id="dcno"
                 name="dcno"
-                className="flex-1 lg:w-[535px] border px-2 py-2"
+                className="flex-1 lg:w-[535px] border px-2 py-1"
                 value={formFields.dcno}
                 onChange={handleFieldChange}
               />
@@ -266,7 +266,7 @@ const SalePurchase = ({
                 type="number"
                 id="billno"
                 name="billno"
-                className="flex-1 lg:w-[535px] border px-2 py-2"
+                className="flex-1 lg:w-[535px] border px-2 py-1"
                 value={formFields.billno}
                 onChange={handleFieldChange}
               />
@@ -281,7 +281,7 @@ const SalePurchase = ({
               type="date"
               id="dcdate"
               name="dcdate"
-              className="flex-1 border px-2 py-2"
+              className="flex-1 border px-2 py-1"
               value={formFields.dcdate}
               onChange={handleFieldChange}
             />
@@ -511,7 +511,7 @@ const SalePurchase = ({
             type="text"
             id="remark"
             name="remark"
-            className="flex-1 w-full h-10 md:w-xl lg:w-[50vw] border px-2 py-2"
+            className="flex-1 w-full h-10 md:w-xl lg:w-[50vw] border px-2 py-1"
             value={formFields.remark}
             onChange={handleFieldChange}
           />

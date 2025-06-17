@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
-*{
-   font-family: "Poppins", sans-serif;
+* {
+  font-family: "Poppins", sans-serif;
 }
-.table-data::-webkit-scrollbar{
-    display: none;
+.table-data::-webkit-scrollbar {
+  display: none;
 }
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
@@ -19,36 +19,36 @@ summary {
   list-style: none;
 }
 
-.addtop{
-  border-top:1px solid black ;
-  border-left:1px solid black ;
-  border-right:1px solid black ;
-  border-bottom:2px dashed black ;
+.addtop {
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-bottom: 2px dashed black;
 }
 
-.addbottom{
-  border-top:none ;
-  border-left:1px solid black ;
-  border-right:1px solid black ;
-  border-bottom:1px solid black ;
+.addbottom {
+  border-top: none;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
 }
-.bb{
- border-top:4px solid lightseagreen;
+.bb {
+  border-top: 4px solid lightseagreen;
 }
 /* Remove marker in Webkit browsers (Chrome, Safari, Edge) */
 summary::-webkit-details-marker {
   display: none;
 }
 
-@media print{
-  .invoice-print{
+@media print {
+  .invoice-print {
     display: none;
   }
-  .invoice-data{
+  .invoice-data {
     padding: 0;
     margin: 0;
   }
-  .no-print{
+  .no-print {
     display: none !important;
   }
 }
