@@ -14,19 +14,19 @@ const Item = () => {
   const [itemUrl, setitemUrl] = useState(null);
   const [showMinMax, setMinMax] = useState(false);
   const [showCopyItem, setshowCopyItem] = useState(false);
-  const {items ,groupMap , itemDelete} = useSelector((state)=>state.items)
+  const {groupMap , itemDelete ,ShowDeleteAlert , clickYes , searchingitems} = useSelector((state)=>state.items)
+  
   
   const dispatch = useDispatch()
   const navigate = useNavigate();
 
-  const {ShowDeleteAlert , clickYes} = useSelector((state)=>state.items);
   
   const ItemSidebarData = [
     { name: "New", onClick: () => {}, navigate: "/dashboard/items/new" },
     {
       name: "Edit",
       onClick: () => {},
-      navigate: (itemUrl!=null && items.length > 0)?`/dashboard/items/edit/${itemUrl}`:'/dashboard/items',
+      navigate: (itemUrl!=null && searchingitems.length > 0)?`/dashboard/items/edit/${itemUrl}`:'/dashboard/items',
     },
     {
       name: "Delete",
@@ -76,7 +76,7 @@ const Item = () => {
      dispatch(fetchItems())
     },[itemDelete])
   
-    const tableData = items.map((item, index) => ({
+    const tableData = searchingitems.map((item, index) => ({
       Sr: index + 1,
       id: item._id,
       "Item Name": item.itemName,
@@ -112,7 +112,7 @@ const Item = () => {
       {showopitemBal && <OpItemBal onClose={() => setOpitemBal(false)} />}
       {showMinMax && <MinMaxQty onClose={() => setMinMax(false)} />}
       {showCopyItem && <CopyItem onClose={() => setshowCopyItem(false)} />}
-       {ShowDeleteAlert && items.length > 0 && <DeleteAlert field="Item" onYes={()=>dispatch(PositiveRes(true))} onClose={()=>dispatch(deleteAlert(false))}/>}
+       {ShowDeleteAlert && searchingitems.length > 0 && <DeleteAlert field="Item" onYes={()=>dispatch(PositiveRes(true))} onClose={()=>dispatch(deleteAlert(false))}/>}
     </div>
   );
 };

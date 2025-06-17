@@ -255,8 +255,6 @@ const UpDateLedger = () => {
       .then(() => navigate("/dashboard/ledger"));
   };
 
-  console.log(error);
-
   return (
     <div className="flex h-[100vh] items-center justify-center">
       {isLoading ? (

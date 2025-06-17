@@ -1,20 +1,26 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Datatable from './Datatable'
 import { useDispatch, useSelector } from 'react-redux'
 import { ScaleLoader } from 'react-spinners'
 import NoTableData from './NoTableData'
+import { setItemSearchQuery, } from '../feature/itemSlice'
+import { setLedgerSearchQuery } from '../feature/ledgerSlice'
 
 
 const MasterPart = ({ getitemUrl , mode ,tableData}) => {
     const { loading } = useSelector((state)=>state.items)
+    const dispatch = useDispatch();
+  const query = useSelector((state) => state.items.searchquery);
+  const ledgerquery = useSelector((state) => state.ledgers.searchledgerquery);
     
   return (
     <div className='h-full w-full xl:px-5'>
       {/* ----------------------------- search ----------------------------------------------- */}
       <div className='w-full py-3 '>
         <form className='flex'>
-          <button className='bg-white border font-medium px-3 py-1'>Search</button>
-          <input type="text" className='bg-white border font-medium px-3 py-1 w-full' />
+          <span className='bg-white border font-medium px-3 py-1'>Search</span>
+          {(mode == "item")&&<input type="text" className='bg-white border font-medium px-3 py-1 w-full'  value={query} onChange={(e) => dispatch(setItemSearchQuery(e.target.value))} />}
+          {(mode == "ledgers")&&<input type="text" className='bg-white border font-medium px-3 py-1 w-full'  value={ledgerquery} onChange={(e) => dispatch(setLedgerSearchQuery(e.target.value))} />}
         </form>
       </div>
       {/* -------------------------------- table ------------------------------ */}

@@ -7,7 +7,9 @@ import EnvelopPrn from './EnvelopPrn';
 import OpBalance from './OpBalance';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllledgers } from '../../feature/ledgerSlice';
+import { deleteAlert, deleteLedger, fetchAllledgers, PositiveRes } from '../../feature/ledgerSlice';
+import DeleteAlert from '../../components/DeleteAlert';
+import { useNavigate } from 'react-router-dom';
 
 const Ledger = () => {
   const [filterLedger, setFilterLedger] = useState(false)
@@ -18,12 +20,16 @@ const Ledger = () => {
   const [itemUrl, setitemUrl] = useState(null);
 
     const dispatch = useDispatch()
-    const {ledgers , groupMap} = useSelector((state)=>state.ledgers)
+    const navigate = useNavigate()
+    const { groupMap ,searchingLedgers,ShowDeleteAlert , clickYes , ledgerDelete} = useSelector((state)=>state.ledgers)
+    
 
    const ledgerSidebarData = [
   { name: "New", onClick: () => {},navigate:"/dashboard/ledger/new" },
-  { name: "Edit", onClick: () => {} ,navigate:`/dashboard/ledger/edit/${itemUrl}` },
-  { name: "Delete", onClick: () => {} ,navigate:"/dashboard/ledger/delete/1" },
+  { name: "Edit", onClick: () => {} ,navigate:(itemUrl!= null && searchingLedgers.length > 0)?`/dashboard/ledger/edit/${itemUrl}`:'/dashboard/ledger' },
+  { name: "Delete", onClick: () => {
+    ((itemUrl != null)&& dispatch(deleteAlert(true)))
+  }  },
   { name: "Export-Excel", onClick: () => {} },
   { name: "BulkUpd", onClick: () => {setshowBulkData(true)} },
   { name: "Filter", onClick: () => {setFilterLedger(true)} },
@@ -36,14 +42,18 @@ const Ledger = () => {
   { name: "Non/Used", onClick: () => {} }
 ];
 
+
  const getUrl = (url) => {
     setitemUrl(url);
   };
   useEffect(()=>{
     dispatch(fetchAllledgers())
   },[])
+  useEffect(()=>{
+    dispatch(fetchAllledgers())
+  },[ledgerDelete])
 
-  const tableData = ledgers.map((item ,idx)=>({
+  const tableData = searchingLedgers.map((item ,idx)=>({
     Sr:idx + 1,
     id: item._id,
     "Ledger Name": item.name,
@@ -52,6 +62,18 @@ const Ledger = () => {
     "debit Balance": item.debitBalance,
     Active: item.status,
   }))
+
+
+  const handleDelete = async () => {
+        ((itemUrl != null)&&dispatch(deleteLedger({editId:itemUrl})).unwrap().then(()=>{navigate('/dashboard/ledger')}))
+        dispatch(PositiveRes(false))
+      };
+       useEffect(()=>{
+            if(clickYes){
+              handleDelete()
+              dispatch(fetchAllledgers())
+            }
+          },[clickYes])
 
   return (
     <div className='w-full'>
@@ -62,6 +84,8 @@ const Ledger = () => {
       {showLabelPrn && <LabelPrn onClose={()=>setshowLabelPrn(false)}/>}
       {showEnvelopPrn && <EnvelopPrn onClose={()=>setshowEnvelopPrn(false)}/>}
       {showOpBal && <OpBalance onClose={()=>setshowOpBal(false)}/>}
+      {ShowDeleteAlert && searchingLedgers.length > 0 && <DeleteAlert field="Ledger Entry" onYes={()=>dispatch(PositiveRes(true))} onClose={()=>dispatch(deleteAlert(false))}/>}
+
     </div>
   )
 }

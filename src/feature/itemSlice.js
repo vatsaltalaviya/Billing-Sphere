@@ -93,53 +93,53 @@ export const createItem = createAsyncThunk("createItem", async (itemData, thunkA
 });
 
 export const updateItem = createAsyncThunk(
-  'updateItem',
-  async ({ itemData, editId }, { rejectWithValue }) => {
-    const token = localStorage.getItem("token");
-    try {
-      const res = await axios.put(
-        `${import.meta.env.VITE_BASE_URL}/items/update-item/${editId}`,
-        itemData,
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
+    'updateItem',
+    async ({ itemData, editId }, { rejectWithValue }) => {
+        const token = localStorage.getItem("token");
+        try {
+            const res = await axios.put(
+                `${import.meta.env.VITE_BASE_URL}/items/update-item/${editId}`,
+                itemData,
+                {
+                    headers: {
+                        Authorization: `${token}`,
+                    },
+                }
+            );
+            const data = res.data;
+            if (data.success) {
+                return data.data;
+            }
+            else {
+                return thunkAPI.rejectWithValue(data.message || "Item Updation failed");
+            }
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
         }
-      );
-      const data =  res.data;
-      if(data.success){
-        return data.data;
-      }
-      else{
-        return thunkAPI.rejectWithValue(data.message || "Item Updation failed");
-      }
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
     }
-  }
 );
 
 
 export const deleteItem = createAsyncThunk(
-  'deleteItem',
-  async ({ editId }, { rejectWithValue }) => {
-    const token = localStorage.getItem("token");
-    try {
-      const res = await axios.delete(
-        `${import.meta.env.VITE_BASE_URL}/items/delete-item/${editId}`,
-        { headers: { Authorization: `${token}` } }
-      );
-      const data = res.data;
-      if(data.success){
-        return data.data;
-      }
-      else{
-        return thunkAPI.rejectWithValue(data.message || "Item Deletion failed");
-      }
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+    'deleteItem',
+    async ({ editId }, { rejectWithValue }) => {
+        const token = localStorage.getItem("token");
+        try {
+            const res = await axios.delete(
+                `${import.meta.env.VITE_BASE_URL}/items/delete-item/${editId}`,
+                { headers: { Authorization: `${token}` } }
+            );
+            const data = res.data;
+            if (data.success) {
+                return data.data;
+            }
+            else {
+                return thunkAPI.rejectWithValue(data.message || "Item Deletion failed");
+            }
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
     }
-  }
 );
 
 
@@ -164,17 +164,32 @@ const itemSlice = createSlice({
         error: null,
         itemBeingEdited: null,
         itemDelete: false,
-
-        ShowDeleteAlert:false,
-        clickYes:false
+        searchingitems: [],
+        searchquery: '',
+        ShowDeleteAlert: false,
+        clickYes: false
     },
-    reducers:{
-        deleteAlert : (state ,action)=>{
-         state.ShowDeleteAlert = action.payload
+    reducers: {
+        deleteAlert: (state, action) => {
+            state.ShowDeleteAlert = action.payload
         },
-        PositiveRes : (state ,action)=>{
-         state.clickYes = action.payload
+        PositiveRes: (state, action) => {
+            state.clickYes = action.payload
         },
+        setItemSearchQuery: (state, action) => {
+            const query = action.payload.trim().toLowerCase();
+            state.searchquery = action.payload;
+
+            if (query === "") {
+                state.searchingitems = state.items;
+            } else {
+                state.searchingitems = state.items.filter((item) =>
+                    (item?.itemName || "").toLowerCase().includes(query)
+                );
+            }
+        }
+
+
     },
     extraReducers: (builder) => {
         builder
@@ -186,6 +201,7 @@ const itemSlice = createSlice({
                 state.loading = false;
                 state.items = action.payload.items;
                 state.groupMap = action.payload.groupMap;
+                state.searchingitems = action.payload.items;
             })
             .addCase(fetchItems.rejected, (state, action) => {
                 state.loading = false;
@@ -225,15 +241,15 @@ const itemSlice = createSlice({
             })
             .addCase(deleteItem.fulfilled, (state, action) => {
                 state.loading = false;
-                state.itemDelete= true;
+                state.itemDelete = true;
             })
             .addCase(deleteItem.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || "Something went wrong";
             })
-           
+
     },
 });
 
 export default itemSlice.reducer;
-export const {deleteAlert ,PositiveRes} =  itemSlice.actions
+export const { deleteAlert, PositiveRes, setItemSearchQuery } = itemSlice.actions
