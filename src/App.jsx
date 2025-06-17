@@ -37,6 +37,7 @@ import UpDateLedger from './pages/Ledger/UpDateLedger'
 const App = () => {
   return (
     <>
+    {/* bg-[url("https://img.freepik.com/free-vector/blue-curve-background_53876-113112.jpg?ga=GA1.1.1175547896.1749882111&semt=ais_hybrid&w=740")] */}
     <div className='xl:h-screen bg-white bg-fixed bg-no-repeat bg-cover'>
       <ToastContainer position="top-right" autoClose={3000} />
     <Routes>

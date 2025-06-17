@@ -36,7 +36,7 @@ const BulkUpd = ({ onClose }) => {
             <div className="flex flex-col md:flex-row xl:items-center">
               <span className="w-44">Ledger Group</span>
               <SearchableDropdown
-                className="px-2 py-2 border flex-1"
+                className="border relative flex-1"
                 options={ladgerGorups}
                 value={bulkData.ledger}
                 onChange={(e) => {
@@ -94,7 +94,7 @@ const BulkUpd = ({ onClose }) => {
                 <input type="checkbox" value={priceTypecheck} onChange={()=>setpriceTypecheck(!priceTypecheck)} />
               <SearchableDropdown
               disabled={!priceTypecheck}
-                className="px-2 py-2 border flex-1"
+                className="border relative flex-1"
                 options={PriceType}
                 value={bulkData.PriceType}
                 onChange={(e) => {
