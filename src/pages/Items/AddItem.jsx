@@ -1,10 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import OpeningBal from "./OpeningBal";
 import axios from "axios";
 import SearchableDropdown from "../../components/SearchableDropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { createItem, fetchDropdowns, fetchItems } from "../../feature/itemSlice";
+import {
+  createItem,
+  fetchDropdowns,
+  fetchItems,
+} from "../../feature/itemSlice";
 import { BeatLoader } from "react-spinners";
 
 const AddItem = () => {
@@ -36,7 +41,6 @@ const AddItem = () => {
   const [OpeningBalanceData, setOpeningBalanceData] = useState([]);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [showOpeningBal, setShowOpeningBal] = useState(false);
-  const [isLoading, setisLoading] = useState(null);
   const navigate = useNavigate();
 
   const [itemGroupOption, setitemGroupOption] = useState([]);
@@ -52,7 +56,7 @@ const AddItem = () => {
   const { dropdowns, loading } = useSelector((state) => state.items);
 
   // ✅ Sync Redux dropdowns to local state
- 
+
   const generateNumericBarcode = () => {
     const now = new Date();
 
@@ -73,7 +77,7 @@ const AddItem = () => {
     generateNumericBarcode();
   }, []);
 
-   useEffect(() => {
+  useEffect(() => {
     setitemGroupOption(dropdowns.itemGroups || []);
     setBrandOption(dropdowns.brands || []);
     setHsnOption(dropdowns.hsns || []);
@@ -85,7 +89,6 @@ const AddItem = () => {
   useEffect(() => {
     dispatch(fetchDropdowns());
   }, [dispatch]);
-
 
   const handleChangeData = (e) => {
     const { id, value, type, checked } = e.target;
@@ -105,6 +108,8 @@ const AddItem = () => {
     setOpeningBalanceData(data);
     setShowOpeningBal(false); // Optionally close the popup
   };
+
+  // =============================== working with images =============================================
 
   const handleButtonClick = (e) => {
     e.preventDefault();
@@ -134,8 +139,6 @@ const AddItem = () => {
       setformData(update);
     }
   };
-
-  
 
   const handleDeleteClick = () => {
     if (!formData.images || formData.images.length === 0) return;
@@ -176,8 +179,49 @@ const AddItem = () => {
     );
   };
 
+  // validation for add data in specific fields
+  const validateForm = (formData) => {
+    if (!formData.itemGroup || !formData.itemGroup.id) {
+      toast.error("Item Group is required!");
+      return false;
+    }
+    if (!formData.itemName) {
+      toast.error("Item Name is required!");
+      return false;
+    }
+    if (!formData.brand || !formData.brand.id) {
+      toast.error("Item Brand is required!");
+      return false;
+    }
+    if (!formData.hsn || !formData.hsn.id) {
+      toast.error("HSN Code is required!");
+      return false;
+    }
+    if (!formData.tax || !formData.tax.id) {
+      toast.error("tex is required!");
+      return false;
+    }
+    if (!formData.rack || !formData.rack.id) {
+      toast.error("Store location is required!");
+      return false;
+    }
+    if (!formData.stockunit || !formData.stockunit.id) {
+      toast.error("Stock is required!");
+      return false;
+    }
+    if (!formData.printName) {
+      toast.error("print name is required!");
+      return false;
+    }
+    return true; // All good
+  };
+
   const HandleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm(formData)) {
+      return;
+    }
 
     const itemdata = {
       itemGroup: formData.itemGroup.id, // should be the _id from your group master
@@ -194,21 +238,23 @@ const AddItem = () => {
       minimumStock: Number(formData.minStock),
       maximumStock: Number(formData.maxStock),
       retail: Number(formData.retail),
-      monthlySalesQty:0,
-      dealer:0,
-      subDealer:0,
+      monthlySalesQty: 0,
+      dealer: 0,
+      subDealer: 0,
       mrp: Number(formData.mrp),
       openingStock: formData.openstock,
       status: formData.isActive,
       images: formData.images,
       openingBalance: OpeningBalanceData.map((row) => ({
         unit: row.unit1.id, // should be the _id from your unit master
-        qty: Number(row.qty), 
+        qty: Number(row.qty),
         rate: Number(row.rate),
         total: Number(row.total),
       })),
     };
-    dispatch(createItem(itemdata)).unwrap().then(()=> navigate('/dashboard/items'))
+    dispatch(createItem(itemdata))
+      .unwrap()
+      .then(() => navigate("/dashboard/items"));
   };
 
   return (
@@ -232,7 +278,7 @@ const AddItem = () => {
                     htmlFor="itemGroup"
                     className="lg:w-32 lg:text-lg text-lg font-medium"
                   >
-                    Item Group
+                    Item Group<span className="text-red-700">*</span>
                   </label>
                   <SearchableDropdown
                     type="text"
@@ -252,7 +298,7 @@ const AddItem = () => {
                       htmlFor="brand"
                       className="lg:w-36 text-lg lg:text-lg font-medium"
                     >
-                      Brand
+                      Brand<span className="text-red-700">*</span>
                     </label>
                     <SearchableDropdown
                       type="text"
@@ -289,7 +335,7 @@ const AddItem = () => {
                     htmlFor="itemName"
                     className="lg:w-32 lg:text-lg text-lg font-medium"
                   >
-                    Item Name
+                    Item Name<span className="text-red-700">*</span>
                   </label>
                   <input
                     type="text"
@@ -307,7 +353,7 @@ const AddItem = () => {
                     htmlFor="printName"
                     className="lg:w-32 lg:text-lg text-lg font-medium"
                   >
-                    Print Name
+                    Print Name<span className="text-red-700">*</span>
                   </label>
                   <input
                     type="text"
@@ -344,7 +390,7 @@ const AddItem = () => {
                       htmlFor="hsn"
                       className="lg:w-36 text-lg lg:text-lg font-medium"
                     >
-                      HSN Code
+                      HSN Code<span className="text-red-700">*</span>
                     </label>
                     <SearchableDropdown
                       type="text"
@@ -361,7 +407,7 @@ const AddItem = () => {
                       htmlFor="tax"
                       className="lg:w-36 text-lg lg:text-lg font-medium"
                     >
-                      Tax Category
+                      Tax Category<span className="text-red-700">*</span>
                     </label>
                     <SearchableDropdown
                       type="text"
@@ -388,7 +434,7 @@ const AddItem = () => {
                   <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="retail"
-                      className="lg:w-32 lg:text-lg text-lg font-medium"
+                      className="lg:w-36 lg:text-lg text-lg font-medium"
                     >
                       Retail
                     </label>
@@ -396,7 +442,7 @@ const AddItem = () => {
                       type="number"
                       id="retail"
                       autoComplete="off"
-                      className="flex-1 border px-2 py-1"
+                      className="flex-1 lg:w-48 border px-2 py-1"
                       value={formData.retail}
                       onChange={handleChangeData}
                       min="0"
@@ -405,7 +451,7 @@ const AddItem = () => {
                   <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="mrp"
-                      className="lg:w-32 lg:text-lg text-lg font-medium"
+                      className="lg:w-36 lg:text-lg text-lg font-medium"
                     >
                       MRP
                     </label>
@@ -413,7 +459,7 @@ const AddItem = () => {
                       type="number"
                       id="mrp"
                       autoComplete="off"
-                      className="flex-1 border px-2 py-1"
+                      className="flex-1 lg:w-48 border px-2 py-1"
                       value={formData.mrp}
                       onChange={handleChangeData}
                       min="0"
@@ -439,7 +485,7 @@ const AddItem = () => {
                   <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="barcode"
-                      className="lg:w-32 lg:text-lg text-lg font-medium"
+                      className="lg:w-36 lg:text-lg text-lg font-medium"
                     >
                       Barcode SR
                     </label>
@@ -447,7 +493,7 @@ const AddItem = () => {
                       type="text"
                       id="barcode"
                       autoComplete="off"
-                      className="flex-1 border px-2 py-1"
+                      className="flex-1 lg:w-48 border px-2 py-1"
                       value={formData.barcode || ""}
                       onChange={handleChangeData}
                     />
@@ -455,16 +501,16 @@ const AddItem = () => {
                   <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="rack"
-                      className="lg:w-32 lg:text-lg text-lg font-medium"
+                      className="lg:w-36 lg:text-lg text-lg font-medium"
                     >
-                      Rack/Bin
+                      Rack/Bin<span className="text-red-700">*</span>
                     </label>
                     <SearchableDropdown
                       type="text"
                       id="rack"
                       options={RackOption}
                       addlink="/dashboard/items/rack"
-                      className="flex-1 border relative"
+                      className="flex-1 lg:w-48 border relative"
                       value={formData.rack}
                       onChange={handleChangeData}
                     />
@@ -475,16 +521,16 @@ const AddItem = () => {
                 <div className="flex flex-col lg:flex-row lg:items-center">
                   <label
                     htmlFor="stockunit"
-                    className="lg:w-32 lg:text-lg text-lg font-medium"
+                    className="lg:w-36 lg:text-lg text-lg font-medium"
                   >
-                    Stock Unit
+                    Stock Unit<span className="text-red-700">*</span>
                   </label>
                   <SearchableDropdown
                     type="text"
                     id="stockunit"
                     options={StockUnitOption}
                     addlink="/dashboard/items/stockUnit"
-                    className="w-52 border relative"
+                    className="w-52 lg:w-48 border relative"
                     value={formData.stockunit}
                     onChange={handleChangeData}
                   />
@@ -495,7 +541,7 @@ const AddItem = () => {
                   <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="minStock"
-                      className="lg:w-32 lg:text-lg text-lg font-medium"
+                      className="lg:w-36 lg:text-lg text-lg font-medium"
                     >
                       Minimun Stock
                     </label>
@@ -503,7 +549,7 @@ const AddItem = () => {
                       type="number"
                       id="minStock"
                       autoComplete="off"
-                      className="flex-1 border px-2 py-1"
+                      className="flex-1 lg:w-48 border px-2 py-1"
                       value={formData.minStock}
                       onChange={handleChangeData}
                       min="0"
@@ -512,7 +558,7 @@ const AddItem = () => {
                   <div className="flex flex-col lg:flex-row lg:items-center">
                     <label
                       htmlFor="maxStock"
-                      className="lg:w-32 lg:text-lg text-lg font-medium"
+                      className="lg:w-36 lg:text-lg text-lg font-medium"
                     >
                       Maximum Stock
                     </label>
@@ -520,7 +566,7 @@ const AddItem = () => {
                       type="number"
                       id="maxStock"
                       autoComplete="off"
-                      className="flex-1 border px-2 py-1"
+                      className="flex-1 lg:w-48 border px-2 py-1"
                       value={formData.maxStock}
                       onChange={handleChangeData}
                       min="0"
@@ -663,12 +709,10 @@ const AddItem = () => {
           </div>
           <div className="flex flex-col xl:flex-row gap-3 mb-3 xl:mb-0">
             <button className="flex items-center justify-center gap-4 px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
-              {loading && (
-                 <BeatLoader size={5}  color='#fff'/>
-              )}
+              {loading && <BeatLoader size={5} color="#fff" />}
               Save
             </button>
-              
+
             <button
               type="reset"
               onClick={() => navigate("/dashboard/items")}

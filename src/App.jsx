@@ -1,4 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Home from './pages/Home'
 import Login from './pages/Login'
 import AddItem from './pages/Items/AddItem'
@@ -36,6 +38,7 @@ const App = () => {
   return (
     <>
     <div className='xl:h-screen bg-white bg-fixed bg-no-repeat bg-cover'>
+      <ToastContainer position="top-right" autoClose={3000} />
     <Routes>
       <Route path='/' element={<Login />} />
      <Route path='/dashboard' element={<ProtectedRoute><Home /></ProtectedRoute>} />

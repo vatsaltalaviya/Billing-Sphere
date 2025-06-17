@@ -41,6 +41,7 @@ const Login = () => {
       }
       else{
         setInvalid(true)
+        setIsloading(false)
       }
     } catch (error) {
       console.error(error)

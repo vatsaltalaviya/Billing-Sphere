@@ -286,7 +286,7 @@ const UpDateLedger = () => {
                         htmlFor="ledgerName"
                         className="w-32 md:w-44 test-sm md:text-lg font-medium"
                       >
-                        Ledger Name
+                        Ledger Name 
                       </label>
                       <input
                         type="text"

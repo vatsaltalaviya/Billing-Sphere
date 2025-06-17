@@ -288,7 +288,7 @@ const UpdateItem = () => {
           .filter((row) => row.qty || row.unit1 || row.rate || row.total)
           .map((row) => ({
             qty: Number(row.qty),
-            unit: getId(row.unit1, StockUnitOption), // always send the id
+            unit: getId(row.unit1, FieldOption.StockUnitOption), // always send the id
             rate: Number(row.rate),
             total: Number(row.total),
           }))
@@ -538,7 +538,7 @@ const UpdateItem = () => {
                       <div className="flex flex-col lg:flex-row lg:items-center">
                         <label
                           htmlFor="retail"
-                          className="lg:w-32 lg:text-lg text-lg font-medium"
+                          className="lg:w-36 lg:text-lg text-lg font-medium"
                         >
                           Retail
                         </label>
@@ -546,7 +546,7 @@ const UpdateItem = () => {
                           type="number"
                           id="retail"
                           autoComplete="off"
-                          className="flex-1 border px-2 py-1"
+                          className="flex-1 lg:w-48 border px-2 py-1"
                           value={formData.retail}
                           onChange={handleChangeData}
                           min="0"
@@ -555,7 +555,7 @@ const UpdateItem = () => {
                       <div className="flex flex-col lg:flex-row lg:items-center">
                         <label
                           htmlFor="mrp"
-                          className="lg:w-32 lg:text-lg text-lg font-medium"
+                          className="lg:w-36 lg:text-lg text-lg font-medium"
                         >
                           MRP
                         </label>
@@ -563,7 +563,7 @@ const UpdateItem = () => {
                           type="number"
                           id="mrp"
                           autoComplete="off"
-                          className="flex-1 border px-2 py-1"
+                          className="flex-1 lg:w-48 border px-2 py-1"
                           value={formData.mrp}
                           onChange={handleChangeData}
                           min="0"
@@ -589,7 +589,7 @@ const UpdateItem = () => {
                       <div className="flex flex-col lg:flex-row lg:items-center">
                         <label
                           htmlFor="barcode"
-                          className="lg:w-32 lg:text-lg text-lg font-medium"
+                          className="lg:w-36 lg:text-lg text-lg font-medium"
                         >
                           Barcode SR
                         </label>
@@ -597,7 +597,7 @@ const UpdateItem = () => {
                           type="text"
                           id="barcode"
                           autoComplete="off"
-                          className="flex-1 border px-2 py-1"
+                          className="flex-1 lg:w-48 border px-2 py-1"
                           value={formData.barcode}
                           onChange={handleChangeData}
                         />
@@ -605,7 +605,7 @@ const UpdateItem = () => {
                       <div className="flex flex-col lg:flex-row lg:items-center">
                         <label
                           htmlFor="rack"
-                          className="lg:w-32 lg:text-lg text-lg font-medium"
+                          className="lg:w-36 lg:text-lg text-lg font-medium"
                         >
                           Rack/Bin
                         </label>
@@ -614,7 +614,7 @@ const UpdateItem = () => {
                           id="rack"
                           options={dropdowns.stores}
                           addlink="/dashboard/items/rack"
-                          className="flex-1 border relative"
+                          className="flex-1 lg:w-48 border relative"
                           value={formData.rack}
                           onChange={handleChangeData}
                         />
@@ -625,7 +625,7 @@ const UpdateItem = () => {
                     <div className="flex flex-col lg:flex-row lg:items-center">
                       <label
                         htmlFor="stockunit"
-                        className="lg:w-32 lg:text-lg text-lg font-medium"
+                        className="lg:w-36 lg:text-lg text-lg font-medium"
                       >
                         Stock Unit
                       </label>
@@ -634,7 +634,7 @@ const UpdateItem = () => {
                         id="stockunit"
                         options={dropdowns.units}
                         addlink="/dashboard/items/stockUnit"
-                        className="w-52 border relative"
+                        className="w-52 lg:w-48 border relative"
                         value={formData.stockunit}
                         onChange={handleChangeData}
                       />
@@ -645,7 +645,7 @@ const UpdateItem = () => {
                       <div className="flex flex-col lg:flex-row lg:items-center">
                         <label
                           htmlFor="minStock"
-                          className="lg:w-32 lg:text-lg text-lg font-medium"
+                          className="lg:w-36 lg:text-lg text-lg font-medium"
                         >
                           Minimun Stock
                         </label>
@@ -653,7 +653,7 @@ const UpdateItem = () => {
                           type="number"
                           id="minStock"
                           autoComplete="off"
-                          className="flex-1 border px-2 py-1"
+                          className="flex-1 lg:w-48 border px-2 py-1"
                           value={formData.minStock}
                           onChange={handleChangeData}
                           min="0"
@@ -662,7 +662,7 @@ const UpdateItem = () => {
                       <div className="flex flex-col lg:flex-row lg:items-center">
                         <label
                           htmlFor="maxStock"
-                          className="lg:w-32 lg:text-lg text-lg font-medium"
+                          className="lg:w-36 lg:text-lg text-lg font-medium"
                         >
                           Maximum Stock
                         </label>
@@ -670,7 +670,7 @@ const UpdateItem = () => {
                           type="number"
                           autoComplete="off"
                           id="maxStock"
-                          className="flex-1 border px-2 py-1"
+                          className="flex-1 lg:w-48 border px-2 py-1"
                           value={formData.maxStock}
                           onChange={handleChangeData}
                           min="0"

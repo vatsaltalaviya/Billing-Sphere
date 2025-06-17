@@ -3,7 +3,6 @@ import BasePage from "../../components/BasePage";
 import OpItemBal from "./OpItemBal";
 import MinMaxQty from "./MinMaxQty";
 import CopyItem from "./CopyItem";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteAlert, deleteItem, fetchItems, PositiveRes } from "../../feature/itemSlice";
 import DeleteAlert from "../../components/DeleteAlert";
@@ -15,9 +14,6 @@ const Item = () => {
   const [itemUrl, setitemUrl] = useState(null);
   const [showMinMax, setMinMax] = useState(false);
   const [showCopyItem, setshowCopyItem] = useState(false);
-  
-  
-  
   const {items ,groupMap , itemDelete} = useSelector((state)=>state.items)
   
   const dispatch = useDispatch()
@@ -30,12 +26,12 @@ const Item = () => {
     {
       name: "Edit",
       onClick: () => {},
-      navigate: `/dashboard/items/edit/${itemUrl}`,
+      navigate: (itemUrl!=null && items.length > 0)?`/dashboard/items/edit/${itemUrl}`:'/dashboard/items',
     },
     {
       name: "Delete",
       onClick: () => {
-        dispatch(deleteAlert(true))
+       ((itemUrl != null)&& dispatch(deleteAlert(true)))
       },
     },
     { name: "Export to excel", onClick: () => {} },
@@ -92,7 +88,7 @@ const Item = () => {
       Active: item.status,
     }));
    const handleDelete = async () => {
-      dispatch(deleteItem({editId:itemUrl})).unwrap().then(()=>{navigate('/dashboard/items')})
+      ((itemUrl != null)&&dispatch(deleteItem({editId:itemUrl})).unwrap().then(()=>{navigate('/dashboard/items')}))
       dispatch(PositiveRes(false))
     };
 
@@ -116,7 +112,7 @@ const Item = () => {
       {showopitemBal && <OpItemBal onClose={() => setOpitemBal(false)} />}
       {showMinMax && <MinMaxQty onClose={() => setMinMax(false)} />}
       {showCopyItem && <CopyItem onClose={() => setshowCopyItem(false)} />}
-       {ShowDeleteAlert && <DeleteAlert field="Item" onYes={()=>dispatch(PositiveRes(true))} onClose={()=>dispatch(deleteAlert(false))}/>}
+       {ShowDeleteAlert && items.length > 0 && <DeleteAlert field="Item" onYes={()=>dispatch(PositiveRes(true))} onClose={()=>dispatch(deleteAlert(false))}/>}
     </div>
   );
 };

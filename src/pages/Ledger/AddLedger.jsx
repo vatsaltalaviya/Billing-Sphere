@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import SearchableDropdown from "../../components/SearchableDropdown";
 import { indianStates } from "../../assets/IndianStates";
@@ -12,7 +13,6 @@ const AddLedger = () => {
   const navigate = useNavigate();
   const companyId = localStorage.getItem("companies");
   const ownerId = localStorage.getItem("uid");
-
 
   const ledgergroupArr = [
     "Bank Accounts",
@@ -52,7 +52,7 @@ const AddLedger = () => {
     teleno: "", // Tele. NO.
     fax: "", // Fax No
     mobile: "", // Mobile No
-    mobile2:"",// Mobile 2
+    mobile2: "", // Mobile 2
     email: "", // Email Address
     contactPerson: "", // Contact Person
     bankName: "", // Bank A/C Detail
@@ -81,7 +81,7 @@ const AddLedger = () => {
   const formattedDate = `${day}/${month}/${year}`;
 
   const dispatch = useDispatch();
-  const { ledgerGroup , loading } = useSelector((state) => state.ledgers);
+  const { ledgerGroup, loading } = useSelector((state) => state.ledgers);
 
   useEffect(() => {
     dispatch(fetchLedgerGroup());
@@ -107,64 +107,88 @@ const AddLedger = () => {
   const isLedgerGroupMatched = ledgergroupArr.includes(
     formData.LedgerGroup.name
   );
+  // validation for add data in specific fields
+  const validateForm = (formData) => {
+    if (!formData.ledgerName) {
+      toast.error("Ledger Name is required!");
+      return false;
+    }
+    if (!formData.printName) {
+      toast.error("Print Name is required!");
+      return false;
+    }
+    
+    if (!formData.opBalance) {
+      toast.error("Opening Balance is required!");
+      return false;
+    }
+    if (!formData.LedgerGroup || !formData.LedgerGroup._id) {
+      toast.error("Ledger Group is required!");
+      return false;
+    }
+    return true; // All good
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  const itemData = {
-  name: formData.ledgerName || "",
-  printName: formData.printName || "",
-  aliasName: formData.alias || "",
-  companyCode: companyId || "",
-  ownerId: ownerId || "",
-  ledgerGroup: formData.LedgerGroup?._id || "",
-  date: formattedDate || "",
-  bilwiseAccounting: formData.billwise || "",
-  creditDays: Number(formData.creditDays) ?? 0,
-  openingBalance: Number(formData.opBalance) ?? 0,
-  debitBalance: Number(formData.debitBalance) ?? 0,
-  ledgerType: formData.opBalanceType || "",
-  priceListCategory: formData.priceList || "",
-  remarks: formData.remarks || "",
-  status: formData.status || "",
-  ledgerCode: formData.ledgercode || "",
-  mailingName: formData.MailingName || "",
-  address: formData.address || "",
-  city: formData.city || "",
-  state: formData.state || "Gujrat",
-  region: "India",
-  pincode: formData.Pincode || 0,
-  tel: formData.teleno || 0,
-  fax: formData.fax || 0,
-  mobile: formData.mobile || 0,
-  sms: formData.mobile2 || 0,
-  email: formData.email || "",
-  contactPerson: formData.contactPerson || "",
-  bankName: formData.bankName || "",
-  branchName: formData.branchName || "",
-  ifsc: formData.ifsc || "",
-  accName: formData.ACname || "",
-  accNo: formData.ACNo || "",
-  panNo: formData.panNO || "",
-  gst: formData.gst || "",
-  gstDated: formData.gstDate || "",
-  cstNo: formData.cst || "",
-  cstDated: formData.cstDate || "",
-  lstNo: formData.LST || "",
-  lstDated: formData.lstDate || "",
-  serviceTaxNo: formData.serviceTaxNo || "",
-  registrationType: formData.regtype || "",
-  serviceTaxDated: "",
-  registrationTypeDated:""
-};
 
+    if (!validateForm(formData)) {
+      return;
+    }
 
+    const itemData = {
+      name: formData.ledgerName || "",
+      printName: formData.printName || "",
+      aliasName: formData.alias || "",
+      companyCode: companyId || "",
+      ownerId: ownerId || "",
+      ledgerGroup: formData.LedgerGroup?._id || "",
+      date: formattedDate || "",
+      bilwiseAccounting: formData.billwise || "",
+      creditDays: Number(formData.creditDays) ?? 0,
+      openingBalance: Number(formData.opBalance) ?? 0,
+      debitBalance: Number(formData.debitBalance) ?? 0,
+      ledgerType: formData.opBalanceType || "",
+      priceListCategory: formData.priceList || "",
+      remarks: formData.remarks || "",
+      status: formData.status || "",
+      ledgerCode: formData.ledgercode || "",
+      mailingName: formData.MailingName || "",
+      address: formData.address || "",
+      city: formData.city || "",
+      state: formData.state || "Gujrat",
+      region: "India",
+      pincode: formData.Pincode || 0,
+      tel: formData.teleno || 0,
+      fax: formData.fax || 0,
+      mobile: formData.mobile || 0,
+      sms: formData.mobile2 || 0,
+      email: formData.email || "",
+      contactPerson: formData.contactPerson || "",
+      bankName: formData.bankName || "",
+      branchName: formData.branchName || "",
+      ifsc: formData.ifsc || "",
+      accName: formData.ACname || "",
+      accNo: formData.ACNo || "",
+      panNo: formData.panNO || "",
+      gst: formData.gst || "",
+      gstDated: formData.gstDate || "",
+      cstNo: formData.cst || "",
+      cstDated: formData.cstDate || "",
+      lstNo: formData.LST || "",
+      lstDated: formData.lstDate || "",
+      serviceTaxNo: formData.serviceTaxNo || "",
+      registrationType: formData.regtype || "",
+      serviceTaxDated: "",
+      registrationTypeDated: "",
+    };
 
     // console.log(itemData);
-    dispatch(createLedger(itemData)).unwrap().then(()=>navigate('/dashboard/ledger'))
+    dispatch(createLedger(itemData))
+      .unwrap()
+      .then(() => navigate("/dashboard/ledger"));
   };
 
-  console.log(formData);
-  
   return (
     <div className="h-screen w-full bg-white">
       <div
@@ -192,7 +216,7 @@ const AddLedger = () => {
                     htmlFor="ledgerName"
                     className="w-32 md:w-44 test-sm md:text-lg font-medium"
                   >
-                    Ledger Name
+                    Ledger Name<span className="text-red-700">*</span>
                   </label>
                   <input
                     type="text"
@@ -210,7 +234,7 @@ const AddLedger = () => {
                     htmlFor="printName"
                     className="w-32 md:w-44 test-sm md:text-lg font-medium"
                   >
-                    Print Name
+                    Print Name<span className="text-red-700">*</span>
                   </label>
                   <input
                     type="text"
@@ -246,7 +270,7 @@ const AddLedger = () => {
                     htmlFor="LedgerGroup"
                     className="w-36 md:w-44 test-sm md:text-lg font-medium"
                   >
-                    Ledger Group
+                    Ledger Group<span className="text-red-700">*</span>
                   </label>
 
                   <SearchableDropdown
@@ -307,7 +331,8 @@ const AddLedger = () => {
                     htmlFor="opBalance"
                     className="w-32 md:w-44 test-sm md:text-lg font-medium"
                   >
-                    Op. Balance ({formattedDate})
+                    Op. Balance<span className="text-red-700">*</span> (
+                    {formattedDate})
                   </label>
                   <div className="flex flex-col lg:flex-row lg:flex-wrap gap-2">
                     <input
@@ -317,7 +342,6 @@ const AddLedger = () => {
                       autoComplete="off"
                       onChange={handleChangeData}
                       className="flex-1 border px-2 py-1"
-                      
                     />
 
                     <select
@@ -346,7 +370,6 @@ const AddLedger = () => {
                     autoComplete="off"
                     value={formData.debitBalance}
                     onChange={handleChangeData}
-              
                   />
                 </div>
                 <div className="flex flex-col lg:flex-row lg:items-center">
@@ -363,7 +386,6 @@ const AddLedger = () => {
                     onChange={handleChangeData}
                     min="0"
                   >
-                
                     <option value="Retail">Retail</option>
                     <option value="Mrp">Mrp</option>
                   </select>
@@ -387,7 +409,6 @@ const AddLedger = () => {
                       onChange={handleChangeData}
                     />
                   </div>
-                  
                 </div>
 
                 <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4">
@@ -599,7 +620,6 @@ const AddLedger = () => {
                             min="0"
                           />
                         </div>
-                        
                       </div>
                       <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-4 mt-4">
                         <label
@@ -689,7 +709,7 @@ const AddLedger = () => {
                           htmlFor="bank"
                           className="w-32 md:w-44 test-sm md:text-lg font-medium"
                         >
-                         A/C Name
+                          A/C Name
                         </label>
                         <input
                           type="text"
@@ -803,7 +823,6 @@ const AddLedger = () => {
                             <option value="UnRegister">UnRegister</option>
                           </select>
                         </div>
-                      
                       </div>
                       <div className="flex flex-col lg:flex-row flex-wrap xl:items-center gap-1 lg:gap-4 mt-4">
                         <div className="flex flex-col lg:flex-row lg:items-center">
@@ -903,11 +922,10 @@ const AddLedger = () => {
         <div className="w-full flex flex-col xl:flex-row justify-between border p-2">
           <div className="grid  grid-cols-1 md:grid-cols-2 xl:grid-cols-2 my-2 px-1 py-0.5"></div>
           <div className="flex flex-col xl:flex-row gap-3 mb-3 md:mb-0">
-            
-              <button className="flex items-center gap-2 justify-center px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
-                {loading&&<BeatLoader size={5}  color='#fff'/>}
-                Save
-              </button>
+            <button className="flex items-center gap-2 justify-center px-3 py-2 h-10 rounded border ml-1 bg-amber-200 border-amber-500 font-medium hover:bg-amber-500">
+              {loading && <BeatLoader size={5} color="#fff" />}
+              Save
+            </button>
 
             <button
               onClick={() => navigate("/dashboard/ledger")}
