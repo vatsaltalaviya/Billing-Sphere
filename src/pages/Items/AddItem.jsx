@@ -283,6 +283,7 @@ const AddItem = () => {
                   <SearchableDropdown
                     type="text"
                     id="itemGroup"
+                    mode="item"
                     options={itemGroupOption}
                     addlink="/dashboard/items/itemgroup"
                     value={formData.itemGroup}
@@ -303,6 +304,7 @@ const AddItem = () => {
                     <SearchableDropdown
                       type="text"
                       id="brand"
+                      mode="item"
                       addlink="/dashboard/items/brand"
                       options={BrandOption}
                       className="flex-1 border relative"
@@ -395,6 +397,7 @@ const AddItem = () => {
                     <SearchableDropdown
                       type="text"
                       id="hsn"
+                      mode="item"
                       className="flex-1 lg:w-42 border relative"
                       addlink="/dashboard/items/hsn"
                       options={HsnOption}
@@ -412,6 +415,7 @@ const AddItem = () => {
                     <SearchableDropdown
                       type="text"
                       id="tax"
+                      mode="item"
                       className="flex-1 border relative"
                       addlink="/dashboard/items/taxCategory"
                       options={TaxOption}
@@ -508,6 +512,7 @@ const AddItem = () => {
                     <SearchableDropdown
                       type="text"
                       id="rack"
+                      mode="item"
                       options={RackOption}
                       addlink="/dashboard/items/rack"
                       className="flex-1 lg:w-48 border relative"
@@ -528,6 +533,7 @@ const AddItem = () => {
                   <SearchableDropdown
                     type="text"
                     id="stockunit"
+                    mode="item"
                     options={StockUnitOption}
                     addlink="/dashboard/items/stockUnit"
                     className="w-52 lg:w-48 border relative"
@@ -702,8 +708,8 @@ const AddItem = () => {
                 value={formData.isActive}
                 onChange={handleChangeData}
               >
-                <option value="No">NO</option>
-                <option value="Yes">YES</option>
+                <option value="Inactive">NO</option>
+                <option value="Active">YES</option>
               </select>
             </div>
           </div>

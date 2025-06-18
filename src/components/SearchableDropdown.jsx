@@ -9,7 +9,8 @@ export default function SearchableDropdown({
   className,
   ref,
   disabled,
-  addlink
+  addlink,
+  mode
 }) {
   const inputRef = useRef();
 
@@ -87,7 +88,7 @@ export default function SearchableDropdown({
         onClick={() => setShowOptions(true)}
       />
       {showOptions && (
-        <ul className="absolute w-full bg-blue-100 z-50 max-h-40 overflow-y-auto  table-data">
+        <ul className="absolute w-full bg-blue-100 z-50 max-h-40 overflow-y-auto">
           {Array.isArray(options) && options.length > 0 ? (
             filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
@@ -100,7 +101,7 @@ export default function SearchableDropdown({
                 </li>
               ))
             ) : (
-              <li className="px-2 py-2 text-gray-400">No match found <Link className="text-blue-900 underline" to={addlink}>click here to create</Link> </li>
+              <li className="px-2 py-2 text-gray-400">No match found {(mode && mode == "item")&&<Link className="text-blue-900 underline" to={addlink}>click here to create</Link>} </li>
               
             )
           ) : (

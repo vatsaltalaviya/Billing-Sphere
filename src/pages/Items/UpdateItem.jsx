@@ -387,6 +387,7 @@ const UpdateItem = () => {
                       <SearchableDropdown
                         type="text"
                         id="itemGroup"
+                        mode="item"
                         options={dropdowns.itemGroups}
                         addlink="/dashboard/items/itemgroup"
                         value={formData.itemGroup}
@@ -407,6 +408,7 @@ const UpdateItem = () => {
                         <SearchableDropdown
                           type="text"
                           id="brand"
+                          mode="item"
                           addlink="/dashboard/items/brand"
                           options={dropdowns.brands}
                           className="flex-1 border relative"
@@ -499,6 +501,7 @@ const UpdateItem = () => {
                         <SearchableDropdown
                           type="text"
                           id="hsn"
+                          mode="item"
                           className="flex-1 lg:w-42 border relative"
                           addlink="/dashboard/items/hsn"
                           options={dropdowns.hsns}
@@ -516,6 +519,7 @@ const UpdateItem = () => {
                         <SearchableDropdown
                           type="text"
                           id="tax"
+                          mode="item"
                           className="flex-1 border relative"
                           addlink="/dashboard/items/taxCategory"
                           options={dropdowns.taxes}
@@ -612,6 +616,7 @@ const UpdateItem = () => {
                         <SearchableDropdown
                           type="text"
                           id="rack"
+                          mode="item"
                           options={dropdowns.stores}
                           addlink="/dashboard/items/rack"
                           className="flex-1 lg:w-48 border relative"
@@ -632,6 +637,7 @@ const UpdateItem = () => {
                       <SearchableDropdown
                         type="text"
                         id="stockunit"
+                        mode="item"
                         options={dropdowns.units}
                         addlink="/dashboard/items/stockUnit"
                         className="w-52 lg:w-48 border relative"
@@ -806,8 +812,8 @@ const UpdateItem = () => {
                     value={formData.isActive}
                     onChange={handleChangeData}
                   >
-                    <option value="No">NO</option>
-                    <option value="Yes">YES</option>
+                <option value="Inactive">NO</option>
+                <option value="Active">YES</option>
                   </select>
                 </div>
               </div>

@@ -1,3 +1,4 @@
+import { TextField } from '@mui/material';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -62,6 +63,7 @@ const Login = () => {
           <div className='px-2 py-2 w-full'>
             <div className='flex flex-col md:flex-row xl:items-center mt-1'>
               <label htmlFor="email" className='w-32 text-lg md:text-xl font-semibold'>Email </label>
+              {/* <TextField id="outlined-basic" className=' rounded flex-1' type="email" name="email" label="Enter your Email" variant="outlined" value={email} onChange={(e)=>setemail(e.target.value)}/> */}
               <input className=' border rounded p-2 text-xl flex-1' type="email" name="email" id="email" value={email} onChange={(e)=>setemail(e.target.value)}/>
             </div>
             <div className='flex flex-col md:flex-row xl:items-center mt-1'>
