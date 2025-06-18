@@ -22,12 +22,10 @@ const NoTableData = ({ mode }) => {
         <thead>
           <tr className="bg-white text-purple-900 font-bold text-left">
             <th className={`border border-black px-3 py-1`}>Sr</th>
-            <th className={`border border-black px-3 py-1`}>Item Name</th>
-            <th className={`border border-black px-3 py-1`}>Code No</th>
+            <th className={`border border-black px-3 py-1`}>ledger Name</th>
             <th className={`border border-black px-3 py-1`}>Group</th>
-            <th className={`border border-black px-3 py-1`}>Retail</th>
-            <th className={`border border-black px-3 py-1`}>MRP</th>
-            <th className={`border border-black px-3 py-1`}>Cl.Stk</th>
+            <th className={`border border-black px-3 py-1`}>op. balance</th>
+            <th className={`border border-black px-3 py-1`}>debit balance</th>
             <th className={`border border-black px-3 py-1`}>Active</th>
           </tr>
         </thead>
