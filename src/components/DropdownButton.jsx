@@ -52,9 +52,7 @@ const DropdownGroup = ({ dropdownData }) => {
                   <div key={gIdx} className="relative group">
                     <div
                       onMouseEnter={() => setOpenSubmenu(option.name)  }
-                      
                       onClick={() => {option.navigate && navigate(option.navigate)}}
-                    
                       className="px-4 py-1 hover:bg-gray-100 cursor-pointer text-sm font-medium flex justify-between items-center"
                     >
                       {option.name} 

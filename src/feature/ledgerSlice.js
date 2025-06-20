@@ -127,9 +127,6 @@ const ledgerSlice = createSlice({
         deleteAlert: (state, action) => {
             state.ShowDeleteAlert = action.payload
         },
-        PositiveRes: (state, action) => {
-            state.clickYes = action.payload
-        },
         setLedgerSearchQuery: (state, action) => {
             const query = action.payload.trim().toLowerCase();
             state.searchledgerquery = action.payload;

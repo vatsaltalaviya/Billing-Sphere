@@ -2,10 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 const companyId = localStorage.getItem('companies')
 const token = localStorage.getItem('token')
-
-
 export const fetchItems = createAsyncThunk("fetchItems", async (_, thunkAPI) => {
-
     try {
         // Fetch all items
         const res = await axios.get(
@@ -19,12 +16,13 @@ export const fetchItems = createAsyncThunk("fetchItems", async (_, thunkAPI) => 
 
         // Fetch group names in parallel
         const groupMap = {};
+        
         await Promise.all(
             groupIds.map(async (id) => {
                 try {
                     const groupRes = await axios.get(
                         `${import.meta.env.VITE_BASE_URL}/item-group/getById/${id}`,
-                        { headers: { Authorization: `${token}` } }
+                        { headers: { Authorization: token } }
                     );
                     if (groupRes.data.success) {
                         groupMap[id] = groupRes.data.data.name;
@@ -174,9 +172,6 @@ const itemSlice = createSlice({
     reducers: {
         deleteAlert: (state, action) => {
             state.ShowDeleteAlert = action.payload
-        },
-        PositiveRes: (state, action) => {
-            state.clickYes = action.payload
         },
         setItemSearchQuery: (state, action) => {
             const query = action.payload.trim().toLowerCase();

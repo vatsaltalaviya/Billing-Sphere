@@ -30,6 +30,7 @@ const DropDowmForMobile = ({handleLogOut}) => {
                         <li
                           key={subIndex}
                           className="py-1 px-5 hover:bg-gray-200 cursor-pointer"
+                          onClick={() => {option.navigate && navigate(option.navigate)}}
                         >
                           {subOption.name}
                         </li>
@@ -40,6 +41,7 @@ const DropDowmForMobile = ({handleLogOut}) => {
                   <li
                     key={index}
                     className="py-1 px-5 hover:bg-gray-200 cursor-pointer"
+                  onClick={() => {option.navigate && navigate(option.navigate)}}
                   >
                     {option.name}
                   </li>

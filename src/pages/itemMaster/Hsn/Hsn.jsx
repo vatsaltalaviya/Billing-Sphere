@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import BasePage from "../../../components/BasePage";
-import { useDispatch, useSelector } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import DeleteAlert from "../../../components/DeleteAlert";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +21,7 @@ const Hsn = () => {
     {
       name: "Delete",
       onClick: () => {
-        setShowDeleteAlert(true);
+        Url!=null &&setShowDeleteAlert(true);
       },
     },
   ];
@@ -58,13 +59,12 @@ const Hsn = () => {
       if (data.success) {
         await fetchData();
         setShowDeleteAlert(false);
+        // toast.success("Item deleted successfully!");
       }
     } catch (err) {
       console.error(err);
     }
   };
-
-
   const tableData = data?.map((item, index) => ({
     sr: index + 1,
     id: item._id,
@@ -91,6 +91,7 @@ const Hsn = () => {
           onClose={() => setShowDeleteAlert(false)}
         />
       )}
+       {/* <ToastContainer position="top-right" autoClose={3000} /> */}
     </div>
   );
 };

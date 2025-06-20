@@ -192,7 +192,9 @@ export
                     ]
                 },
                 { name: "Item Master" },
-                { name: "Item Group Master" },
+                { name: "Item Group Master" ,
+                    navigate:`/dashboard/items/itemgroup`
+                },
                 { name: "Unit Master" },
                 {
                     name: "Misc. Master",
