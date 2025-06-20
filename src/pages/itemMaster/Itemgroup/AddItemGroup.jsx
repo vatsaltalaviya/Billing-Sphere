@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import AttachImage from "../AttachImage";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
 
-const ItemGroup = () => {
+const AddItemGroup = () => {
   const [ItemGroupName, setItemGroupName] = useState("");
   const [desc, setdesc] = useState("");
   const [isLoading, setisLoading] = useState(null);
-  // const [images, setimages] = useState('')
-  // const [showimages, setshowImages] = useState(false)
 
   const token = localStorage.getItem("token");
   const companyCode = localStorage.getItem("companies");
   const ownerId = localStorage.getItem("uid");
+
+   const location = useLocation();
+   const source = location.state?.source;
 
   const navigate = useNavigate();
 
@@ -41,7 +41,7 @@ const ItemGroup = () => {
 
       const data = res.data;
       if (data.success) {
-        navigate("/dashboard/items/new");
+        {(source == "itemsPage")?navigate("/dashboard/items/new"):navigate("/dashboard/items/itemgroup")}
         setisLoading(false)
       }
     } catch (error) {
@@ -83,7 +83,7 @@ const ItemGroup = () => {
               Save
             </button>
             <button
-              type="reset"
+              onClick={()=>navigate(-1)}
               className=" px-5 h-10 font-medium bg-amber-300 border border-amber-600 hover:bg-amber-500"
             >
               Cancel
@@ -96,4 +96,4 @@ const ItemGroup = () => {
   );
 };
 
-export default ItemGroup;
+export default AddItemGroup;

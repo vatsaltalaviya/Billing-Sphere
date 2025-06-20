@@ -11,7 +11,7 @@ const ButtonGroup = ({ data, className , setshowSidebar}) => {
           key={btn.name}
           onClick={() => {
             if (btn.onClick) btn.onClick();
-            if (btn.navigate) navigate(btn.navigate);
+            if (btn.navigate) navigate(btn.navigate , {state:{source:"button"}});
             if (setshowSidebar) setshowSidebar(false);
           }}
           className={className}

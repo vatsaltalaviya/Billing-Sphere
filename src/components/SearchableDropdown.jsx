@@ -101,7 +101,7 @@ export default function SearchableDropdown({
                 </li>
               ))
             ) : (
-              <li className="px-2 py-2 text-gray-400">No match found {(mode && mode == "item")&&<Link className="text-blue-900 underline" to={addlink}>click here to create</Link>} </li>
+              <li className="px-2 py-2 text-gray-400">No match found {(mode && mode == "item")&&<Link state={ {source: 'itemsPage' }}  className="text-blue-900 underline" to={addlink}>click here to create</Link>} </li>
               
             )
           ) : (

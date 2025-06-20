@@ -142,8 +142,10 @@ export const deleteItem = createAsyncThunk(
     }
 );
 
-
-
+export const addItemGroup = createAsyncThunk("addItemGroup" , async(data , thunkAPI)=>{
+    const token = localStorage.getItem("token");
+    
+})
 
 
 

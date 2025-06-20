@@ -18,9 +18,8 @@ import Contra from './pages/Contra'
 import CreditNote from './pages/CreditNote'
 import DebitNote from './pages/DebitNote'
 import GstExp from './pages/GstExp'
-import ItemGroup from './pages/Items/ItemGroup'
 import Brand from './pages/Items/Brand'
-import HsnPage from './pages/Items/HsnPage'
+import HsnPage from './pages/itemMaster/Hsn/AddHsnPage'
 import BulkItemUpd from './pages/Items/BulkItemUpd'
 import Filteritem from './pages/Items/Filteritem'
 import ImgGallery from './pages/Items/ImgGallery'
@@ -33,6 +32,13 @@ import StockUnit from './pages/Items/StockUnit'
 import TaxCategory from './pages/Items/TaxCategory'
 import UpdateItem from './pages/Items/UpdateItem'
 import UpDateLedger from './pages/Ledger/UpDateLedger'
+// import AddItemGroupfrom './pages/AddItemGroup';
+import AddItemGroup from './pages/itemMaster/Itemgroup/AddItemGroup';
+import ItemGroup from './pages/itemMaster/Itemgroup/ItemGroup';
+import UpdateItemGroup from './pages/itemMaster/Itemgroup/UpdateItemGroup';
+import AddHsnPage from './pages/itemMaster/Hsn/AddHsnPage';
+import Hsn from './pages/itemMaster/Hsn/Hsn';
+import Updatehsn from './pages/itemMaster/Hsn/Updatehsn';
 
 const App = () => {
   return (
@@ -48,8 +54,12 @@ const App = () => {
       <Route path='/dashboard/items' element={<ProtectedRoute><Item /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/new' element={<ProtectedRoute><AddItem /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/itemgroup' element={<ProtectedRoute><ItemGroup /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/additemgroup' element={<ProtectedRoute><AddItemGroup /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/edititemgroup/:id' element={<ProtectedRoute><UpdateItemGroup /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/brand' element={<ProtectedRoute><Brand /></ProtectedRoute>} /> 
-      <Route path='/dashboard/items/hsn' element={<ProtectedRoute><HsnPage /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/hsn' element={<ProtectedRoute><Hsn /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/addhsn' element={<ProtectedRoute><AddHsnPage /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/edithsn/:id' element={<ProtectedRoute><Updatehsn /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/rack' element={<ProtectedRoute><Rack /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/stockUnit' element={<ProtectedRoute><StockUnit /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/taxcategory' element={<ProtectedRoute><TaxCategory /></ProtectedRoute>} /> 

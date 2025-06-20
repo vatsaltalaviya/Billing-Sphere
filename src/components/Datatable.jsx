@@ -88,6 +88,8 @@ const Datatable = ({ data, list, getitemUrl, mode }) => {
               }}
               onDoubleClick={() => {
                 {mode == "item" && handleDoubleClick("/dashboard/items/edit");}
+                {mode == "itemGroup" && handleDoubleClick("/dashboard/items/edititemgroup");}
+                {mode == "hsn" && handleDoubleClick("/dashboard/items/edithsn");}
                 {mode == "ledgers" && handleDoubleClick("/dashboard/ledger/edit");}
               }}
               className={`font-medium cursor-pointer ${

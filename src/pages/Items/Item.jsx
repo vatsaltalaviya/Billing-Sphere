@@ -22,10 +22,9 @@ const Item = () => {
 
   
   const ItemSidebarData = [
-    { name: "New", onClick: () => {}, navigate: "/dashboard/items/new" },
+    { name: "New", navigate: "/dashboard/items/new" },
     {
       name: "Edit",
-      onClick: () => {},
       navigate: (itemUrl!=null && searchingitems.length > 0)?`/dashboard/items/edit/${itemUrl}`:'/dashboard/items',
     },
     {

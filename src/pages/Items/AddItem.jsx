@@ -285,7 +285,7 @@ const AddItem = () => {
                     id="itemGroup"
                     mode="item"
                     options={itemGroupOption}
-                    addlink="/dashboard/items/itemgroup"
+                    addlink="/dashboard/items/additemgroup"
                     value={formData.itemGroup}
                     onChange={handleChangeData}
                     className="w-full border flex-1 relative"
@@ -399,7 +399,7 @@ const AddItem = () => {
                       id="hsn"
                       mode="item"
                       className="flex-1 lg:w-42 border relative"
-                      addlink="/dashboard/items/hsn"
+                      addlink="/dashboard/items/addhsn"
                       options={HsnOption}
                       value={formData.hsn}
                       onChange={handleChangeData}

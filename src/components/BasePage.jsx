@@ -24,6 +24,8 @@ const BasePage = ({
   focusDateTrigger
 }) => {
 
+  
+
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -65,7 +67,7 @@ const BasePage = ({
       <div className='flex justify-end'>
         {/* ------------------ displaying main content according their mode or table data -------------------------------- */}
        <div className='w-full h-screen overflow-y-auto p-5 sm:p-2 table-data'>
-            {(mode==="item") && <MasterPart mode={mode} getitemUrl={getitemUrl} tableData={tableData}/>}            
+            {(mode==="item" || mode === "itemGroup" || mode=== "hsn") && <MasterPart mode={mode} getitemUrl={getitemUrl} tableData={tableData}/>}            
             {(mode==="ledgers") && <MasterPart mode={mode} getitemUrl={getitemUrl} tableData={tableData}/>}            
             
             {(mode === "Sales" || mode === "Purchase") && (

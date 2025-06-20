@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
 
-const HsnPage = () => {
+const AddHsnPage = () => {
   const [HsnCode, setHsnCode] = useState("");
   const [Desc, setDesc] = useState("");
   const [isLoading, setisLoading] = useState(null);
@@ -11,6 +11,8 @@ const HsnPage = () => {
   const token = localStorage.getItem("token");
   const companyCode = localStorage.getItem("companies");
   const ownerId = localStorage.getItem("uid");
+    const location = useLocation();
+   const source = location.state?.source;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +35,7 @@ const HsnPage = () => {
       );
       const data = res.data;
       if (data.success) {
-        navigate("/dashboard/items/new");
+         {(source == "itemsPage")?navigate("/dashboard/items/new"):navigate("/dashboard/items/hsn")}
         setisLoading(false)
       }
     } catch (error) {
@@ -73,7 +75,7 @@ const HsnPage = () => {
               Save
             </button>
             <button
-              onClick={() => navigate("/dashboard/items/new")}
+              onClick={() => navigate(-1)}
               className=" px-5 h-10 font-medium bg-amber-300 border border-amber-600 hover:bg-amber-500"
             >
               Cancel
@@ -85,4 +87,4 @@ const HsnPage = () => {
   );
 };
 
-export default HsnPage;
+export default AddHsnPage;

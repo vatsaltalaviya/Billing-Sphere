@@ -19,7 +19,7 @@ const MasterPart = ({ getitemUrl , mode ,tableData}) => {
       <div className='w-full py-3 '>
         <form className='flex'>
           <span className='bg-white border font-medium px-3 py-1'>Search</span>
-          {(mode == "item")&&<input type="text" className='bg-white border font-medium px-3 py-1 w-full'  value={query} onChange={(e) => dispatch(setItemSearchQuery(e.target.value))} />}
+          {(mode == "item" || mode == "itemGroup" || mode === "hsn")&&<input type="text" className='bg-white border font-medium px-3 py-1 w-full'  value={query} onChange={(e) => dispatch(setItemSearchQuery(e.target.value))} />}
           {(mode == "ledgers")&&<input type="text" className='bg-white border font-medium px-3 py-1 w-full'  value={ledgerquery} onChange={(e) => dispatch(setLedgerSearchQuery(e.target.value))} />}
         </form>
       </div>
@@ -29,6 +29,7 @@ const MasterPart = ({ getitemUrl , mode ,tableData}) => {
       </div>:
       <div className={`w-full flex justify-center max-h-[85vh] min-h-[80vh] table-data overflow-y-auto`}>
         {(mode == "item")&&tableData && (tableData.length > 0 ? <Datatable mode={mode} getitemUrl={getitemUrl} list={tableData}/>:<NoTableData mode={mode}/>)}
+        {(mode == "itemGroup" || mode === "hsn")&&tableData && (tableData.length > 0 ? <Datatable mode={mode} getitemUrl={getitemUrl} list={tableData}/>:<NoTableData mode={mode}/>)}
         {(mode == "ledgers")&&tableData && (tableData.length > 0 ? <Datatable mode={mode} getitemUrl={getitemUrl} list={tableData}/>:<NoTableData mode="item"/>)}
       </div>}
      
