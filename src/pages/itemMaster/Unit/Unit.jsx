@@ -6,7 +6,7 @@ import axios from "axios";
 import DeleteAlert from "../../../components/DeleteAlert";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDropdowns } from "../../../feature/itemSlice";
+import { deleteunit, fetchDropdowns } from "../../../feature/itemSlice";
 
 const Unit = () => {
    const [Url, setUrl] = useState(null);
@@ -16,7 +16,7 @@ const Unit = () => {
    const {units} = useSelector((state)=>state.items.dropdowns)
  
    const [ShowDeleteAlert, setShowDeleteAlert] = useState(false);
-   const navigate = useNavigate();
+
    const unitside = [
      { name: "New", navigate: `/dashboard/items/addunit` },
      { name: "Edit", navigate: `/dashboard/items/edittax/${Url}` },
@@ -35,24 +35,13 @@ const Unit = () => {
    const getUrl = (url) => {
      setUrl(url);
    };
- 
-   const handleDelete = async () => {
-     try {
-       
-       const res = await axios.delete(
-         `${import.meta.env.VITE_BASE_URL}/measurementLimit/delete/${Url}`,
-         { headers: { Authorization: `${token}` } }
-       );
-       const data = res.data;
-       if (data.success) {
-         dispatch(fetchDropdowns())
-         setShowDeleteAlert(false);
-         
-       }
-     } catch (err) {
-       console.error(err);
-     }
-   };
+ const handleDelete = async () => {
+  try {
+    await dispatch(deleteunit(Url));
+  } catch (err) {
+    console.error(err);
+  }
+};
    const tableData = units?.map((item, index) => ({
      sr: index + 1,
      id: item.id,

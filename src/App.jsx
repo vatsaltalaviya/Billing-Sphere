@@ -51,7 +51,7 @@ const App = () => {
   return (
     <>
     <div className='xl:h-screen bg-white bg-fixed bg-no-repeat bg-cover'>
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={1000} />
     <Routes>
       <Route path='/' element={<Login />} />
      <Route path='/dashboard' element={<ProtectedRoute><Home /></ProtectedRoute>} />

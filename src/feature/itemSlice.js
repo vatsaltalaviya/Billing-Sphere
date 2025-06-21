@@ -16,7 +16,7 @@ export const fetchItems = createAsyncThunk("fetchItems", async (_, thunkAPI) => 
 
         // Fetch group names in parallel
         const groupMap = {};
-        
+
         await Promise.all(
             groupIds.map(async (id) => {
                 try {
@@ -61,7 +61,7 @@ export const fetchDropdowns = createAsyncThunk('items/fetchDropdowns', async () 
         brands: brands.data.data.map((i) => ({ id: i._id, name: i.name })),
         hsns: hsns.data.data.map((i) => ({ id: i._id, name: i.hsn })),
         units: units.data.data.map((i) => ({ id: i._id, name: i.measurement })),
-        stores: stores.data.data.map((i) => ({ id: i._id, name: i.location , isActive:i.isActive })),
+        stores: stores.data.data.map((i) => ({ id: i._id, name: i.location, isActive: i.isActive })),
         taxes: taxes.data.data.map((i) => ({ id: i._id, name: i.rate })),
     };
 });
@@ -139,11 +139,126 @@ export const deleteItem = createAsyncThunk(
         }
     }
 );
-
-export const addItemGroup = createAsyncThunk("addItemGroup" , async(data , thunkAPI)=>{
+export const deleteItemGroup = createAsyncThunk("deleteItemGroup", async (Url, thunkAPI) => {
     const token = localStorage.getItem("token");
-    
-})
+    try {
+        const res = await axios.delete(
+            `${import.meta.env.VITE_BASE_URL}/item-group/delete/${Url}`,
+            { headers: { Authorization: `${token}` } }
+        );
+
+        const data = res.data;
+        if (data.success) {
+            // ✅ Refresh dropdowns after delete
+            await thunkAPI.dispatch(fetchDropdowns());
+            return Url;
+        } else {
+            return thunkAPI.rejectWithValue(data.message || "Item Deletion failed");
+        }
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data || error.message);
+    }
+});
+export const deleteBrand = createAsyncThunk("deleteBrand", async (Url, thunkAPI) => {
+    const token = localStorage.getItem("token");
+    try {
+        const res = await axios.delete(
+            `${import.meta.env.VITE_BASE_URL}/item-brand/delete/${Url}`,
+            { headers: { Authorization: `${token}` } }
+        );
+
+        const data = res.data;
+        if (data.success) {
+            // ✅ Refresh dropdowns after delete
+            await thunkAPI.dispatch(fetchDropdowns());
+            return Url;
+        } else {
+            return thunkAPI.rejectWithValue(data.message || "Item Deletion failed");
+        }
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data || error.message);
+    }
+});
+export const deletehsn = createAsyncThunk("deletehsn", async (Url, thunkAPI) => {
+    const token = localStorage.getItem("token");
+    try {
+        const res = await axios.delete(
+            `${import.meta.env.VITE_BASE_URL}/hsnCode/delete/${Url}`,
+            { headers: { Authorization: `${token}` } }
+        );
+
+        const data = res.data;
+        if (data.success) {
+            // ✅ Refresh dropdowns after delete
+            await thunkAPI.dispatch(fetchDropdowns());
+            return Url;
+        } else {
+            return thunkAPI.rejectWithValue(data.message || "Item Deletion failed");
+        }
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data || error.message);
+    }
+});
+export const deletetax = createAsyncThunk("deletetax", async (Url, thunkAPI) => {
+    const token = localStorage.getItem("token");
+    try {
+        const res = await axios.delete(
+            `${import.meta.env.VITE_BASE_URL}/tax/delete/${Url}`,
+            { headers: { Authorization: `${token}` } }
+        );
+
+        const data = res.data;
+        if (data.success) {
+            // ✅ Refresh dropdowns after delete
+            await thunkAPI.dispatch(fetchDropdowns());
+            return Url;
+        } else {
+            return thunkAPI.rejectWithValue(data.message || "Item Deletion failed");
+        }
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data || error.message);
+    }
+});
+export const deletestore = createAsyncThunk("deletestore", async (Url, thunkAPI) => {
+    const token = localStorage.getItem("token");
+    try {
+        const res = await axios.delete(
+            `${import.meta.env.VITE_BASE_URL}/store/delete/${Url}`,
+            { headers: { Authorization: `${token}` } }
+        );
+
+        const data = res.data;
+        if (data.success) {
+            // ✅ Refresh dropdowns after delete
+            await thunkAPI.dispatch(fetchDropdowns());
+            return Url;
+        } else {
+            return thunkAPI.rejectWithValue(data.message || "Item Deletion failed");
+        }
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data || error.message);
+    }
+});
+export const deleteunit = createAsyncThunk("deleteunit", async (Url, thunkAPI) => {
+    const token = localStorage.getItem("token");
+    try {
+        const res = await axios.delete(
+            `${import.meta.env.VITE_BASE_URL}/measurementLimit/delete/${Url}`,
+            { headers: { Authorization: `${token}` } }
+        );
+
+        const data = res.data;
+        if (data.success) {
+            // ✅ Refresh dropdowns after delete
+            await thunkAPI.dispatch(fetchDropdowns());
+            return Url;
+        } else {
+            return thunkAPI.rejectWithValue(data.message || "Item Deletion failed");
+        }
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data || error.message);
+    }
+});
 
 
 
@@ -244,6 +359,85 @@ const itemSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload || "Something went wrong";
             })
+            .addCase(deleteItemGroup.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+               
+            })
+            .addCase(deleteItemGroup.fulfilled, (state, action) => {
+                state.loading = false;
+              
+            })
+            .addCase(deleteItemGroup.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Something went wrong";
+            })
+            .addCase(deleteBrand.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+               
+            })
+            .addCase(deleteBrand.fulfilled, (state, action) => {
+                state.loading = false;
+              
+            })
+            .addCase(deleteBrand.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Something went wrong";
+            })
+            .addCase(deletehsn.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+               
+            })
+            .addCase(deletehsn.fulfilled, (state, action) => {
+                state.loading = false;
+              
+            })
+            .addCase(deletehsn.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Something went wrong";
+            })
+            .addCase(deletetax.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+               
+            })
+            .addCase(deletetax.fulfilled, (state, action) => {
+                state.loading = false;
+              
+            })
+            .addCase(deletetax.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Something went wrong";
+            })
+            .addCase(deletestore.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+               
+            })
+            .addCase(deletestore.fulfilled, (state, action) => {
+                state.loading = false;
+              
+            })
+            .addCase(deletestore.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Something went wrong";
+            })
+            .addCase(deleteunit.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+               
+            })
+            .addCase(deleteunit.fulfilled, (state, action) => {
+                state.loading = false;
+              
+            })
+            .addCase(deleteunit.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Something went wrong";
+            })
+
 
     },
 });

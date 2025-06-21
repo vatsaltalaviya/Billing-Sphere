@@ -4,13 +4,17 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import DeleteAlert from "../../../components/DeleteAlert";
 import { useNavigate } from "react-router-dom";
+import { deleteItemGroup, fetchDropdowns } from "../../../feature/itemSlice";
 
 const ItemGroup = () => {
   const [data, setdata] = useState(null);
+  const [loading, setloading] = useState(false);
   const [Url, setUrl] = useState(null);
   const uid = localStorage.getItem("uid");
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { itemGroups } = useSelector((state) =>state.items.dropdowns)
 
   const itemgroupside = [
     { name: "New", navigate: `/dashboard/items/additemgroup` },
@@ -24,48 +28,32 @@ const ItemGroup = () => {
   ];
 
   const [ShowDeleteAlert, setShowDeleteAlert] = useState(false);
-  const [clickYes, setclickYes] = useState(false);
-
-  const fetchdata = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/item-group/get/${uid}`
-      );
-      const data = response.data.data;
-      setdata(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  
   useEffect(() => {
-    fetchdata();
+    dispatch(fetchDropdowns())
   }, []);
-  useEffect(() => {
-    fetchdata();
-  }, [clickYes]);
+  
+
   const getUrl = (url) => {
     setUrl(url);
   };
 
-  const handleDelete = async () => {
-    try {
-      const res = await axios.delete(
-        `${import.meta.env.VITE_BASE_URL}/item-group/delete/${Url}`,
-        { headers: { Authorization: `${token}` } }
-      );
-      const data = res.data;
-      if (data.success) {
-        navigate("/dashboard/items/itemgroup");
-        setShowDeleteAlert(false);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+ const handleDelete = async () => {
+  try {
+    setloading(true);
+    await dispatch(deleteItemGroup(Url));
+    setloading(false);
+  } catch (err) {
+    setloading(false);
+    console.error(err);
+  }
+};
 
-  const tableData = data?.map((item, index) => ({
+  
+
+  const tableData = itemGroups?.map((item, index) => ({
     sr: index + 1,
-    id: item._id,
+    id: item.id,
     name: item.name,
   }));
   return (
@@ -76,6 +64,7 @@ const ItemGroup = () => {
         mode="itemGroup"
         getitemUrl={(e) => getUrl(e)}
         tableData={tableData}
+        isloading={loading}
       />
 
       {ShowDeleteAlert && (

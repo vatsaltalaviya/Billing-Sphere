@@ -23,11 +23,11 @@ const AddBrand = () => {
       return true; 
     };
   const handleSubmit = async (e) => {
+    e.preventDefault();
     setisLoading(true);
-        if (!validateForm(formData)) {
+        if (!validateForm()) {
       return;
     }
-    e.preventDefault();
     try {
       const BrandData = {
         name: BrandName,

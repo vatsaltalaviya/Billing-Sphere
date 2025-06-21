@@ -33,6 +33,7 @@ export
                 },
                 {
                     name: "Ledger Master",
+                    navigate:'/dashboard/ledger'
                 },
                 {
                     name: "Ledger DashBoard",
@@ -52,6 +53,7 @@ export
                 },
                 {
                     name: "HSN Commodity Master",
+                    navigate:'/dashboard/items/hsn'
                 },
                 {
                     name: "Reports",
@@ -198,7 +200,9 @@ export
                 { name: "Item Group Master" ,
                     navigate:`/dashboard/items/itemgroup`
                 },
-                { name: "Unit Master" },
+                { name: "Unit Master",
+                    navigate:`/dashboard/items/unit`
+                 },
                 {
                     name: "Misc. Master",
                     submenu: [
@@ -206,9 +210,13 @@ export
                         { name: "Retail Customer" },
                         { name: "Clearing Type" },
                         { name: "Transporter" },
-                        { name: "Store Location Master" },
+                        { name: "Store Location Master",
+                        navigate:'/dashboard/items/rack'
+                         },
                         { name: "Payment Mode" },
-                        { name: "Brand Master" },
+                        { name: "Brand Master",
+                            navigate:"/dashboard/items/brand"
+                         },
                         { name: "Import Master Profile" }
                     ]
                 }

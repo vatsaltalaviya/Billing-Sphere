@@ -5,12 +5,16 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import DeleteAlert from "../../../components/DeleteAlert";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { deletetax, fetchDropdowns } from "../../../feature/itemSlice";
 
 const Tax = () => {
    const [data, setdata] = useState(null);
   const [Url, setUrl] = useState(null);
   const uid = localStorage.getItem("uid");
   const token = localStorage.getItem("token");
+  const dispatch = useDispatch()
+  const {taxes} = useSelector((state)=>state.items.dropdowns)
 
   const [ShowDeleteAlert, setShowDeleteAlert] = useState(false);
   const navigate = useNavigate();
@@ -39,35 +43,27 @@ const Tax = () => {
     }
   };
   useEffect(() => {
-    fetchData();
+    dispatch(fetchDropdowns())
   }, []);
-;
+
 
   const getUrl = (url) => {
     setUrl(url);
   };
 
   const handleDelete = async () => {
-    try {
-      
-      const res = await axios.delete(
-        `${import.meta.env.VITE_BASE_URL}/tax/delete/${Url}`,
-        { headers: { Authorization: `${token}` } }
-      );
-      const data = res.data;
-      if (data.success) {
-        await fetchData();
-        setShowDeleteAlert(false);
-        
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  const tableData = data?.map((item, index) => ({
+  try {
+    await dispatch(deletetax(Url));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
+  const tableData = taxes?.map((item, index) => ({
     sr: index + 1,
-    id: item._id,
-    "Tax category": item.rate,
+    id: item.id,
+    "Tax category": item.name,
   }));
 
   return (

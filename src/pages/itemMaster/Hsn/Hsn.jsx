@@ -5,12 +5,16 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import DeleteAlert from "../../../components/DeleteAlert";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { deletehsn, fetchDropdowns } from "../../../feature/itemSlice";
 
 const Hsn = () => {
   const [data, setdata] = useState(null);
   const [Url, setUrl] = useState(null);
   const uid = localStorage.getItem("uid");
   const token = localStorage.getItem("token");
+  const dispatch = useDispatch();
+  const { hsns } = useSelector((state) => state.items.dropdowns);
 
   const [ShowDeleteAlert, setShowDeleteAlert] = useState(false);
   const navigate = useNavigate();
@@ -20,7 +24,7 @@ const Hsn = () => {
     {
       name: "Delete",
       onClick: () => {
-        Url!=null &&setShowDeleteAlert(true);
+        Url != null && setShowDeleteAlert(true);
       },
     },
   ];
@@ -38,9 +42,8 @@ const Hsn = () => {
     }
   };
   useEffect(() => {
-    fetchData();
+    dispatch(fetchDropdowns());
   }, []);
-
 
   const getUrl = (url) => {
     setUrl(url);
@@ -48,24 +51,15 @@ const Hsn = () => {
 
   const handleDelete = async () => {
     try {
-      const res = await axios.delete(
-        `${import.meta.env.VITE_BASE_URL}/hsnCode/delete/${Url}`,
-        { headers: { Authorization: `${token}` } }
-      );
-      const data = res.data;
-      if (data.success) {
-        await fetchData();
-        setShowDeleteAlert(false);
-  
-      }
+      await dispatch(deletehsn(Url));
     } catch (err) {
       console.error(err);
     }
   };
-  const tableData = data?.map((item, index) => ({
+  const tableData = hsns?.map((item, index) => ({
     sr: index + 1,
-    id: item._id,
-    name: item.hsn,
+    id: item.id,
+    name: item.name,
   }));
 
   return (
@@ -83,12 +77,12 @@ const Hsn = () => {
           field="Item Group"
           onYes={async () => {
             setShowDeleteAlert(false); // Hide the alert
-            // await handleDelete(); // Wait for deletion
+            await handleDelete(); // Wait for deletion
           }}
           onClose={() => setShowDeleteAlert(false)}
         />
       )}
-       {/* <ToastContainer position="top-right" autoClose={3000} /> */}
+      {/* <ToastContainer position="top-right" autoClose={3000} /> */}
     </div>
   );
 };

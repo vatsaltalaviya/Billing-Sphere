@@ -6,7 +6,7 @@ import axios from "axios";
 import DeleteAlert from "../../../components/DeleteAlert";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDropdowns } from "../../../feature/itemSlice";
+import { deleteBrand, fetchDropdowns } from "../../../feature/itemSlice";
 
 const Brand = () => {
   const [Url, setUrl] = useState(null);
@@ -16,7 +16,8 @@ const Brand = () => {
   const { brands } = useSelector((state) => state.items.dropdowns);
 
   const [ShowDeleteAlert, setShowDeleteAlert] = useState(false);
-  const navigate = useNavigate();
+ 
+
   const brandside = [
     { name: "New", navigate: `/dashboard/items/addbrand` },
     { name: "Edit", navigate: `/dashboard/items/editbrand/${Url}` },
@@ -27,22 +28,15 @@ const Brand = () => {
       },
     },
   ];
+
   const handleDelete = async () => {
     try {
-      
-      const res = await axios.delete(
-        `${import.meta.env.VITE_BASE_URL}/item-brand/delete/${Url}`,
-        { headers: { Authorization: `${token}` } }
-      );
-      const data = res.data;
-      if (data.success) {
-        dispatch(fetchDropdowns());
-        setShowDeleteAlert(false);
-      }
+      await dispatch(deleteBrand(Url));
     } catch (err) {
       console.error(err);
     }
   };
+
   const getUrl = (url) => {
     setUrl(url);
   };
@@ -65,6 +59,7 @@ const Brand = () => {
         mode="brand"
         getitemUrl={(e) => getUrl(e)}
         tableData={tableData}
+       
       />
 
       {ShowDeleteAlert && (
