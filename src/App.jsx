@@ -19,7 +19,6 @@ import CreditNote from './pages/CreditNote'
 import DebitNote from './pages/DebitNote'
 import GstExp from './pages/GstExp'
 import Brand from './pages/itemMaster/Brand/Brand';
-import HsnPage from './pages/itemMaster/Hsn/AddHsnPage'
 import BulkItemUpd from './pages/Items/BulkItemUpd'
 import Filteritem from './pages/Items/Filteritem'
 import ImgGallery from './pages/Items/ImgGallery'
