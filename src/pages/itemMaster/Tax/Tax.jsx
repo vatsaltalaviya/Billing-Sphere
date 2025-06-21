@@ -6,17 +6,17 @@ import axios from "axios";
 import DeleteAlert from "../../../components/DeleteAlert";
 import { useNavigate } from "react-router-dom";
 
-const Hsn = () => {
-  const [data, setdata] = useState(null);
+const Tax = () => {
+   const [data, setdata] = useState(null);
   const [Url, setUrl] = useState(null);
   const uid = localStorage.getItem("uid");
   const token = localStorage.getItem("token");
 
   const [ShowDeleteAlert, setShowDeleteAlert] = useState(false);
   const navigate = useNavigate();
-  const hsnside = [
-    { name: "New", navigate: `/dashboard/items/addhsn` },
-    { name: "Edit", navigate: `/dashboard/items/edithsn/${Url}` },
+  const taxside = [
+    { name: "New", navigate: `/dashboard/items/addtax` },
+    { name: "Edit", navigate: `/dashboard/items/edittax/${Url}` },
     {
       name: "Delete",
       onClick: () => {
@@ -28,10 +28,11 @@ const Hsn = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/hsnCode/fetchAllHsncode/${uid}`,
+        `${import.meta.env.VITE_BASE_URL}/tax/fetchAllTax/${uid}`,
         { headers: { Authorization: token } }
       );
       const data = response.data.data;
+      
       setdata(data);
     } catch (error) {
       console.error(error);
@@ -40,7 +41,7 @@ const Hsn = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
+;
 
   const getUrl = (url) => {
     setUrl(url);
@@ -48,15 +49,16 @@ const Hsn = () => {
 
   const handleDelete = async () => {
     try {
+      
       const res = await axios.delete(
-        `${import.meta.env.VITE_BASE_URL}/hsnCode/delete/${Url}`,
+        `${import.meta.env.VITE_BASE_URL}/tax/delete/${Url}`,
         { headers: { Authorization: `${token}` } }
       );
       const data = res.data;
       if (data.success) {
         await fetchData();
         setShowDeleteAlert(false);
-  
+        
       }
     } catch (err) {
       console.error(err);
@@ -65,32 +67,32 @@ const Hsn = () => {
   const tableData = data?.map((item, index) => ({
     sr: index + 1,
     id: item._id,
-    name: item.hsn,
+    "Tax category": item.rate,
   }));
 
   return (
     <div>
       <BasePage
-        heading="HSN Master"
-        Sidebardata={hsnside}
-        mode="hsn"
+        heading="Tax Category Master"
+        Sidebardata={taxside}
+        mode="tax"
         getitemUrl={(e) => getUrl(e)}
         tableData={tableData}
       />
 
       {ShowDeleteAlert && (
         <DeleteAlert
-          field="Item Group"
+          field="Tax"
           onYes={async () => {
             setShowDeleteAlert(false); // Hide the alert
-            // await handleDelete(); // Wait for deletion
+            await handleDelete();
           }}
           onClose={() => setShowDeleteAlert(false)}
         />
       )}
-       {/* <ToastContainer position="top-right" autoClose={3000} /> */}
+       
     </div>
   );
-};
+}
 
-export default Hsn;
+export default Tax

@@ -130,12 +130,13 @@ const UpdateItemGroup = () => {
                   {issaveLoading && <BeatLoader size={5} color="#fff" />}
                   Save
                 </button>
-                <button
-                  type="reset"
-                  className=" px-5 h-10 font-medium bg-amber-300 border border-amber-600 hover:bg-amber-500"
-                >
-                  Cancel
-                </button>
+                 <button
+            type="button"
+              onClick={() => navigate(-1)}
+              className=" px-5 h-10 font-medium bg-amber-300 border border-amber-600 hover:bg-amber-500"
+            >
+              Cancel
+            </button>
               </div>
             </form>
           </div>

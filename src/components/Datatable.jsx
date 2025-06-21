@@ -90,6 +90,10 @@ const Datatable = ({ data, list, getitemUrl, mode }) => {
                 {mode == "item" && handleDoubleClick("/dashboard/items/edit");}
                 {mode == "itemGroup" && handleDoubleClick("/dashboard/items/edititemgroup");}
                 {mode == "hsn" && handleDoubleClick("/dashboard/items/edithsn");}
+                {mode == "tax" && handleDoubleClick("/dashboard/items/edittax");}
+                {mode == "brand" && handleDoubleClick("/dashboard/items/editbrand");}
+                {mode == "unit" && handleDoubleClick("/dashboard/items/editunit");}
+                {mode == "store" && handleDoubleClick("/dashboard/items/editrack");}
                 {mode == "ledgers" && handleDoubleClick("/dashboard/ledger/edit");}
               }}
               className={`font-medium cursor-pointer ${

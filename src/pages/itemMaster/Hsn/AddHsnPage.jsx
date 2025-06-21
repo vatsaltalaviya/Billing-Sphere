@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
+import { toast } from "react-toastify";
 
 const AddHsnPage = () => {
   const [HsnCode, setHsnCode] = useState("");
@@ -11,11 +12,22 @@ const AddHsnPage = () => {
   const token = localStorage.getItem("token");
   const companyCode = localStorage.getItem("companies");
   const ownerId = localStorage.getItem("uid");
-    const location = useLocation();
-   const source = location.state?.source;
+  const location = useLocation();
+  const source = location.state?.source;
+
+  const validateForm = () => {
+    if (!HsnCode || HsnCode == "") {
+      toast.error("HSN Code is required!");
+      return false;
+    }
+    return true; // All good
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm(formData)) {
+      return;
+    }
     setisLoading(true);
     const hsnData = {
       hsn: HsnCode,
@@ -35,8 +47,12 @@ const AddHsnPage = () => {
       );
       const data = res.data;
       if (data.success) {
-         {(source == "itemsPage")?navigate("/dashboard/items/new"):navigate("/dashboard/items/hsn")}
-        setisLoading(false)
+        {
+          source == "itemsPage"
+            ? navigate("/dashboard/items/new")
+            : navigate("/dashboard/items/hsn");
+        }
+        setisLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -75,6 +91,7 @@ const AddHsnPage = () => {
               Save
             </button>
             <button
+              type="button"
               onClick={() => navigate(-1)}
               className=" px-5 h-10 font-medium bg-amber-300 border border-amber-600 hover:bg-amber-500"
             >

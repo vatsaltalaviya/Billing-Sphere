@@ -18,7 +18,7 @@ import Contra from './pages/Contra'
 import CreditNote from './pages/CreditNote'
 import DebitNote from './pages/DebitNote'
 import GstExp from './pages/GstExp'
-import Brand from './pages/Items/Brand'
+import Brand from './pages/itemMaster/Brand/Brand';
 import HsnPage from './pages/itemMaster/Hsn/AddHsnPage'
 import BulkItemUpd from './pages/Items/BulkItemUpd'
 import Filteritem from './pages/Items/Filteritem'
@@ -27,23 +27,29 @@ import Receivable from './pages/Receivable'
 import ReceivableTable from './pages/ReceivableTable'
 import RecTabReport from './components/RecTabReport'
 import ProtectedRoute from './components/ProtectedRoute'
-import Rack from './pages/Items/Rack'
-import StockUnit from './pages/Items/StockUnit'
-import TaxCategory from './pages/Items/TaxCategory'
+import Rack from './pages/itemMaster/Storelocation/Rack'; 
 import UpdateItem from './pages/Items/UpdateItem'
 import UpDateLedger from './pages/Ledger/UpDateLedger'
-// import AddItemGroupfrom './pages/AddItemGroup';
 import AddItemGroup from './pages/itemMaster/Itemgroup/AddItemGroup';
 import ItemGroup from './pages/itemMaster/Itemgroup/ItemGroup';
 import UpdateItemGroup from './pages/itemMaster/Itemgroup/UpdateItemGroup';
 import AddHsnPage from './pages/itemMaster/Hsn/AddHsnPage';
 import Hsn from './pages/itemMaster/Hsn/Hsn';
 import Updatehsn from './pages/itemMaster/Hsn/Updatehsn';
+import Tax from './pages/itemMaster/Tax/Tax';
+import Addtax from './pages/itemMaster/Tax/Addtax';
+import Updatetax from './pages/itemMaster/Tax/Updatetax';
+import AddBrand from './pages/itemMaster/Brand/Addbrand';
+import Updatebrand from './pages/itemMaster/Brand/Updatebrand';
+import Addunit from './pages/itemMaster/Unit/Addunit';
+import Unit from './pages/itemMaster/Unit/Unit';
+import Updateunit from './pages/itemMaster/Unit/Updateunit';
+import Addrack from './pages/itemMaster/Storelocation/Addrack';
+import Updaterack from './pages/itemMaster/Storelocation/Updaterack';
 
 const App = () => {
   return (
     <>
-    {/* bg-[url("https://img.freepik.com/free-vector/blue-curve-background_53876-113112.jpg?ga=GA1.1.1175547896.1749882111&semt=ais_hybrid&w=740")] */}
     <div className='xl:h-screen bg-white bg-fixed bg-no-repeat bg-cover'>
       <ToastContainer position="top-right" autoClose={3000} />
     <Routes>
@@ -53,16 +59,31 @@ const App = () => {
      {/* items */}
       <Route path='/dashboard/items' element={<ProtectedRoute><Item /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/new' element={<ProtectedRoute><AddItem /></ProtectedRoute>} /> 
+      
       <Route path='/dashboard/items/itemgroup' element={<ProtectedRoute><ItemGroup /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/additemgroup' element={<ProtectedRoute><AddItemGroup /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/edititemgroup/:id' element={<ProtectedRoute><UpdateItemGroup /></ProtectedRoute>} /> 
+      
       <Route path='/dashboard/items/brand' element={<ProtectedRoute><Brand /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/addbrand' element={<ProtectedRoute><AddBrand /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/editbrand/:id' element={<ProtectedRoute><Updatebrand /></ProtectedRoute>} /> 
+      
       <Route path='/dashboard/items/hsn' element={<ProtectedRoute><Hsn /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/addhsn' element={<ProtectedRoute><AddHsnPage /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/edithsn/:id' element={<ProtectedRoute><Updatehsn /></ProtectedRoute>} /> 
+
       <Route path='/dashboard/items/rack' element={<ProtectedRoute><Rack /></ProtectedRoute>} /> 
-      <Route path='/dashboard/items/stockUnit' element={<ProtectedRoute><StockUnit /></ProtectedRoute>} /> 
-      <Route path='/dashboard/items/taxcategory' element={<ProtectedRoute><TaxCategory /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/addrack' element={<ProtectedRoute><Addrack /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/editrack/:id' element={<ProtectedRoute><Updaterack /></ProtectedRoute>} /> 
+      
+      <Route path='/dashboard/items/unit' element={<ProtectedRoute><Unit /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/addunit' element={<ProtectedRoute><Addunit /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/editunit/:id' element={<ProtectedRoute><Updateunit /></ProtectedRoute>} /> 
+      
+      <Route path='/dashboard/items/tax' element={<ProtectedRoute><Tax /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/addtax' element={<ProtectedRoute><Addtax /></ProtectedRoute>} /> 
+      <Route path='/dashboard/items/edittax/:id' element={<ProtectedRoute><Updatetax /></ProtectedRoute>} /> 
+      
       <Route path='/dashboard/items/fi' element={<ProtectedRoute><Filteritem /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/bu' element={<ProtectedRoute><BulkItemUpd /></ProtectedRoute>} /> 
       <Route path='/dashboard/items/gallery' element={<ProtectedRoute><ImgGallery /></ProtectedRoute>} /> 

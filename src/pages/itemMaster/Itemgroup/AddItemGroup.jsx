@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
+import { toast } from "react-toastify";
 
 const AddItemGroup = () => {
   const [ItemGroupName, setItemGroupName] = useState("");
@@ -17,8 +18,19 @@ const AddItemGroup = () => {
 
   const navigate = useNavigate();
 
+  const validateForm = () => {
+      if (!ItemGroupName || ItemGroupName=="") {
+        toast.error("Item Group is required!");
+        return false;
+      }
+      return true; // All good
+    };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     setisLoading(true)
 
     const itemGroupData = {
@@ -83,6 +95,7 @@ const AddItemGroup = () => {
               Save
             </button>
             <button
+            type="button"
               onClick={()=>navigate(-1)}
               className=" px-5 h-10 font-medium bg-amber-300 border border-amber-600 hover:bg-amber-500"
             >

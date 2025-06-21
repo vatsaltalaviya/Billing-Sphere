@@ -61,7 +61,7 @@ export const fetchDropdowns = createAsyncThunk('items/fetchDropdowns', async () 
         brands: brands.data.data.map((i) => ({ id: i._id, name: i.name })),
         hsns: hsns.data.data.map((i) => ({ id: i._id, name: i.hsn })),
         units: units.data.data.map((i) => ({ id: i._id, name: i.measurement })),
-        stores: stores.data.data.map((i) => ({ id: i._id, name: i.location })),
+        stores: stores.data.data.map((i) => ({ id: i._id, name: i.location , isActive:i.isActive })),
         taxes: taxes.data.data.map((i) => ({ id: i._id, name: i.rate })),
     };
 });

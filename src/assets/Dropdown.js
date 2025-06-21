@@ -45,6 +45,7 @@ export
                 },
                 {
                     name: "Tax Category (GST)",
+                    navigate:'/dashboard/items/tax'
                 },
                 {
                     name: "Sundry Component",
@@ -191,7 +192,9 @@ export
                         { name: "InActive Customers" }
                     ]
                 },
-                { name: "Item Master" },
+                { name: "Item Master",
+                    navigate:'/dashboard/items'
+                 },
                 { name: "Item Group Master" ,
                     navigate:`/dashboard/items/itemgroup`
                 },

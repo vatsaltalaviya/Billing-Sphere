@@ -417,7 +417,7 @@ const AddItem = () => {
                       id="tax"
                       mode="item"
                       className="flex-1 border relative"
-                      addlink="/dashboard/items/taxCategory"
+                      addlink="/dashboard/items/addtax"
                       options={TaxOption}
                       value={formData.tax}
                       onChange={handleChangeData}
@@ -514,7 +514,7 @@ const AddItem = () => {
                       id="rack"
                       mode="item"
                       options={RackOption}
-                      addlink="/dashboard/items/rack"
+                      addlink="/dashboard/items/addrack"
                       className="flex-1 lg:w-48 border relative"
                       value={formData.rack}
                       onChange={handleChangeData}
@@ -535,7 +535,7 @@ const AddItem = () => {
                     id="stockunit"
                     mode="item"
                     options={StockUnitOption}
-                    addlink="/dashboard/items/stockUnit"
+                    addlink="/dashboard/items/addunit"
                     className="w-52 lg:w-48 border relative"
                     value={formData.stockunit}
                     onChange={handleChangeData}

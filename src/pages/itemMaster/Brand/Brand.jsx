@@ -5,92 +5,80 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import DeleteAlert from "../../../components/DeleteAlert";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDropdowns } from "../../../feature/itemSlice";
 
-const Hsn = () => {
-  const [data, setdata] = useState(null);
+const Brand = () => {
   const [Url, setUrl] = useState(null);
   const uid = localStorage.getItem("uid");
   const token = localStorage.getItem("token");
+  const dispatch = useDispatch();
+  const { brands } = useSelector((state) => state.items.dropdowns);
 
   const [ShowDeleteAlert, setShowDeleteAlert] = useState(false);
   const navigate = useNavigate();
-  const hsnside = [
-    { name: "New", navigate: `/dashboard/items/addhsn` },
-    { name: "Edit", navigate: `/dashboard/items/edithsn/${Url}` },
+  const brandside = [
+    { name: "New", navigate: `/dashboard/items/addbrand` },
+    { name: "Edit", navigate: `/dashboard/items/editbrand/${Url}` },
     {
       name: "Delete",
       onClick: () => {
-        Url!=null &&setShowDeleteAlert(true);
+        Url != null && setShowDeleteAlert(true);
       },
     },
   ];
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/hsnCode/fetchAllHsncode/${uid}`,
-        { headers: { Authorization: token } }
-      );
-      const data = response.data.data;
-      setdata(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-
-  const getUrl = (url) => {
-    setUrl(url);
-  };
-
   const handleDelete = async () => {
     try {
+      
       const res = await axios.delete(
-        `${import.meta.env.VITE_BASE_URL}/hsnCode/delete/${Url}`,
+        `${import.meta.env.VITE_BASE_URL}/item-brand/delete/${Url}`,
         { headers: { Authorization: `${token}` } }
       );
       const data = res.data;
       if (data.success) {
-        await fetchData();
+        dispatch(fetchDropdowns());
         setShowDeleteAlert(false);
-  
       }
     } catch (err) {
       console.error(err);
     }
   };
-  const tableData = data?.map((item, index) => ({
+  const getUrl = (url) => {
+    setUrl(url);
+  };
+
+  useEffect(() => {
+    dispatch(fetchDropdowns());
+  }, []);
+
+  const tableData = brands?.map((item, index) => ({
     sr: index + 1,
-    id: item._id,
-    name: item.hsn,
+    id: item.id,
+    "Brand category": item.name,
   }));
 
   return (
     <div>
       <BasePage
-        heading="HSN Master"
-        Sidebardata={hsnside}
-        mode="hsn"
+        heading="Item Brand Master"
+        Sidebardata={brandside}
+        mode="brand"
         getitemUrl={(e) => getUrl(e)}
         tableData={tableData}
       />
 
       {ShowDeleteAlert && (
         <DeleteAlert
-          field="Item Group"
+          field="Item Brand"
           onYes={async () => {
             setShowDeleteAlert(false); // Hide the alert
-            // await handleDelete(); // Wait for deletion
+            await handleDelete();
           }}
           onClose={() => setShowDeleteAlert(false)}
         />
       )}
-       {/* <ToastContainer position="top-right" autoClose={3000} /> */}
     </div>
   );
 };
 
-export default Hsn;
+export default Brand;
