@@ -88,7 +88,7 @@ export default function SearchableDropdown({
         onClick={() => setShowOptions(true)}
       />
       {showOptions && (
-        <ul className="absolute w-full bg-blue-100 z-50 max-h-40 overflow-y-auto">
+        <ul className="absolute w-full bg-blue-50 z-50 max-h-40 overflow-y-auto">
           {Array.isArray(options) && options.length > 0 ? (
             filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
