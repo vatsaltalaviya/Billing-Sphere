@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import OpeningBal from "./OpeningBal";
 import axios from "axios";
@@ -28,10 +28,9 @@ const UpdateItem = () => {
     stockunit: "",
     minStock: "",
     maxStock: "",
-    updateImage: "NO",
     images: [],
     openstock: "NO",
-    isActive: "NO",
+    isActive: "Inactive",
     openingBalance: [],
   };
   const didInitRef = useRef(false);
@@ -111,25 +110,50 @@ const UpdateItem = () => {
     }
   };
 
-  const itemGroupobj = FieldOption.itemGroupOption.find(
-    (i) => i.id == AllData.itemGroup
+  const itemGroupobj = useMemo(() => {
+  return FieldOption.itemGroupOption.find(
+    (i) => i.id === AllData.itemGroup
   );
-  const brandobj = FieldOption.BrandOption.find(
-    (i) => i.id == AllData.itemBrand
-  );
-  const hsnobj = FieldOption.HsnOption.find((i) => i.id == AllData.hsnCode);
-  const taxobj = FieldOption.TaxOption.find((i) => i.id == AllData.taxCategory);
-  const stockUnitobj = FieldOption.StockUnitOption.find(
-    (i) => i.id == AllData.measurementUnit
-  );
-  const rackObj = FieldOption.RackOption.find(
-    (i) => i.id == AllData.storeLocation
-  );
+}, [FieldOption.itemGroupOption, AllData.itemGroup]);
 
-  const openingBalanceobj = AllData.openingBalance?.map((i) => {
-    const unitData = FieldOption.StockUnitOption.find((u) => u.id == i.unit);
+const brandobj = useMemo(() => {
+  return FieldOption.BrandOption.find(
+    (i) => i.id === AllData.itemBrand
+  );
+}, [FieldOption.BrandOption, AllData.itemBrand]);
+
+const hsnobj = useMemo(() => {
+  return FieldOption.HsnOption.find(
+    (i) => i.id === AllData.hsnCode
+  );
+}, [FieldOption.HsnOption, AllData.hsnCode]);
+
+const taxobj = useMemo(() => {
+  return FieldOption.TaxOption.find(
+    (i) => i.id === AllData.taxCategory
+  );
+}, [FieldOption.TaxOption, AllData.taxCategory]);
+
+const stockUnitobj = useMemo(() => {
+  return FieldOption.StockUnitOption.find(
+    (i) => i.id === AllData.measurementUnit
+  );
+}, [FieldOption.StockUnitOption, AllData.measurementUnit]);
+
+const rackObj = useMemo(() => {
+  return FieldOption.RackOption.find(
+    (i) => i.id === AllData.storeLocation
+  );
+}, [FieldOption.RackOption, AllData.storeLocation]);
+
+const openingBalanceobj = useMemo(() => {
+  return AllData.openingBalance?.map((i) => {
+    const unitData = FieldOption.StockUnitOption.find(
+      (u) => u.id === i.unit
+    );
     return { ...i, unit: unitData?.name };
   });
+}, [AllData.openingBalance, FieldOption.StockUnitOption]);
 
   const handledata = () => {
     const updatedForm = {
@@ -148,7 +172,6 @@ const UpdateItem = () => {
       stockunit: stockUnitobj?.name || "",
       minStock: AllData.minimumStock,
       maxStock: AllData.maximumStock,
-      updateImage: AllData.updateImage,
       images: AllData.images,
       openstock: AllData.openingStock,
       isActive: AllData.status,
@@ -693,25 +716,7 @@ const UpdateItem = () => {
                 </div>
                 <div className="py-5 px-4">
                   <div className="space-y-4">
-                    {/* update images  */}
-                    <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-                      <label
-                        htmlFor="remarkstockunit"
-                        className="lg:w-32 lg:text-lg text-lg font-medium"
-                      >
-                        Update Images ??
-                      </label>
-                      <select
-                        id="updateImage"
-                        className="border px-2 py-1 w-32"
-                        value={formData.updateImage}
-                        onChange={handleChangeData}
-                      >
-                        <option value="NO">NO</option>
-                        <option value="YES">YES</option>
-                      </select>
-                    </div>
-
+                 
                     {/* HSN Code + Tax Category */}
                     <div className="flex flex-col md:flex-row items-center gap-4">
                       <div className="h-52 w-52">

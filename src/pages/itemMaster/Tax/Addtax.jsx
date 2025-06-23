@@ -77,11 +77,7 @@ const Addtax = () => {
       const data = res.data;
       if (data.success) {
         setisLoading(false);
-        {
-          source == "itemsPage"
-            ? navigate("/dashboard/items/new")
-            : navigate("/dashboard/items/tax");
-        }
+          navigate(-1)
       }
     } catch (error) {
       console.error(error);
@@ -161,7 +157,7 @@ const Addtax = () => {
               <input
                 type="number"
                 className="flex-1 md:w-32 border py-2 px-2"
-                value={texCategory.SGST || ""}
+                value={texCategory.IGST || ""}
                 onChange={(e) => {
                   const update = { ...texCategory };
                   update.IGST = e.target.value;
@@ -174,7 +170,7 @@ const Addtax = () => {
               <input
                 type="number"
                 className="w-32 border py-2 px-2"
-                value={texCategory.SGST || ""}
+                value={texCategory.Cess1 || ""}
                 onChange={(e) => {
                   const update = { ...texCategory };
                   update.Cess1 = e.target.value;

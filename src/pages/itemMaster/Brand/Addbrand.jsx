@@ -49,8 +49,7 @@ const AddBrand = () => {
       const data = res.data;
       if (data.success) {
         setisLoading(false)
-         {(source == "itemsPage")?navigate("/dashboard/items/new"):navigate("/dashboard/items/brand")}
-        
+        navigate(-1)
       }
     } catch (error) {
       console.log(error);

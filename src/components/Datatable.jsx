@@ -53,15 +53,17 @@ const Datatable = ({ data, list, getitemUrl, mode }) => {
                 key={i}
                 className={`border border-black px-3 py-1 ${
                     columns.length <= 3
-                      ? i === 0 && "text-center"
+                      ? i === 0 && "text-center "
                       : i === 0 || i === columns.length -1
-                      ? "text-center"
-                      : ""
+                      ? "text-center md:w-12"
+                      : ['item',"ledgers"].includes(mode)&&(i === 1&& "md:w-sm")
                   }
+                  ${mode == "ledgers" && (i == 3 ||i == 4) && " text-right"}
+             
                   ${
                     columns.length > 3 &&
                     (i === columns.length - 2 || i === columns.length - 3)
-                      ? "text-right"
+                      ? "text-center"
                       : ""
                   } `}
               >
@@ -145,10 +147,11 @@ const Datatable = ({ data, list, getitemUrl, mode }) => {
                       ? "text-center"
                       : ""
                   }
+                       ${mode == "ledgers" && (colIndex == 3 ||colIndex == 4)?" text-right":''}
                   ${
                     columns.length > 3 &&
-                    (colIndex === columns.length - 2 || colIndex === columns.length - 3)
-                      ? "text-right"
+                    (colIndex == columns.length - 2 || colIndex == columns.length - 3|| mode=="item"&&(colIndex === columns.length - 4))
+                      ? "text-center"
                       : ""
                   } `}
                 >

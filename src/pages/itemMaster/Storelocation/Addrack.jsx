@@ -52,7 +52,7 @@ const Addrack = () => {
 
       const data = res.data;
       if (data.success) {
-        {(source == "itemsPage")?navigate("/dashboard/items/new"):navigate("/dashboard/items/rack")}
+        navigate(-1)
         setisLoading(false)
       }
     } catch (error) {

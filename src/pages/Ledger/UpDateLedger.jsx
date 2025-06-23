@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import SearchableDropdown from "../../components/SearchableDropdown";
 import { indianStates } from "../../assets/IndianStates";
@@ -83,9 +83,6 @@ const UpDateLedger = () => {
   const dispatch = useDispatch();
   const { ledgerGroup, loading , error} = useSelector((state) => state.ledgers);
 
- 
-  
-
   useEffect(() => {
     dispatch(fetchLedgerGroup());
   }, [dispatch]);
@@ -129,8 +126,10 @@ const UpDateLedger = () => {
       console.error("Error fetching item:", error);
     }
   };
+const ledgerGroupOp = useMemo(() => {
+  return ledgerGroup?.find((i) => i._id === AllData.ledgerGroup);
+}, [ledgerGroup, AllData.ledgerGroup]);
 
-  const ledgerGroupOp = ledgerGroup?.find((i) => i._id == AllData.ledgerGroup);
 
   const handleData = () => {
     const updatedForm = {

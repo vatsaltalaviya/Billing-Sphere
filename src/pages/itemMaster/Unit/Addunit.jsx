@@ -47,7 +47,7 @@ const Addunit = () => {
 
       const data = res.data;
       if (data.success) {
-          {(source == "itemsPage")?navigate("/dashboard/items/new"):navigate("/dashboard/items/unit")}
+          navigate(-1)
         setisLoading(false)
       }
     } catch (error) {

@@ -28,10 +28,9 @@ const AddItem = () => {
     stockunit: "",
     minStock: "",
     maxStock: "",
-    updateImage: "NO",
     images: [],
     openstock: "NO",
-    isActive: "NO", // Only use lowercase 'isActive'
+    isActive: "Inactive", // Only use lowercase 'isActive'
   };
 
   const inputRef = useRef(null);
@@ -592,24 +591,7 @@ const AddItem = () => {
             </div>
             <div className="py-5 px-4">
               <div className="space-y-4">
-                {/* update images  */}
-                <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-                  <label
-                    htmlFor="remarkstockunit"
-                    className="lg:w-32 lg:text-lg text-lg font-medium"
-                  >
-                    Update Images ??
-                  </label>
-                  <select
-                    id="updateImage"
-                    className="border px-2 py-1 w-32"
-                    value={formData.updateImage}
-                    onChange={handleChangeData}
-                  >
-                    <option value="NO">NO</option>
-                    <option value="YES">YES</option>
-                  </select>
-                </div>
+                
 
                 {/* HSN Code + Tax Category */}
                 <div className="flex flex-col md:flex-row items-center gap-4">
