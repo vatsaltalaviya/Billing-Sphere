@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 
 export default function SearchableDropdown({
   id,
-  options = [],               // Default to empty array
+  options = [], // Default to empty array
   value,
   onChange,
   className,
   ref,
   disabled,
   addlink,
-  mode
+  mode,
 }) {
   const inputRef = useRef();
 
@@ -74,16 +74,16 @@ export default function SearchableDropdown({
         ref={inputRef}
         value={searchTerm}
         autoComplete="off"
-        className='w-full px-2 py-1'
+        className="w-full px-2 py-1"
         onChange={(e) => {
           setSearchTerm(e.target.value);
           setShowOptions(true);
-           onChange({
-              target: {
-                id: id,
-                value: e.target.value,
-              },
-            });
+          onChange({
+            target: {
+              id: id,
+              value: e.target.value,
+            },
+          });
         }}
         onClick={() => setShowOptions(true)}
       />
@@ -97,16 +97,30 @@ export default function SearchableDropdown({
                   onClick={() => handleSelect(option)}
                   className="px-2 py-2 cursor-pointer hover:bg-blue-200"
                 >
-                  {typeof option === "string" ? option : option?.name || "Unnamed"}
+                  {typeof option === "string"
+                    ? option
+                    : mode === "sales" && option.qty
+                    ? `${option.name}  Qty${option.qty}`
+                    : option.name || ""}
                 </li>
               ))
             ) : (
-              <li className="px-2 py-2 text-gray-400">No match found {(mode && mode == "item")&&<Link state={ {source: 'itemsPage' }}  className="text-blue-900 underline" to={addlink}>click here to create</Link>} </li>
-              
+              <li className="px-2 py-2 text-gray-400">
+                No match found{" "}
+                {mode && mode == "item" && (
+                  <Link
+                    state={{ source: "itemsPage" }}
+                    className="text-blue-900 underline"
+                    to={addlink}
+                  >
+                    click here to create
+                  </Link>
+                )}{" "}
+              </li>
             )
           ) : (
             // <li className="px-2 py-2 border w-52 text-gray-400">No options available</li>
-            ''
+            ""
           )}
         </ul>
       )}

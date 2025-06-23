@@ -31,7 +31,6 @@ const Ledger = () => {
     searchingLedgers,
     ShowDeleteAlert,
     error,
-    ledgerDelete,
   } = useSelector((state) => state.ledgers);
 
   const ledgerSidebarData = [
@@ -114,8 +113,6 @@ const Ledger = () => {
         })
 
   };
-  console.log(error);
-  
 
   return (
     <div className="w-full">

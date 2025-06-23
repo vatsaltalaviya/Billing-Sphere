@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   createItem,
   fetchDropdowns,
-  fetchItems,
 } from "../../feature/itemSlice";
 import { BeatLoader } from "react-spinners";
 
@@ -78,13 +77,17 @@ const AddItem = () => {
   }, []);
 
   useEffect(() => {
-    setitemGroupOption(dropdowns.itemGroups || []);
-    setBrandOption(dropdowns.brands || []);
-    setHsnOption(dropdowns.hsns || []);
-    setStockUnitOption(dropdowns.units || []);
-    setRackOption(dropdowns.stores || []);
-    setTaxOption(dropdowns.taxes || []);
-  }, [dropdowns]);
+  const {
+    itemGroups = [],brands = [],hsns = [],units = [],stores = [],taxes = [],
+  } = dropdowns || {};
+
+  setitemGroupOption(itemGroups);
+  setBrandOption(brands);
+  setHsnOption(hsns);
+  setStockUnitOption(units);
+  setRackOption(stores);
+  setTaxOption(taxes);
+}, [dropdowns]);
 
   useEffect(() => {
     dispatch(fetchDropdowns());

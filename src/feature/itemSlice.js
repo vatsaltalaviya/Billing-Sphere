@@ -9,31 +9,8 @@ export const fetchItems = createAsyncThunk("fetchItems", async (_, thunkAPI) => 
             `${import.meta.env.VITE_BASE_URL}/items/get-items/${companyId}`,
             { headers: { Authorization: `${token}` } }
         );
-
         const data = res.data.data;
-        // Collect all unique itemGroup IDs
-        const groupIds = [...new Set(data.map((item) => item.itemGroup))];
-
-        // Fetch group names in parallel
-        const groupMap = {};
-
-        await Promise.all(
-            groupIds.map(async (id) => {
-                try {
-                    const groupRes = await axios.get(
-                        `${import.meta.env.VITE_BASE_URL}/item-group/getById/${id}`,
-                        { headers: { Authorization: token } }
-                    );
-                    if (groupRes.data.success) {
-                        groupMap[id] = groupRes.data.data.name;
-                    }
-                } catch (err) {
-                    console.error(`Error fetching itemGroup ${id}`, err);
-                }
-            })
-        );
-
-        return { items: data, groupMap }; //  return both items and group map
+        return { items: data }; //  return both items and group map
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message);
     }
@@ -65,6 +42,34 @@ export const fetchDropdowns = createAsyncThunk('items/fetchDropdowns', async () 
         taxes: taxes.data.data.map((i) => ({ id: i._id, name: i.rate })),
     };
 });
+
+export const fetchSerchItem = createAsyncThunk("serchItem", async (query, thunkAPI) => {
+    try {
+        const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/items/get-items/search/${companyId}?query=${query}&page=1&limit=20`)
+        const resdata = res.data;
+        if (resdata.success) {
+            return { items: resdata.data };
+        }
+
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+    }
+})
+export const fetchitemGroup = createAsyncThunk("Fetchitemgroup", async (_, thunkAPI) => {
+    const ownerId = localStorage.getItem("uid");
+    try {
+        const res = await axios.get(
+            `${import.meta.env.VITE_BASE_URL}/item-group/get/${ownerId}`,
+            { headers: { Authorization: token } }
+        );
+        const resdata = res.data;
+        if (resdata.success) {
+            return resdata.data;
+        }
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+    }
+})
 
 export const createItem = createAsyncThunk("createItem", async (itemData, thunkAPI) => {
     try {
@@ -146,7 +151,6 @@ export const deleteItemGroup = createAsyncThunk("deleteItemGroup", async (Url, t
             `${import.meta.env.VITE_BASE_URL}/item-group/delete/${Url}`,
             { headers: { Authorization: `${token}` } }
         );
-
         const data = res.data;
         if (data.success) {
             // ✅ Refresh dropdowns after delete
@@ -289,17 +293,9 @@ const itemSlice = createSlice({
             state.ShowDeleteAlert = action.payload
         },
         setItemSearchQuery: (state, action) => {
-            const query = action.payload.trim().toLowerCase();
             state.searchquery = action.payload;
-
-            if (query === "") {
-                state.searchingitems = state.items;
-            } else {
-                state.searchingitems = state.items.filter((item) =>
-                    (item?.itemName || "").toLowerCase().includes(query)
-                );
-            }
         }
+
 
 
     },
@@ -312,15 +308,32 @@ const itemSlice = createSlice({
             .addCase(fetchItems.fulfilled, (state, action) => {
                 state.loading = false;
                 state.items = action.payload.items;
-                state.groupMap = action.payload.groupMap;
+                // state.groupMap = action.payload.groupMap;
                 state.searchingitems = action.payload.items;
             })
             .addCase(fetchItems.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || "Something went wrong";
             })
+            .addCase(fetchSerchItem.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchSerchItem.fulfilled, (state, action) => {
+                state.loading = false;
+                state.searchingitems = action.payload.items;
+                state.groupMap = action.payload.groupMap;
+                state.searchingitems = action.payload.items;
+            })
+            .addCase(fetchSerchItem.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Something went wrong";
+            })
             .addCase(fetchDropdowns.fulfilled, (state, action) => {
                 state.dropdowns = action.payload;
+            })
+            .addCase(fetchitemGroup.fulfilled, (state, action) => {
+                state.dropdowns.itemGroups = action.payload;
             })
             .addCase(createItem.pending, (state) => {
                 state.loading = true;
@@ -362,11 +375,11 @@ const itemSlice = createSlice({
             .addCase(deleteItemGroup.pending, (state) => {
                 state.loading = true;
                 state.error = null;
-               
+
             })
             .addCase(deleteItemGroup.fulfilled, (state, action) => {
                 state.loading = false;
-              
+
             })
             .addCase(deleteItemGroup.rejected, (state, action) => {
                 state.loading = false;
@@ -375,11 +388,11 @@ const itemSlice = createSlice({
             .addCase(deleteBrand.pending, (state) => {
                 state.loading = true;
                 state.error = null;
-               
+
             })
             .addCase(deleteBrand.fulfilled, (state, action) => {
                 state.loading = false;
-              
+
             })
             .addCase(deleteBrand.rejected, (state, action) => {
                 state.loading = false;
@@ -388,11 +401,11 @@ const itemSlice = createSlice({
             .addCase(deletehsn.pending, (state) => {
                 state.loading = true;
                 state.error = null;
-               
+
             })
             .addCase(deletehsn.fulfilled, (state, action) => {
                 state.loading = false;
-              
+
             })
             .addCase(deletehsn.rejected, (state, action) => {
                 state.loading = false;
@@ -401,11 +414,11 @@ const itemSlice = createSlice({
             .addCase(deletetax.pending, (state) => {
                 state.loading = true;
                 state.error = null;
-               
+
             })
             .addCase(deletetax.fulfilled, (state, action) => {
                 state.loading = false;
-              
+
             })
             .addCase(deletetax.rejected, (state, action) => {
                 state.loading = false;
@@ -414,11 +427,11 @@ const itemSlice = createSlice({
             .addCase(deletestore.pending, (state) => {
                 state.loading = true;
                 state.error = null;
-               
+
             })
             .addCase(deletestore.fulfilled, (state, action) => {
                 state.loading = false;
-              
+
             })
             .addCase(deletestore.rejected, (state, action) => {
                 state.loading = false;
@@ -427,11 +440,11 @@ const itemSlice = createSlice({
             .addCase(deleteunit.pending, (state) => {
                 state.loading = true;
                 state.error = null;
-               
+
             })
             .addCase(deleteunit.fulfilled, (state, action) => {
                 state.loading = false;
-              
+
             })
             .addCase(deleteunit.rejected, (state, action) => {
                 state.loading = false;

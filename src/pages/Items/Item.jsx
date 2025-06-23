@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import BasePage from "../../components/BasePage";
 import OpItemBal from "./OpItemBal";
 import MinMaxQty from "./MinMaxQty";
@@ -7,21 +7,26 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   deleteAlert,
   deleteItem,
+  fetchitemGroup,
   fetchItems,
+  fetchSerchItem,
 } from "../../feature/itemSlice";
 import DeleteAlert from "../../components/DeleteAlert";
-import { useNavigate } from "react-router-dom";
+import lodash from "lodash";
 
 const Item = () => {
   const [showopitemBal, setOpitemBal] = useState(false);
   const [itemUrl, setitemUrl] = useState(null);
   const [showMinMax, setMinMax] = useState(false);
   const [showCopyItem, setshowCopyItem] = useState(false);
-  const { groupMap, itemDelete, ShowDeleteAlert, clickYes, searchingitems } =
-    useSelector((state) => state.items);
+  const { ShowDeleteAlert, searchingitems, searchquery } = useSelector(
+    (state) => state.items
+  );
+  const itemGroups = useSelector(
+    (state) => state.items.dropdowns?.itemGroups || []
+  );
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const ItemSidebarData = [
     { name: "New", navigate: "/dashboard/items/new" },
@@ -69,20 +74,49 @@ const Item = () => {
     { name: "Non/Used", onClick: () => {} },
   ];
 
+  useEffect(() => {
+    dispatch(fetchitemGroup());
+  }, []);
+
+
+  const debouncedSearch = useMemo(
+    () =>
+      lodash.debounce((value) => {
+        if (value.trim() === "") {
+          dispatch(fetchItems());
+        } else {
+          dispatch(fetchSerchItem(value));
+        }
+      }, 500),
+    [dispatch]
+  );
+
+  useEffect(() => {
+    debouncedSearch(searchquery);
+    return () => {
+      debouncedSearch.cancel(); // Cleanup on unmount
+    };
+  }, [searchquery, debouncedSearch]);
+
   const getUrl = (url) => {
     setitemUrl(url);
   };
-  useEffect(() => {
-    dispatch(fetchItems());
-  }, []);
 
+  const groupMap = useMemo(() => {
+    const map = {};
+    itemGroups.forEach((group) => {
+      map[group._id] = group.name;
+    });
+    return map;
+  }, [itemGroups]);
 
   const tableData = searchingitems.map((item, index) => ({
     Sr: index + 1,
     id: item._id,
     "Item Name": item.itemName,
     "Code No": item.codeNo,
-    Group: groupMap[item.itemGroup] || "Loading...", // ✅ safe access
+
+    Group: groupMap[item.itemGroup] || "",
     Retail: item.retail,
     MRP: item.mrp,
     "Cl.Stk": item.maximumStock,
@@ -95,7 +129,6 @@ const Item = () => {
         .then(() => {
           dispatch(fetchItems());
         });
-      
   };
 
   return (
@@ -115,8 +148,8 @@ const Item = () => {
         <DeleteAlert
           field="Item"
           onYes={async () => {
-            await handleDelete()
-            dispatch(deleteAlert(false))
+            await handleDelete();
+            dispatch(deleteAlert(false));
           }}
           onClose={() => dispatch(deleteAlert(false))}
         />

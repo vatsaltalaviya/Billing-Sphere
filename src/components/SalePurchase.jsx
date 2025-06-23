@@ -33,6 +33,8 @@ const SalePurchase = ({
       netAmt: "",
     }))
   );
+  console.log(mode);
+  
 
   if (createNewRow) {
     setProductRows((prevRows) => [...prevRows, createNewRow()]);
