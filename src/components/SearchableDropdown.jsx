@@ -109,7 +109,7 @@ export default function SearchableDropdown({
                 No match found{" "}
                 {mode && mode == "item" && (
                   <Link
-                    state={{ source: "itemsPage" }}
+                    // state={{ source: "itemsPage" }}
                     className="text-blue-900 underline"
                     to={addlink}
                   >

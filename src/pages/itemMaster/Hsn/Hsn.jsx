@@ -57,10 +57,12 @@ const Hsn = () => {
     }
   };
   const tableData = hsns?.map((item, index) => ({
-    sr: index + 1,
-    id: item.id,
-    name: item.name,
+    sr: index + 1||'',
+    id: item.id||'',
+    name: item.name||"",
+    Description:item.desc||''
   }));
+  
 
   return (
     <div>
@@ -74,7 +76,7 @@ const Hsn = () => {
 
       {ShowDeleteAlert && (
         <DeleteAlert
-          field="Item Group"
+          field="HSN"
           onYes={async () => {
             setShowDeleteAlert(false); // Hide the alert
             await handleDelete(); // Wait for deletion

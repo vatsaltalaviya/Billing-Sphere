@@ -10,8 +10,6 @@ import { deleteBrand, fetchDropdowns } from "../../../feature/itemSlice";
 
 const Brand = () => {
   const [Url, setUrl] = useState(null);
-  const uid = localStorage.getItem("uid");
-  const token = localStorage.getItem("token");
   const dispatch = useDispatch();
   const { brands } = useSelector((state) => state.items.dropdowns);
 
@@ -46,9 +44,9 @@ const Brand = () => {
   }, []);
 
   const tableData = brands?.map((item, index) => ({
-    sr: index + 1,
+    sr: index + 1 ||"",
     id: item.id,
-    "Brand category": item.name,
+    "Brand category": item.name||"",
   }));
 
   return (

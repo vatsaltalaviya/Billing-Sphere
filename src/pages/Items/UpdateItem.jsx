@@ -389,7 +389,7 @@ const UpdateItem = () => {
                         id="itemGroup"
                         mode="item"
                         options={dropdowns.itemGroups}
-                        addlink="/dashboard/items/itemgroup"
+                        addlink="/dashboard/items/additemgroup"
                         value={formData.itemGroup}
                         onChange={handleChangeData}
                         className="w-full border flex-1 relative"
@@ -409,7 +409,7 @@ const UpdateItem = () => {
                           type="text"
                           id="brand"
                           mode="item"
-                          addlink="/dashboard/items/brand"
+                          addlink="/dashboard/items/addbrand"
                           options={dropdowns.brands}
                           className="flex-1 border relative"
                           value={formData.brand}
@@ -503,7 +503,7 @@ const UpdateItem = () => {
                           id="hsn"
                           mode="item"
                           className="flex-1 lg:w-42 border relative"
-                          addlink="/dashboard/items/hsn"
+                          addlink="/dashboard/items/addhsn"
                           options={dropdowns.hsns}
                           value={formData.hsn}
                           onChange={handleChangeData}
@@ -521,7 +521,7 @@ const UpdateItem = () => {
                           id="tax"
                           mode="item"
                           className="flex-1 border relative"
-                          addlink="/dashboard/items/taxCategory"
+                          addlink="/dashboard/items/addtax"
                           options={dropdowns.taxes}
                           value={formData.tax}
                           onChange={handleChangeData}
@@ -618,7 +618,7 @@ const UpdateItem = () => {
                           id="rack"
                           mode="item"
                           options={dropdowns.stores}
-                          addlink="/dashboard/items/rack"
+                          addlink="/dashboard/items/addrack"
                           className="flex-1 lg:w-48 border relative"
                           value={formData.rack}
                           onChange={handleChangeData}
@@ -639,7 +639,7 @@ const UpdateItem = () => {
                         id="stockunit"
                         mode="item"
                         options={dropdowns.units}
-                        addlink="/dashboard/items/stockUnit"
+                        addlink="/dashboard/items/addunit"
                         className="w-52 lg:w-48 border relative"
                         value={formData.stockunit}
                         onChange={handleChangeData}

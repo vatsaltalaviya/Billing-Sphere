@@ -110,12 +110,13 @@ const Item = () => {
     return map;
   }, [itemGroups]);
 
+  
+
   const tableData = searchingitems.map((item, index) => ({
     Sr: index + 1,
     id: item._id,
     "Item Name": item.itemName,
     "Code No": item.codeNo,
-
     Group: groupMap[item.itemGroup] || "",
     Retail: item.retail,
     MRP: item.mrp,

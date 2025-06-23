@@ -203,6 +203,9 @@ export
                 { name: "Unit Master",
                     navigate:`/dashboard/items/unit`
                  },
+                { name: "HSN Master",
+                    navigate:`/dashboard/items/hsn`
+                 },
                 {
                     name: "Misc. Master",
                     submenu: [

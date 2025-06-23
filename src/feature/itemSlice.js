@@ -36,7 +36,7 @@ export const fetchDropdowns = createAsyncThunk('items/fetchDropdowns', async () 
     return {
         itemGroups: groups.data.data.map((i) => ({ id: i._id, name: i.name })),
         brands: brands.data.data.map((i) => ({ id: i._id, name: i.name })),
-        hsns: hsns.data.data.map((i) => ({ id: i._id, name: i.hsn })),
+        hsns: hsns.data.data.map((i) => ({ id: i._id, name: i.hsn ,desc:i.description})),
         units: units.data.data.map((i) => ({ id: i._id, name: i.measurement })),
         stores: stores.data.data.map((i) => ({ id: i._id, name: i.location, isActive: i.isActive })),
         taxes: taxes.data.data.map((i) => ({ id: i._id, name: i.rate })),
@@ -329,7 +329,11 @@ const itemSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload || "Something went wrong";
             })
+            .addCase(fetchDropdowns.pending, (state, action) => {
+                state.loading = true;
+            })
             .addCase(fetchDropdowns.fulfilled, (state, action) => {
+                state.loading = false;
                 state.dropdowns = action.payload;
             })
             .addCase(fetchitemGroup.fulfilled, (state, action) => {

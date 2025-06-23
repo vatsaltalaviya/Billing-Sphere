@@ -25,7 +25,7 @@ const AddHsnPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm(formData)) {
+    if (!validateForm()) {
       return;
     }
     setisLoading(true);

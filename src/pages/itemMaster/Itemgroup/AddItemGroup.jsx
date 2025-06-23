@@ -53,7 +53,8 @@ const AddItemGroup = () => {
 
       const data = res.data;
       if (data.success) {
-        {(source == "itemsPage")?navigate("/dashboard/items/new"):navigate("/dashboard/items/itemgroup")}
+        // {(source == "itemsPage")?navigate("/dashboard/items/new"):navigate("/dashboard/items/itemgroup")}
+        navigate(-1)
         setisLoading(false)
       }
     } catch (error) {

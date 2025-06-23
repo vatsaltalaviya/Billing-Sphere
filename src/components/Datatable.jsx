@@ -32,12 +32,12 @@ const Datatable = ({ data, list, getitemUrl, mode }) => {
       getitemUrl(RowData.id);
     }
   }, [RowData.id]);
-  
+
   useEffect(() => {
-  if (rows && rows.length > 0 && selectedRow === 0) {
-    setRowData(rows[0]);
-  }
-}, [selectedRow, rows]);
+    if (rows && rows.length > 0 && selectedRow === 0) {
+      setRowData(rows[0]);
+    }
+  }, [selectedRow, rows]);
 
   return (
     <div
@@ -52,8 +52,18 @@ const Datatable = ({ data, list, getitemUrl, mode }) => {
               <th
                 key={i}
                 className={`border border-black px-3 py-1 ${
-                  i === 0 || i === columns.length - 1 ? "text-center" : ""
-                }`}
+                    columns.length <= 3
+                      ? i === 0 && "text-center"
+                      : i === 0 || i === columns.length -1
+                      ? "text-center"
+                      : ""
+                  }
+                  ${
+                    columns.length > 3 &&
+                    (i === columns.length - 2 || i === columns.length - 3)
+                      ? "text-right"
+                      : ""
+                  } `}
               >
                 {col}
               </th>
@@ -81,20 +91,42 @@ const Datatable = ({ data, list, getitemUrl, mode }) => {
           {rows.map((row, rowIndex) => (
             <tr
               key={rowIndex}
-            
               onClick={() => {
                 setSelectedRow(rowIndex);
                 setRowData(row);
               }}
               onDoubleClick={() => {
-                {mode == "item" && handleDoubleClick("/dashboard/items/edit");}
-                {mode == "itemGroup" && handleDoubleClick("/dashboard/items/edititemgroup");}
-                {mode == "hsn" && handleDoubleClick("/dashboard/items/edithsn");}
-                {mode == "tax" && handleDoubleClick("/dashboard/items/edittax");}
-                {mode == "brand" && handleDoubleClick("/dashboard/items/editbrand");}
-                {mode == "unit" && handleDoubleClick("/dashboard/items/editunit");}
-                {mode == "store" && handleDoubleClick("/dashboard/items/editrack");}
-                {mode == "ledgers" && handleDoubleClick("/dashboard/ledger/edit");}
+                {
+                  mode == "item" && handleDoubleClick("/dashboard/items/edit");
+                }
+                {
+                  mode == "itemGroup" &&
+                    handleDoubleClick("/dashboard/items/edititemgroup");
+                }
+                {
+                  mode == "hsn" &&
+                    handleDoubleClick("/dashboard/items/edithsn");
+                }
+                {
+                  mode == "tax" &&
+                    handleDoubleClick("/dashboard/items/edittax");
+                }
+                {
+                  mode == "brand" &&
+                    handleDoubleClick("/dashboard/items/editbrand");
+                }
+                {
+                  mode == "unit" &&
+                    handleDoubleClick("/dashboard/items/editunit");
+                }
+                {
+                  mode == "store" &&
+                    handleDoubleClick("/dashboard/items/editrack");
+                }
+                {
+                  mode == "ledgers" &&
+                    handleDoubleClick("/dashboard/ledger/edit");
+                }
               }}
               className={`font-medium cursor-pointer ${
                 selectedRow === rowIndex
@@ -105,11 +137,20 @@ const Datatable = ({ data, list, getitemUrl, mode }) => {
               {columns.map((col, colIndex) => (
                 <td
                   key={colIndex}
-                  className={`border border-black px-3 py-1 ${
-                    colIndex === 0 || colIndex === columns.length - 1
+                  className={`border border-black px-3 py-1 
+                  ${
+                    columns.length <= 3
+                      ? colIndex === 0 && "text-center"
+                      : colIndex === 0 || colIndex === columns.length -1
                       ? "text-center"
                       : ""
-                  }`}
+                  }
+                  ${
+                    columns.length > 3 &&
+                    (colIndex === columns.length - 2 || colIndex === columns.length - 3)
+                      ? "text-right"
+                      : ""
+                  } `}
                 >
                   {row[col]}
                 </td>

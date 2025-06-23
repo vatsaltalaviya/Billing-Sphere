@@ -17,7 +17,14 @@ const MasterPart = ({ getitemUrl, mode, tableData }) => {
   return (
     <div className="h-full w-full xl:px-5">
       {/* ----------------------------- search ----------------------------------------------- */}
-      <div className="w-full py-3 ">
+      <div className={`${[
+            "itemGroup",
+            "hsn",
+            "tax",
+            "brand",
+            "unit",
+            "store",
+          ].includes(mode) ? "md:w-5xl md:mx-auto ":'w-full '} pt-5 pb-0.5 `}>
         <form className="flex">
           <span className="bg-white border font-medium px-3 py-1">Search</span>
           {[
@@ -31,7 +38,7 @@ const MasterPart = ({ getitemUrl, mode, tableData }) => {
           ].includes(mode) && (
             <input
               type="text"
-              className="bg-white border font-medium px-3 py-1 w-full"
+              className={`bg-white border font-medium px-3 w-full`}
               value={query}
               onChange={(e) => dispatch(setItemSearchQuery(e.target.value))}
             />
@@ -39,7 +46,7 @@ const MasterPart = ({ getitemUrl, mode, tableData }) => {
           {mode == "ledgers" && (
             <input
               type="text"
-              className="bg-white border font-medium px-3 py-1 w-full"
+              className="bg-white border font-medium px-3 w-full"
               value={ledgerquery}
               onChange={(e) => dispatch(setLedgerSearchQuery(e.target.value))}
             />
@@ -52,7 +59,14 @@ const MasterPart = ({ getitemUrl, mode, tableData }) => {
           <ScaleLoader height="30px" color="blue" />
         </div>
       ) : (
-        <div className="w-full flex justify-center max-h-[85vh] min-h-[80vh] table-data overflow-y-auto">
+        <div className={`${[
+            "itemGroup",
+            "hsn",
+            "tax",
+            "brand",
+            "unit",
+            "store",
+          ].includes(mode) ? "md:w-5xl md:mx-auto ":'w-full '}  flex justify-center max-h-[85vh] min-h-[80vh] table-data overflow-y-auto`}>
           {["item","ledgers","itemGroup", "hsn", "tax", "brand", "unit", "store"].includes(
             mode
           ) &&
@@ -60,7 +74,7 @@ const MasterPart = ({ getitemUrl, mode, tableData }) => {
             (tableData.length > 0 ? (
               <Datatable mode={mode} getitemUrl={getitemUrl} list={tableData} />
             ) : (
-              <NoTableData mode={mode} />
+              <NoTableData mode={mode} list={tableData}/>
             ))}
         </div>
       )}
