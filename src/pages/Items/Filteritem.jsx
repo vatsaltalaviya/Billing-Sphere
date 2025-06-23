@@ -12,7 +12,7 @@ const Filteritem = ({onClose}) => {
             <form action="">
                 <div className='flex flex-col md:flex-row px-2 py-1 xl:items-center'>
                     <span className='w-70'>Item Group</span>
-                    {/* <SearchableDropdown className=" px-2 py-2 border flex-1" options={ledgergroup} value={filter.ledgergroup} id='ledgerGroup' onChange={(val)=>{
+                    {/* <SearchableDropdown className=" relative border flex-1" options={ledgergroup} value={filter.ledgergroup} id='ledgerGroup' onChange={(val)=>{
                         const update = {...filter};
                         update.ledgergroup = val.target.value;
                         setfilter(update);
