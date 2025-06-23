@@ -13,6 +13,8 @@ import {
 } from "../../feature/itemSlice";
 import DeleteAlert from "../../components/DeleteAlert";
 import lodash from "lodash";
+import useKeyCombo from "../../Hooks/UseKeyPress";
+import { useNavigate } from "react-router-dom";
 
 const Item = () => {
   const [showopitemBal, setOpitemBal] = useState(false);
@@ -22,14 +24,17 @@ const Item = () => {
   const { ShowDeleteAlert, searchingitems, searchquery } = useSelector(
     (state) => state.items
   );
+  const navigate = useNavigate()
   const itemGroups = useSelector(
     (state) => state.items.dropdowns?.itemGroups || []
   );
 
   const dispatch = useDispatch();
 
+  useKeyCombo("F2",{}, () => navigate(`/dashboard/items/new`));
+
   const ItemSidebarData = [
-    { name: "New", navigate: "/dashboard/items/new" },
+    {key:"F2", name: " New", navigate: "/dashboard/items/new" },
     {
       name: "Edit",
       navigate:

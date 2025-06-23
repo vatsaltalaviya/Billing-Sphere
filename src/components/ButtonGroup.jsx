@@ -16,7 +16,7 @@ const ButtonGroup = ({ data, className , setshowSidebar}) => {
           }}
           className={className}
         >
-          <span>{btn.name}</span>
+          <span className='text-red-500 mr-1'>{btn.key || ""}</span><span>{btn.name}</span>
         </button>
       ))}
     </>
