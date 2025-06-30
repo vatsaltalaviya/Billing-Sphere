@@ -20,7 +20,7 @@ const DropDowmForMobile = ({handleLogOut}) => {
                 option.submenu ? (
                   <details
                     key={index}
-                    className="w-full list-none font-medium text-lgs"
+                    className="w-full list-none font-medium text-lg"
                   >
                     <summary className="py-1 px-5 hover:bg-gray-200 cursor-pointer">
                       {option.name} <span className="pl-2">▸</span>
